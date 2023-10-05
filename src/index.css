@@ -1,13 +1,61 @@
-body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url("https://fonts.googleapis.com/css2?family=Arvo:wght@400;700&family=Exo+2:wght@300;400;500;700;800&family=Fauna+One&family=Montserrat:wght@200;300;400;600;700;800&family=Work+Sans:wght@300;400;600;700&display=swap");
+
+html,
+body,
+#root,
+.app,
+.content {
+  height: 100%;
+  width: 100%;
+  font-family: "Exo 2", sans-serif;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+.app {
+  display: flex;
+  position: relative;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: #e0e0e0;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #888;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+/* css for content */
+/* Default styles for .content */
+.content {
+  width: calc(100% - 300px);
+  /* margin: 0 40px; */
+}
+.content {
+  flex: 1; /* Take up all available horizontal space */
+  font-size: 16px; /* Default font size */
+}
+
+/* Media query for screens smaller than 768px */
+@media screen and (max-width: 768px) {
+  .content {
+    font-size: 14px; /* Adjust font size for smaller screens */
+  }
+}
+
+/* Media query for screens smaller than 480px (e.g., mobile) */
+@media screen and (max-width: 480px) {
+  .content {
+    font-size: 12px; /* Further adjust font size for mobile screens */
+  }
 }
