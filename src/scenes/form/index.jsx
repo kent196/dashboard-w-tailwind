@@ -1,11 +1,12 @@
 // Libraries import
-import { Box, Button, TextField, Typography } from "@mui/material";
+import { Box, Button, Select, TextField, Typography } from "@mui/material";
 import React from "react";
 import { Formik } from "formik";
 import * as yup from "yup";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import Header from "../../components/Header";
 import { Helmet } from "react-helmet";
+import { useEffect } from "react";
 
 const Form = () => {
   const isNonMobile = useMediaQuery("(min-width:600px)");
@@ -15,6 +16,9 @@ const Form = () => {
     password: "",
     phone: "",
   };
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
   const handleFormSubmit = (values) => {
     console.log(values);
   };
@@ -121,6 +125,10 @@ const Form = () => {
                   gridColumn: "span 4",
                 }}
               />
+              <Select>
+                <option value='male'>Male</option>
+                <option value='female'>Female</option>
+              </Select>
             </Box>
             <Box display={"flex"} justifyContent={"end"}>
               <Button

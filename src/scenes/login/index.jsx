@@ -1,14 +1,74 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Box, Typography, TextField, Button } from "@mui/material";
 import { useTheme } from "@emotion/react";
 import { ColorModeContext, useMode, token } from "../../theme";
 import loginBackground from "../../assets/login_bg_1.png";
 import { Helmet } from "react-helmet";
 import Header from "../../components/Header";
+import { useNavigate } from "react-router-dom"; // Import useNavigate
+import axios from "../../api/publicAxios"; // Import Axios
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const Login = () => {
   const theme = useTheme();
   const colors = token(theme.palette.mode);
+  const navigate = useNavigate(); // Initialize useNavigate for navigation
+  const [error, setError] = useState(null); // Initialize error state
+
+  const [formData, setFormData] = useState({
+    email: "",
+    password: "",
+  });
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+  const handleInputChange = (event) => {
+    const { name, value } = event.target;
+    setFormData({
+      ...formData,
+      [name]: value,
+    });
+  };
+
+  const handleLogin = async () => {
+    try {
+      console.log("Sending login request...");
+
+      const response = await axios.post("/login", formData);
+
+      console.log("Response received:", response.data);
+
+      if (response.status === 200) {
+        toast.success("Login success", {
+          position: "top-right",
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
+        const accessToken = response.data.data.accessToken;
+        const refreshToken = response.data.data.refreshToken;
+        localStorage.setItem("accessToken", accessToken);
+        localStorage.setItem("refreshToken", refreshToken);
+        console.log(localStorage.accessToken);
+        console.log(localStorage.refreshToken);
+        navigate("/dashboard"); // Navigate to the auctions page
+      } else {
+        console.log(response.data);
+        setError(response.data.message);
+        // Handle the login failure
+      }
+    } catch (error) {
+      console.error("An error occurred:", error);
+      setError("An error occurred");
+      // Handle the error
+    }
+  };
+
   return (
     <Box
       sx={{
@@ -27,7 +87,6 @@ const Login = () => {
           position: "fixed", // Set position to fixed
           width: "100%",
           height: "100%",
-          zIndex: "-1",
           overflow: "hidden",
         }}>
         <img
@@ -37,6 +96,7 @@ const Login = () => {
             width: "100%",
             height: "100%",
             objectFit: "cover",
+            zIndex: "30",
           }}
         />
       </div>
@@ -51,35 +111,58 @@ const Login = () => {
             flexDirection: "column",
             justifyContent: "center",
             alignItems: "center",
-            gap: "20px",
+            gap: "10px",
             margin: "0 20px",
             padding: "20px",
+            zIndex: "50",
           }}>
-          <Header title={" PAH Management Website"} />
+          <Header title={" Quản trị hệ thống PAH"} />
+
+          <Typography variant='h5' fontWeight={"bold"}>
+            Tên đăng nhập
+          </Typography>
+
           <TextField
             // color={colors.gray[900]}
             id='outlined-basic'
-            label='Username'
             variant='outlined'
             sx={{ width: "70%" }}
-          />{" "}
+            name='email'
+            value={formData.email}
+            onChange={handleInputChange}
+          />
+          <Typography variant='h5' fontWeight={"bold"}>
+            Mật khẩu
+          </Typography>
+
           <TextField
             id='outlined-basic'
-            label='Password'
             variant='outlined'
             sx={{ width: "70%" }}
+            type='password'
+            name='password'
+            value={formData.password}
+            onChange={handleInputChange}
           />
+          {error && ( // Display the error message only if there's an error
+            <Typography variant='body2' color='error'>
+              {error}
+            </Typography>
+          )}
           <Button
+            type='submit'
             variant='contained'
             sx={{
               width: "150px",
               height: "50px",
+              mt: "20px",
               backgroundColor: colors.primary[500],
               "&:hover": {
                 backgroundColor: colors.primary[600],
               },
-            }}>
-            Login
+            }}
+            onClick={handleLogin}>
+            Đăng nhập
           </Button>
         </Box>
       </Box>

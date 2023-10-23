@@ -2,17 +2,18 @@
 import {
   AdminPanelSettingsOutlined,
   LockOpenOutlined,
+  Person2Outlined,
   SecurityOutlined,
 } from "@mui/icons-material";
 import {
   Box,
   Container,
   Typography,
-  useTheme,
   useMediaQuery,
+  useTheme,
 } from "@mui/material";
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 // Local imports
 import { Helmet } from "react-helmet";
@@ -20,131 +21,299 @@ import ActionButtons from "../../components/ActionButtons";
 import Header from "../../components/Header";
 import { mockDataTeam } from "../../data/mockData";
 import { token } from "../../theme";
+import { fetchCustomer, fetchUsers } from "../../libs/userService";
+import { fetchUserData } from "../../libs/accountServices";
+import Unauthorize from "../../global/Unauthorize";
 
 const Team = () => {
   const isSmallScreen = useMediaQuery((theme) => theme.breakpoints.down("md"));
-
   const theme = useTheme();
+  const [users, setUsers] = useState([]);
+  const [currentUser, setCurrentUser] = useState({}); // State to store auction details
   const colors = token(theme.palette.mode);
+  const [customers, setCustomers] = useState([]);
+  const allowedRoles = ["Quản trị viên", "Quản lý"];
+  const [paginationModel, setPaginationModel] = React.useState({
+    page: 0,
+    pageSize: 10,
+  });
+  const [userCount, setUserCount] = React.useState(0);
+  const [customerCount, setCustomerCount] = React.useState(0);
+  const [rowCountState, setRowCountState] = React.useState(customerCount || 0);
+  const [rowCountStateManager, setRowCountStateManager] = React.useState(
+    userCount || 0
+  );
+
+  React.useEffect(() => {
+    setRowCountState((prevRowCountState) =>
+      customerCount !== undefined ? customerCount : prevRowCountState
+    );
+  }, [customerCount, setRowCountState]);
+  React.useEffect(() => {
+    setRowCountState((prevRowCountState) =>
+      userCount !== undefined ? userCount : prevRowCountState
+    );
+  }, [userCount, setRowCountState]);
+
+  useEffect(() => {
+    fetchCustomer()
+      .then((res) => {
+        console.log(res.data);
+        setCustomers(res.data.customerList);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+
+    return () => {
+      setCustomers([]);
+    };
+  }, []);
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+
+    fetchUserData()
+      .then((res) => {
+        console.log(res.data.role);
+        setCurrentUser(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
+
+  useEffect(() => {
+    fetchUsers()
+      .then((res) => {
+        setUsers(res.data);
+        console.log(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
 
   const columns = [
     { field: "id", headerName: "ID" },
     {
       field: "name",
-      headerName: "Name",
+      headerName: "Tên",
       flex: 1,
       cellClassName: "name-column--cell",
     },
     { field: "email", headerName: "Email", flex: 1 },
     {
       field: "age",
-      headerName: "Age",
+      headerName: "Tuổi",
       type: "number",
       headerAlign: "left",
       align: "left",
     },
-    { field: "phone", headerName: "Phone", flex: 1 },
+    { field: "phone", headerName: "SDT", flex: 1 },
     {
-      field: "access",
+      field: "status",
+      headerName: "Trạng thái",
       flex: 1,
-      headerName: "Access Level",
-      renderCell: ({ row: { access } }) => {
+      renderCell: ({ row: { status } }) =>
+        status === 1 ? (
+          <Typography variant='h5' color={colors.greenAccent[400]}>
+            Đang hoạt động
+          </Typography>
+        ) : (
+          <Typography variant='h5' color={colors.red[400]}>
+            Đã khóa
+          </Typography>
+        ),
+    },
+    {
+      field: "role",
+      flex: 1,
+      headerName: "Cấp bậc",
+      renderCell: ({ row: { role } }) => {
         return (
-          <Box
-            flex={"1"}
-            width={"60%"}
-            m={"0 auto"}
-            p={"5px"}
-            display={"flex"}
-            justifyContent={"center"}
-            gap={"10px"}
-            backgroundColor={
-              access === "admin"
-                ? colors.greenAccent[600]
-                : colors.greenAccent[700]
-            }
-            borderRadius={"4px"}>
-            {access === "admin" && <AdminPanelSettingsOutlined />}
-            {access === "manager" && <SecurityOutlined />}
-            {access === "user" && <LockOpenOutlined />}
-            {!isSmallScreen && (
-              <Typography
-                color={colors.gray[100]}
-                sx={{
-                  textTransform: "uppercase",
-                }}>
-                {access}
-              </Typography>
-            )}
+          <Box>
+            <Box
+              flex={"1"}
+              width={"150px"}
+              m={"0 auto"}
+              p={"5px"}
+              display={"flex"}
+              justifyContent={"flex-start"}
+              gap={"10px"}
+              backgroundColor={
+                role === 3
+                  ? colors.greenAccent[600]
+                  : role === 4
+                  ? colors.greenAccent[700]
+                  : role === 5
+                  ? colors.greenAccent[800]
+                  : colors.greenAccent[900]
+              }
+              borderRadius={"4px"}>
+              {role === 3 ? (
+                <AdminPanelSettingsOutlined />
+              ) : role === 4 ? (
+                <SecurityOutlined />
+              ) : role === 5 ? (
+                <LockOpenOutlined />
+              ) : (
+                <Person2Outlined />
+              )}
+
+              {!isSmallScreen && (
+                <Typography
+                  color={colors.gray[100]}
+                  sx={{
+                    textTransform: "uppercase",
+                  }}>
+                  {role === 3
+                    ? "Admin"
+                    : role === 4
+                    ? "Quản lý"
+                    : role === 5
+                    ? "Nhân viên"
+                    : role === 1
+                    ? "Người mua"
+                    : role === 2
+                    ? "Người bán"
+                    : "Người dùng"}
+                </Typography>
+              )}
+            </Box>
           </Box>
         );
       },
     },
     {
       field: "actions",
-      headerName: "Actions",
+      headerName: "Thao tác",
       flex: 1,
       renderCell: (params) => <ActionButtons row={params.row} />,
     },
   ];
-  return (
-    <Container maxWidth='xl' sx={{ paddingTop: "20px" }}>
-      <Helmet>
-        <title>User Management</title>
-      </Helmet>
-      <Header title='Users' subTitle={"This page shows all the user data"} />
-      <Box
-        m={"20px 0"} // Reduced top margin
-        sx={{
-          overflowX: "auto", // Add horizontal scroll for smaller screens
-          "& .MuiDataGrid-root": {
-            border: "none",
-          },
-          "& .MuiDataGrid-cell": {
-            borderBottom: "none",
-          },
-          "& .name-column--cell": {
-            color: colors.greenAccent[300],
-          },
-          "& .MuiDataGrid-columnHeaders": {
-            backgroundColor: colors.gray[900],
-            borderBottom: "none",
-          },
-          "& .MuiDataGrid-virtualScroller": {
-            backgroundColor: colors.primary[400],
-          },
-          "& .MuiDataGrid-footerContainer": {
-            backgroundColor: colors.gray[900],
-            borderTop: "none",
-          },
-          "& .MuiDataGrid-toolbarContainer .MuiButton-text": {
-            color: `${colors.gray[100]} !important `,
-          },
-          // Media queries for responsive column width
-          "@media (max-width: 768px)": {
-            "& .access-column": {
-              // Adjust the width for smaller screens
-              flexBasis: "20%",
-            },
-          },
-          "@media (max-width: 480px)": {
-            "& .access-column": {
-              // Further adjust the width for mobile screens
-              flexBasis: "15%",
-            },
-          },
-        }}>
-        <DataGrid
-          style={{
-            fontSize: "18px",
-          }}
-          rows={mockDataTeam}
-          columns={columns}
-          components={{ Toolbar: GridToolbar }}
-        />
-      </Box>
-    </Container>
-  );
+
+  {
+    if (currentUser.role === 3 || currentUser.role === 4) {
+      return (
+        <Container maxWidth='xl' sx={{ paddingTop: "20px" }}>
+          <Helmet>
+            <title>User Management</title>
+          </Helmet>
+          <Header title='Người dùng' subTitle={"Danh sách người dùng"} />
+          <Box
+            m={"20px 0"} // Reduced top margin
+            sx={{
+              overflowX: "auto", // Add horizontal scroll for smaller screens
+              "& .MuiDataGrid-root": {
+                border: "none",
+              },
+              "& .MuiDataGrid-cell": {
+                borderBottom: "none",
+              },
+              "& .name-column--cell": {
+                color: colors.greenAccent[300],
+              },
+              "& .MuiDataGrid-columnHeaders": {
+                backgroundColor: colors.gray[900],
+                borderBottom: "none",
+              },
+              "& .MuiDataGrid-virtualScroller": {
+                backgroundColor: colors.primary[400],
+              },
+              "& .MuiDataGrid-footerContainer": {
+                backgroundColor: colors.gray[900],
+                borderTop: "none",
+              },
+              "& .MuiDataGrid-toolbarContainer .MuiButton-text": {
+                color: `${colors.gray[100]} !important `,
+              },
+              // Media queries for responsive column width
+              "@media (max-width: 768px)": {
+                "& .access-column": {
+                  // Adjust the width for smaller screens
+                  flexBasis: "20%",
+                },
+              },
+              "@media (max-width: 480px)": {
+                "& .access-column": {
+                  // Further adjust the width for mobile screens
+                  flexBasis: "15%",
+                },
+              },
+            }}>
+            <DataGrid
+              style={{
+                fontSize: "18px",
+              }}
+              rows={users}
+              columns={columns}
+              components={{ Toolbar: GridToolbar }}
+            />
+          </Box>
+        </Container>
+      );
+    } else if (currentUser.role === 5) {
+      return (
+        <Container maxWidth='xl' sx={{ paddingTop: "20px" }}>
+          <Helmet>
+            <title>User Management</title>
+          </Helmet>
+          <Header title='Người dùng' subTitle={"Danh sách người dùng"} />
+          <Box
+            m={"20px 0"} // Reduced top margin
+            sx={{
+              overflowX: "auto", // Add horizontal scroll for smaller screens
+              "& .MuiDataGrid-root": {
+                border: "none",
+              },
+              "& .MuiDataGrid-cell": {
+                borderBottom: "none",
+              },
+              "& .name-column--cell": {
+                color: colors.greenAccent[300],
+              },
+              "& .MuiDataGrid-columnHeaders": {
+                backgroundColor: colors.gray[900],
+                borderBottom: "none",
+              },
+              "& .MuiDataGrid-virtualScroller": {
+                backgroundColor: colors.primary[400],
+              },
+              "& .MuiDataGrid-footerContainer": {
+                backgroundColor: colors.gray[900],
+                borderTop: "none",
+              },
+              "& .MuiDataGrid-toolbarContainer .MuiButton-text": {
+                color: `${colors.gray[100]} !important `,
+              },
+              // Media queries for responsive column width
+              "@media (max-width: 768px)": {
+                "& .access-column": {
+                  // Adjust the width for smaller screens
+                  flexBasis: "20%",
+                },
+              },
+              "@media (max-width: 480px)": {
+                "& .access-column": {
+                  // Further adjust the width for mobile screens
+                  flexBasis: "15%",
+                },
+              },
+            }}>
+            <DataGrid
+              style={{
+                fontSize: "18px",
+              }}
+              rows={customers}
+              columns={columns}
+              components={{ Toolbar: GridToolbar }}
+            />
+          </Box>
+        </Container>
+      );
+    }
+  }
 };
 
 export default Team;

@@ -1,4 +1,4 @@
-import { Delete, Edit, List } from "@mui/icons-material";
+import { Delete, Edit, Visibility } from "@mui/icons-material";
 import {
   Box,
   IconButton,
@@ -8,25 +8,96 @@ import {
   DialogContent,
   DialogActions,
   Button,
+  Typography,
+  TextField,
 } from "@mui/material";
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { token } from "../../theme";
+import { mockDataTeam } from "../../data/mockData";
+import Header from "../Header";
+import { fetchUserData, fetchUserDetails } from "../../libs/userService";
 
-const ActionButtons = ({ row, rowIndex }) => {
+const ActionButtons = ({ row }) => {
   const theme = useTheme();
+  const { id } = useParams();
   const colors = token(theme.palette.mode);
   const [deletedId, setDeletedId] = useState(null);
   const [deleteConfirmationOpen, setDeleteConfirmationOpen] = useState(false);
+  const [openViewUser, setOpenViewUser] = useState(false);
+  const [openEditUser, setOpenEditUser] = useState(false);
+  const [scroll, setScroll] = React.useState("paper");
+
+  // State to store user details
+  const [userDetails, setUserDetails] = useState({
+    id: "",
+    name: "",
+    email: "",
+    age: "",
+    phone: "",
+    access: "",
+  });
+  const [editUser, setEditUser] = useState({
+    id: "",
+    name: "",
+    email: "",
+    age: "",
+    phone: "",
+    access: "",
+  });
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    setTimeout(() => {
+      const updatedMockDataTeam = mockDataTeam.map((userData) =>
+        userData.id === editUser.id ? editUser : userData
+      );
+      mockDataTeam.length = 0;
+      mockDataTeam.push(...updatedMockDataTeam);
+      // Use navigate to navigate back to the detail page
+      navigate(`/user/${id}`);
+    }, 1000);
+  };
+
+  // Function to fetch user details
+  const handleFetchUserDetails = (userId) => {
+    try {
+      fetchUserDetails(userId)
+        .then((res) => {
+          setUserDetails(res.data);
+          console.log(res.data);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+
+      setOpenViewUser(true); // Open the "View User" dialog
+    } catch (error) {
+      console.error("Error fetching user details:", error);
+    }
+  };
+
+  const handleOpenEditUser = (userId) => {
+    const res = mockDataTeam.find((userData) => userData.id === userId); // Replace with your API endpoint
+    setEditUser(res);
+    setOpenEditUser(true);
+  };
+
+  // Function to handle input changes
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setEditUser((prevUser) => ({
+      ...prevUser,
+      [name]: value,
+    }));
+  };
 
   const navigate = useNavigate();
-  const handleViewUser = (userId) => {
-    // Navigate to the user detail page with the user's ID
-    navigate(`/user/${userId}`);
+  const handleViewUser = () => {
+    setOpenViewUser(true);
   };
 
   const handleEditUser = (userId) => {
-    // Navigate to the edit user page with the user's ID
     navigate(`/edit/${userId}`);
   };
 
@@ -45,23 +116,29 @@ const ActionButtons = ({ row, rowIndex }) => {
     setDeleteConfirmationOpen(false);
   };
 
+  const handleViewUserClose = () => {
+    setOpenViewUser(false);
+  };
+  const handleEditUserClose = () => {
+    setOpenEditUser(false);
+  };
+
   return (
     <Box>
       <IconButton
-        to={`/team/user/${row.id}`}
-        onClick={() => handleViewUser(row.id)} // Implement view user function
+        onClick={() => handleFetchUserDetails(row.id)}
         color='primary'
         aria-label='View'
         style={{
           color: colors.gray[100],
         }}>
-        <List />
+        <Visibility />
       </IconButton>
       <IconButton
         style={{
           color: colors.gray[100],
         }}
-        onClick={() => handleEditUser(row.id)} // Implement edit user function
+        onClick={() => handleOpenEditUser(row.id)}
         color='primary'
         aria-label='Edit'>
         <Edit />
@@ -79,25 +156,156 @@ const ActionButtons = ({ row, rowIndex }) => {
         onClose={handleCancelDelete}
         aria-labelledby='alert-dialog-title'
         aria-describedby='alert-dialog-description'>
-        <DialogTitle id='alert-dialog-title'>{"Confirm Delete"}</DialogTitle>
+        <DialogTitle id='alert-dialog-title'>{"Xác nhận xóa"}</DialogTitle>
         <DialogContent>
-          <p>Are you sure you want to delete this user?</p>
+          <Typography variant='h5'>
+            Bạn có muốn xóa {userDetails.name}?
+          </Typography>
         </DialogContent>
         <DialogActions>
           <Button
             onClick={handleCancelDelete}
             color='error'
             variant='contained'>
-            Cancel
+            Hủy
           </Button>
           <Button
             onClick={handleConfirmDelete}
             color='success'
             autoFocus
             variant='contained'>
-            Confirm
+            Xác nhận
           </Button>
         </DialogActions>
+      </Dialog>
+
+      {/* View user */}
+      <Dialog
+        fullWidth
+        open={openViewUser}
+        onClose={handleViewUserClose}
+        scroll={scroll}
+        aria-labelledby='scroll-dialog-title'
+        aria-describedby='scroll-dialog-description'>
+        <DialogTitle id='scroll-dialog-title' variant='h4'>
+          Thông tin của {userDetails.name}
+        </DialogTitle>
+        <DialogContent dividers={scroll === "paper"}>
+          <Box id='scroll-dialog-description' tabIndex={-1}>
+            {/* Display user details here */}
+            <Typography variant='h5'>ID: {row.id}</Typography>
+            <Typography variant='h5'>Tên: {userDetails.name}</Typography>
+            <Typography variant='h5'>Email: {userDetails.email}</Typography>
+            <Typography variant='h5'>Tuổi: {userDetails.age}</Typography>
+            <Typography variant='h5'>SDT: {userDetails.phone}</Typography>
+            <Typography variant='h5'>
+              Cấp bậc:{" "}
+              {userDetails.role === 1
+                ? "Người mua"
+                : userDetails.role === 2
+                ? "Người bán"
+                : "Người dùng"}
+            </Typography>
+            {/* Add more user details as needed */}
+          </Box>
+        </DialogContent>
+        <DialogActions>
+          <Button
+            variant='contained'
+            color='warning'
+            onClick={() => handleEditUser(row.id)}>
+            Chỉnh sửa
+          </Button>
+          <Button
+            variant='contained'
+            color='error'
+            onClick={() => handleDeleteUser(row.id)}>
+            Xóa
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+      {/* Edit user */}
+      <Dialog
+        fullWidth
+        open={openEditUser}
+        onClose={handleEditUserClose}
+        aria-labelledby='scroll-dialog-title'
+        aria-describedby='scroll-dialog-description'>
+        <DialogTitle id='scroll-dialog-title' variant='h4'>
+          Cập nhật thông tin của {editUser.name}
+        </DialogTitle>
+        <DialogContent>
+          <Box
+            display={"flex"}
+            flexDirection={"column"}
+            justifyContent={"center"}
+            width={"100%"}
+            gap={"20px"}>
+            <form onSubmit={handleSubmit}>
+              <Box display={"flex"} flexDirection={"column"} gap={"20px"}>
+                <Box display={"flex"} flexDirection={"column"} gap={"20px"}>
+                  <Typography variant='h4'>Tên</Typography>
+                  <TextField
+                    variant='outlined'
+                    name='name'
+                    value={editUser.name}
+                    onChange={handleInputChange}
+                    fullWidth
+                  />
+                </Box>
+                <Box display={"flex"} flexDirection={"column"} gap={"20px"}>
+                  <Typography variant='h4'>Email</Typography>
+                  <TextField
+                    variant='outlined'
+                    name='email'
+                    value={editUser.email}
+                    onChange={handleInputChange}
+                    fullWidth
+                  />
+                </Box>
+                <Box display={"flex"} flexDirection={"column"} gap={"20px"}>
+                  <Typography variant='h4'>SDT</Typography>
+                  <TextField
+                    variant='outlined'
+                    name='phone'
+                    value={editUser.phone}
+                    onChange={handleInputChange}
+                    fullWidth
+                  />
+                </Box>
+                <Box display={"flex"} flexDirection={"column"} gap={"20px"}>
+                  <Typography variant='h4'>Tuổi</Typography>
+                  <TextField
+                    variant='outlined'
+                    name='age'
+                    value={editUser.age}
+                    onChange={handleInputChange}
+                    fullWidth
+                  />
+                </Box>
+              </Box>
+              <Box
+                display={"flex"}
+                justifyContent={"flex-start"}
+                gap={"10px"}
+                mt={"10px"}>
+                <Button type='submit' variant='contained' color='success'>
+                  Lưu
+                </Button>
+                <Button
+                  onClick={() => {
+                    setOpenEditUser(false);
+                    navigate(`/team`);
+                  }} // Use navigate to go back to detail page
+                  variant='contained'
+                  color='error'>
+                  Hủy
+                </Button>
+              </Box>
+            </form>
+          </Box>
+        </DialogContent>
       </Dialog>
     </Box>
   );

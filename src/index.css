@@ -9,7 +9,10 @@ body,
 #root,
 .app,
 .content {
-  height: 100%;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  height: 120vh;
   width: 100%;
   font-family: "Exo 2", sans-serif;
 }
@@ -39,6 +42,7 @@ body,
 /* Default styles for .content */
 .content {
   width: calc(100% - 300px);
+  background-color: #f0f2f5;
   /* margin: 0 40px; */
 }
 .content {

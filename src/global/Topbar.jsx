@@ -21,6 +21,9 @@ const Topbar = () => {
 
   return (
     <Box
+      sx={{
+        backgroundColor: colors.primary[400],
+      }}
       display={"flex"}
       justifyContent={"space-between"}
       alignItems={"center"}

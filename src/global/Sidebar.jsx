@@ -13,8 +13,10 @@ import {
   StoreOutlined,
   Checklist,
   Person2Outlined,
+  VpnKey,
+  HowToRegOutlined,
 } from "@mui/icons-material";
-import { Box, IconButton, Typography, useTheme } from "@mui/material";
+import { Box, IconButton, Tooltip, Typography, useTheme } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { Menu, MenuItem, ProSidebar } from "react-pro-sidebar";
 import "react-pro-sidebar/dist/css/styles.css";
@@ -22,27 +24,70 @@ import { Link } from "react-router-dom";
 import { token } from "../theme";
 
 import logo from "../assets/user_logo.jpg";
+import { fetchUserData } from "../libs/accountServices";
 
 const Item = ({ icon, title, to, selected, setSelected }) => {
+  const typographyStyle = {
+    whiteSpace: "nowrap", // Prevent text from wrapping to the next line
+    overflow: "hidden", // Hide any overflowing content
+    textOverflow: "ellipsis", // Display an ellipsis (...) if text overflows
+    width: "100%", // Set the width of the container to ensure text overflows
+    transition: "transform 0.5s", // Add a smooth transition effect
+  };
+
+  const hoverStyle = {
+    transform: "translateX(-100%)", // Move text off-screen to the left on hover
+  };
+  const [isHovered, setIsHovered] = useState(false);
   const theme = useTheme();
   const colors = token(theme.palette.mode);
   return (
     <MenuItem
       active={selected === title}
       style={{ color: colors.gray[100] }}
-      onClick={() => setSelected(title)}
+      onClick={() => {
+        setSelected(title);
+        if (to === "/login") {
+          handleLogout(); // Call handleLogout when "Đăng xuất" is clicked
+        }
+      }}
       icon={icon}>
-      <Typography variant='h6'>{title}</Typography>
+      <Typography
+        style={{ ...typographyStyle, ...(isHovered ? hoverStyle : {}) }}
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
+        variant='h5'>
+        {title}
+      </Typography>
       <Link to={to} />
     </MenuItem>
   );
 };
 
-const Sidebar = ({ user, currentLocation }) => {
+const handleLogout = () => {
+  console.log("Logout button clicked");
+  localStorage.clear();
+  // Perform any additional logout actions here
+};
+
+const Sidebar = ({ userRole, currentLocation }) => {
   const theme = useTheme();
   const colors = token(theme.palette.mode);
   const [collapsed, setCollapsed] = React.useState(false);
   const [selected, setSelected] = useState("Dashboard");
+  const [user, setUser] = useState({}); // State to store user data
+
+  useEffect(() => {
+    fetchUserData()
+      .then((res) => {
+        console.log(res);
+        if (!res) {
+          return console.log("No user data");
+        }
+        setUser(res.data);
+      })
+      .catch((err) => console.log(err));
+  }, []);
 
   // Function to handle resizing of the window
   const handleResize = () => {
@@ -63,216 +108,443 @@ const Sidebar = ({ user, currentLocation }) => {
   }, []);
 
   const renderMenuItem = () => {
-    if (user === "admin") {
+    if (user.role === 3) {
       return (
         <Box>
-          <Item
-            title={"Dashboard"}
-            to={"/dashboard"}
-            icon={<HomeOutlined />}
-            selected={
-              selected ||
-              currentLocation === "/" ||
-              currentLocation === "/dashboard"
-            } // Check if the current location matches the route
-            setSelected={setSelected}
-          />
-          <Typography
-            variant='h6'
-            color={colors.gray[300]}
-            sx={{
-              margin: "5px 0px 10px 15px",
-            }}>
-            Management
-          </Typography>
-          <Item
-            title={"Users"}
-            to={"/team"}
-            icon={<PeopleOutline />}
-            selected={selected}
-            setSelected={setSelected}
-          />
+          <Tooltip title='Bảng điều khiển' placement='right'>
+            <Box>
+              <Item
+                title={"Bảng điều khiển"}
+                to={"/dashboard"}
+                icon={<HomeOutlined />}
+                selected={selected}
+                setSelected={setSelected}
+              />
+            </Box>
+          </Tooltip>
+          <Box>
+            {collapsed ? (
+              // Dashline
+              <Box display={"flex"} justifyContent={"center"}>
+                <Box
+                  sx={{
+                    width: "60%",
+                    height: "1px",
+                    backgroundColor: "black",
+                    margin: "20px 0",
+                  }}></Box>
+              </Box>
+            ) : (
+              <Typography
+                variant='h4'
+                fontWeight={"bold"}
+                color={colors.gray[300]}
+                sx={{
+                  margin: "5px 0px 10px 15px",
+                }}>
+                Quản lí
+              </Typography>
+            )}
+          </Box>
+          <Tooltip title='Người dùng' placement='right'>
+            <Box>
+              <Item
+                title={"Người dùng"}
+                to={"/team"}
+                icon={<PeopleOutline />}
+                selected={selected}
+                setSelected={setSelected}
+              />
+            </Box>
+          </Tooltip>
 
+          <Box>
+            {collapsed ? (
+              // Dashline
+              <Box display={"flex"} justifyContent={"center"}>
+                <Box
+                  sx={{
+                    width: "60%",
+                    height: "1px",
+                    backgroundColor: "black",
+                    margin: "20px 0",
+                  }}></Box>
+              </Box>
+            ) : (
+              <Typography
+                variant='h4'
+                fontWeight={"bold"}
+                color={colors.gray[300]}
+                sx={{
+                  margin: "5px 0px 10px 15px",
+                }}>
+                Thao tác
+              </Typography>
+            )}
+          </Box>
           <Item
-            title={"Contacts"}
-            to={"/contacts"}
-            icon={<ContactsOutlined />}
-            selected={selected}
-            setSelected={setSelected}
-          />
-          <Item
-            title={"Invoices"}
-            to={"/invoices"}
-            icon={<ReceiptOutlined />}
-            selected={selected}
-            setSelected={setSelected}
-          />
-          <Typography
-            variant='h6'
-            color={colors.gray[300]}
-            sx={{
-              margin: "5px 0px 10px 15px",
-            }}>
-            Pages
-          </Typography>
-          <Item
-            title={"Create user"}
+            title={"Tạo tài khoản hệ thống"}
             to={"/form"}
             icon={<ListOutlined />}
             selected={selected}
             setSelected={setSelected}
           />
           <Item
-            title={"Bar chart"}
+            title={"Biểu đồ cột"}
             to={"/bar"}
             icon={<BarChartOutlined />}
             selected={selected}
             setSelected={setSelected}
           />
           <Item
-            title={"Pie chart"}
+            title={"Biểu đồ tròn"}
             to={"/pie"}
             icon={<PieChartOutlineOutlined />}
             selected={selected}
             setSelected={setSelected}
           />
-          <Typography
-            variant='h6'
-            color={colors.gray[300]}
-            sx={{
-              margin: "5px 0px 10px 15px",
-            }}>
-            Account
-          </Typography>
-
-          <Item
-            title={"Logout"}
-            to={"/logout"}
-            icon={<ExitToAppOutlined />}
-            selected={selected}
-            setSelected={setSelected}></Item>
+          <Box>
+            {collapsed ? (
+              // Dashline
+              <Box display={"flex"} justifyContent={"center"}>
+                <Box
+                  sx={{
+                    width: "60%",
+                    height: "1px",
+                    backgroundColor: "black",
+                    margin: "20px 0",
+                  }}></Box>
+              </Box>
+            ) : (
+              <Typography
+                variant='h4'
+                fontWeight={"bold"}
+                color={colors.gray[300]}
+                sx={{
+                  margin: "5px 0px 10px 15px",
+                }}>
+                Tài khoản
+              </Typography>
+            )}
+          </Box>
+          <Tooltip title='Tài khoản của tôi' placement='right'>
+            <Box>
+              <Item
+                title={"Tài khoản của tôi"}
+                to={"/profile"} //Update later when API is updated
+                icon={<Person2Outlined />}
+                selected={selected}
+                setSelected={setSelected}></Item>
+            </Box>
+          </Tooltip>
+          <Tooltip title='Đăng xuất' placement='right'>
+            <Box>
+              <Item
+                title={"Đăng xuất"}
+                to={"/login"}
+                icon={<ExitToAppOutlined />}
+                selected={selected}
+                setSelected={setSelected}></Item>
+            </Box>
+          </Tooltip>
         </Box>
       );
-    } else if (user === "manager") {
+    } else if (user.role === 4) {
       return (
         <Box>
-          <Item
-            title={"Dashboard"}
-            to={"/dashboard"}
-            icon={<HomeOutlined />}
-            selected={selected}
-            setSelected={setSelected}
-          />
-          <Typography
-            variant='h6'
-            color={colors.gray[300]}
-            sx={{
-              margin: "5px 0px 10px 15px",
-            }}>
-            Management
-          </Typography>
-          <Item
-            title={"Users"}
-            to={"/team"}
-            icon={<PeopleOutline />}
-            selected={selected}
-            setSelected={setSelected}
-          />
+          <Tooltip title='Bảng điều khiển' placement='right'>
+            <Box>
+              <Item
+                title={"Bảng điều khiển"}
+                to={"/dashboard"}
+                icon={<HomeOutlined />}
+                selected={selected}
+                setSelected={setSelected}
+              />
+            </Box>
+          </Tooltip>
+          <Box>
+            {collapsed ? (
+              // Dashline
+              <Box display={"flex"} justifyContent={"center"}>
+                <Box
+                  sx={{
+                    width: "60%",
+                    height: "1px",
+                    backgroundColor: "black",
+                    margin: "20px 0",
+                  }}></Box>
+              </Box>
+            ) : (
+              <Typography
+                fontWeight={"bold"}
+                variant='h4'
+                color={colors.gray[300]}
+                sx={{
+                  margin: "5px 0px 10px 15px",
+                }}>
+                Quản lí
+              </Typography>
+            )}
+          </Box>
+          <Tooltip title='Người dùng' placement='right'>
+            <Box>
+              <Item
+                title={"Người dùng"}
+                to={"/team"}
+                icon={<PeopleOutline />}
+                selected={selected}
+                setSelected={setSelected}
+              />
+            </Box>
+          </Tooltip>
 
-          <Item
-            title={"Auctions"}
-            to={"/auctions"}
-            icon={<ShoppingBagOutlined />}
-            selected={selected}
-            setSelected={setSelected}
-          />
-          <Typography
-            variant='h6'
-            color={colors.gray[300]}
-            sx={{
-              margin: "5px 0px 10px 15px",
-            }}>
-            Account
-          </Typography>
-
-          <Item
-            title={"Logout"}
-            to={"/logout"}
-            icon={<ExitToAppOutlined />}
-            selected={selected}
-            setSelected={setSelected}></Item>
+          <Tooltip title='Đấu giá' placement='right'>
+            <Box>
+              <Item
+                title={"Đấu giá"}
+                to={"/auctions/manager"}
+                icon={<ListOutlined />}
+                selected={selected}
+                setSelected={setSelected}
+              />
+            </Box>
+          </Tooltip>
+          <Tooltip title='Sản phẩm đấu giá' placement='right'>
+            <Box>
+              <Item
+                title={"Sản phẩm đấu giá"}
+                to={"/products"}
+                icon={<StoreOutlined />}
+                selected={selected}
+                setSelected={setSelected}
+              />
+            </Box>
+          </Tooltip>
+          <Box>
+            {collapsed ? (
+              // Dashline
+              <Box display={"flex"} justifyContent={"center"}>
+                <Box
+                  sx={{
+                    width: "60%",
+                    height: "1px",
+                    backgroundColor: "black",
+                    margin: "20px 0",
+                  }}></Box>
+              </Box>
+            ) : (
+              <Typography
+                variant='h4'
+                fontWeight={"bold"}
+                color={colors.gray[300]}
+                sx={{
+                  margin: "5px 0px 10px 15px",
+                }}>
+                Tài khoản
+              </Typography>
+            )}
+          </Box>
+          <Tooltip title='Tài khoản của tôi' placement='right'>
+            <Box>
+              <Item
+                title={"Tài khoản của tôi"}
+                to={"/profile"} //Update later when API is updated
+                icon={<Person2Outlined />}
+                selected={selected}
+                setSelected={setSelected}></Item>
+            </Box>
+          </Tooltip>
+          <Tooltip title='Đăng xuất' placement='right'>
+            <Box>
+              <Item
+                title={"Đăng xuất"}
+                to={"/login"}
+                icon={<ExitToAppOutlined />}
+                selected={selected}
+                setSelected={setSelected}></Item>
+            </Box>
+          </Tooltip>
         </Box>
       );
-    } else {
+    } else if (user.role === 5) {
       return (
         <Box>
-          <Item
-            title={"Dashboard"}
-            to={"/dashboard"}
-            icon={<HomeOutlined />}
-            selected={selected}
-            setSelected={setSelected}
-          />
-          <Typography
-            variant='h6'
-            color={colors.gray[300]}
-            sx={{
-              margin: "5px 0px 10px 15px",
-            }}>
-            Management
-          </Typography>
-          <Item
-            title={"Users"}
-            to={"/team"}
-            icon={<PeopleOutline />}
-            selected={selected}
-            setSelected={setSelected}
-          />
+          <Tooltip title='Bảng điều khiển' placement='right'>
+            <Box>
+              <Item
+                title={"Bảng điều khiển"}
+                to={"/dashboard"}
+                icon={<HomeOutlined />}
+                selected={selected}
+                setSelected={setSelected}
+              />
+            </Box>
+          </Tooltip>
 
-          <Item
-            title={"Auctions"}
-            to={"/"}
-            icon={<ListOutlined />}
-            selected={selected}
-            setSelected={setSelected}
-          />
-          <Item
-            title={"Products"}
-            to={"/products"}
-            icon={<StoreOutlined />}
-            selected={selected}
-            setSelected={setSelected}
-          />
-          <Item
-            title={"Orders"}
-            to={"/orders"}
-            icon={<Checklist />}
-            selected={selected}
-            setSelected={setSelected}
-          />
+          <Box>
+            {collapsed ? (
+              // Dashline
+              <Box display={"flex"} justifyContent={"center"}>
+                <Box
+                  sx={{
+                    width: "60%",
+                    height: "1px",
+                    backgroundColor: "black",
+                    margin: "20px 0",
+                  }}></Box>
+              </Box>
+            ) : (
+              <Typography
+                variant='h4'
+                fontWeight={"bold"}
+                color={colors.gray[300]}
+                sx={{
+                  margin: "5px 0px 10px 15px",
+                }}>
+                Quản lí
+              </Typography>
+            )}
+          </Box>
+          <Tooltip title='Người dùng' placement='right'>
+            <Box>
+              <Item
+                title={"Người dùng"}
+                to={"/team"}
+                icon={<PeopleOutline />}
+                selected={selected}
+                setSelected={setSelected}
+              />
+            </Box>
+          </Tooltip>
 
-          <Typography
-            variant='h6'
-            color={colors.gray[300]}
-            sx={{
-              margin: "5px 0px 10px 15px",
-            }}>
-            Account
-          </Typography>
+          <Tooltip title='Đấu giá' placement='right'>
+            <Box>
+              <Item
+                title={"Đấu giá"}
+                to={"/auctions"}
+                icon={<ListOutlined />}
+                selected={selected}
+                setSelected={setSelected}
+              />
+            </Box>
+          </Tooltip>
+          <Tooltip title='Sản phẩm' placement='right'>
+            <Box>
+              <Item
+                title={"Sản phẩm"}
+                to={"/products"}
+                icon={<StoreOutlined />}
+                selected={selected}
+                setSelected={setSelected}
+              />
+            </Box>
+          </Tooltip>
+          <Tooltip title='Đơn hàng' placement='right'>
+            <Box>
+              <Item
+                title={"Đơn hàng"}
+                to={"/orders"}
+                icon={<Checklist />}
+                selected={selected}
+                setSelected={setSelected}
+              />
+            </Box>
+          </Tooltip>
 
-          <Item
-            title={"Profile"}
-            to={"/profile"} //Update later when API is updated
-            icon={<Person2Outlined />}
-            selected={selected}
-            setSelected={setSelected}></Item>
+          <Box>
+            {collapsed ? (
+              // Dashline
+              <Box display={"flex"} justifyContent={"center"}>
+                <Box
+                  sx={{
+                    width: "60%",
+                    height: "1px",
+                    backgroundColor: "black",
+                    margin: "20px 0",
+                  }}></Box>
+              </Box>
+            ) : (
+              <Typography
+                fontWeight={"bold"}
+                variant='h4'
+                color={colors.gray[300]}
+                sx={{
+                  margin: "5px 0px 10px 15px",
+                }}>
+                Yêu cầu
+              </Typography>
+            )}
+          </Box>
 
-          <Item
-            title={"Logout"}
-            to={"/logout"}
-            icon={<ExitToAppOutlined />}
-            selected={selected}
-            setSelected={setSelected}></Item>
+          <Tooltip title='Kích hoạt lại tài khoản' placement='right'>
+            <Box>
+              <Item
+                title={"Kích hoạt lại tài khoản"}
+                to={"/"}
+                icon={<VpnKey />}
+                selected={selected}
+                setSelected={setSelected}
+              />
+            </Box>
+          </Tooltip>
+          <Tooltip title='Kích hoạt người bán' placement='right'>
+            <Box>
+              <Item
+                title={"Kích hoạt người bán"}
+                to={"/sellerRequest"}
+                icon={<HowToRegOutlined />}
+                selected={selected}
+                setSelected={setSelected}
+              />
+            </Box>
+          </Tooltip>
+          <Box>
+            {collapsed ? (
+              // Dashline
+              <Box display={"flex"} justifyContent={"center"}>
+                <Box
+                  sx={{
+                    width: "60%",
+                    height: "1px",
+                    backgroundColor: "black",
+                    margin: "20px 0",
+                  }}></Box>
+              </Box>
+            ) : (
+              <Typography
+                fontWeight={"bold"}
+                variant='h4'
+                color={colors.gray[300]}
+                sx={{
+                  margin: "5px 0px 10px 15px",
+                }}>
+                Tài khoản
+              </Typography>
+            )}
+          </Box>
+
+          <Tooltip title='Tài khoản của tôi' placement='right'>
+            <Box>
+              <Item
+                title={"Tài khoản của tôi"}
+                to={"/profile"} //Update later when API is updated
+                icon={<Person2Outlined />}
+                selected={selected}
+                setSelected={setSelected}></Item>
+            </Box>
+          </Tooltip>
+
+          <Tooltip title='Đăng xuất' placement='right'>
+            <Box>
+              <Item
+                title={"Đăng xuất"}
+                to={"/login"}
+                icon={<ExitToAppOutlined />}
+                selected={selected}
+                setSelected={setSelected}></Item>
+            </Box>
+          </Tooltip>
         </Box>
       );
     }
@@ -280,6 +552,7 @@ const Sidebar = ({ user, currentLocation }) => {
 
   return (
     <Box
+      borderRight={`1px solid ${colors.gray[900]}`}
       display={"flex"}
       flexDirection={"column"}
       sx={{
@@ -293,10 +566,12 @@ const Sidebar = ({ user, currentLocation }) => {
           padding: "5px 35px 5px 20px !important",
         },
         "& .pro-inner-item:hover": {
-          color: "#868dfb !important",
+          backgroundColor: "#868dfb !important",
+          color: "#fff !important",
         },
         "& .pro-menu-item.active": {
-          color: "#6870fa !important",
+          backgroundColor: "#6870fa !important",
+          color: "#fff !important",
         },
       }}>
       {/* Head */}
@@ -316,7 +591,13 @@ const Sidebar = ({ user, currentLocation }) => {
                   sx={{
                     textTransform: "uppercase",
                   }}>
-                  {user}
+                  {user.role === 3
+                    ? "Admin"
+                    : user.role === 4
+                    ? "Manager"
+                    : user.role === 5
+                    ? "Staff"
+                    : ""}
                 </Typography>
                 <IconButton>
                   <MenuOutlined />
@@ -334,7 +615,7 @@ const Sidebar = ({ user, currentLocation }) => {
               m={"5px"}>
               <Box>
                 <img
-                  src={logo}
+                  src={user.profilePicture || logo}
                   style={{
                     cursor: "pointer",
                     borderRadius: "50%",
@@ -351,9 +632,17 @@ const Sidebar = ({ user, currentLocation }) => {
                   sx={{
                     textTransform: "uppercase",
                   }}>
-                  {user}
+                  {user.name}
                 </Typography>
-                <Typography variant='subtitle2'>User Role</Typography>
+                <Typography variant='subtitle2'>
+                  {user.role === 3
+                    ? "Admin"
+                    : user.role === 4
+                    ? "Manager"
+                    : user.role === 5
+                    ? "Staff"
+                    : ""}
+                </Typography>
               </Box>
             </Box>
           )}

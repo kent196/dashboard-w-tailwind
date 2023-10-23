@@ -1,22 +1,88 @@
 import { useTheme } from "@emotion/react";
-import { Box, Container, IconButton } from "@mui/material";
-import React from "react";
+import {
+  Box,
+  Button,
+  Chip,
+  Container,
+  Dialog,
+  DialogContent,
+  DialogTitle,
+  IconButton,
+  Select,
+  TextField,
+  Typography,
+} from "@mui/material";
+import React, { useState } from "react";
 
-import { ListOutlined } from "@mui/icons-material";
+import {
+  ListOutlined,
+  Visibility,
+  VisibilityOutlined,
+} from "@mui/icons-material";
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import Header from "../../components/Header";
 import { mockDataOrders } from "../../data/mockData";
 import { token } from "../../theme";
 import { useNavigate } from "react-router-dom";
 import { Helmet } from "react-helmet";
+import { useEffect } from "react";
+import { fetchOrders } from "../../libs/orderService";
+import { formatDateTime } from "../../libs/formaters";
 
 const Orders = () => {
+  const [isOpenViewOrder, setIsOpenViewOrder] = useState(false);
+  const [orders, setOrders] = useState([]); // State to store orders
+  const [orderDetails, setOrderDetails] = useState({
+    totalAmount: 0,
+    shippingCost: 0,
+  }); // State to store order details
   const navigate = useNavigate();
   const theme = useTheme();
+  const [page, setPage] = useState(1);
+  const [pageSize, setPageSize] = useState(3);
+  const [pageInput, setPageInput] = useState(1); // State for page input
+  const [pageSizeInput, setPageSizeInput] = useState(3);
+  const [paginationModel, setPaginationModel] = React.useState({
+    page: 0,
+    pageSize: 5,
+  });
   const colors = token(theme.palette.mode);
 
+  function formatPrice(price) {
+    // Convert price to VND format with commas for thousands
+    return price.toLocaleString("vi-VN", {
+      style: "currency",
+      currency: "VND",
+    });
+  }
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+
+    fetchOrders(pageSize, page)
+      .then((res) => {
+        console.log(pageSize, page);
+        console.log(res.data);
+        setOrders(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+
+    return () => {
+      setOrders([]);
+    };
+  }, [page, pageSize]);
+
   const handleViewOrder = (orderId) => {
-    navigate(`/order/${orderId}`);
+    // setIsOpenViewOrder(true);
+    // const res = mockDataOrders.find((orderData) => orderData.id === orderId);
+    // if (!res) {
+    //   return <Box>Order not found</Box>;
+    // }
+    // console.log(res);
+    // setOrderDetails(res);
+    navigate(`/orders/${orderId}`);
   };
 
   const columns = [
@@ -24,55 +90,92 @@ const Orders = () => {
       field: "id",
       headerName: "ID",
     },
-    {
-      field: "buyerId",
-      headerName: "Buyer ID",
-    },
-    {
-      field: "sellerId",
-      headerName: "Seller ID",
-    },
+
     {
       field: "recipientName",
-      headerName: "Buyer",
+      headerName: "Tên người mua",
       flex: 1,
     },
     {
       field: "recipientPhone",
-      headerName: "Buyer Phone",
+      headerName: "SDT người mua",
       flex: 1,
     },
-    {
-      field: "recipientAddress",
-      headerName: "Buyer Address",
-      flex: 1,
-    },
+
     {
       field: "orderDate",
-      headerName: "Order Date",
+      headerName: "Ngày đặt hàng",
+      flex: 2,
+      renderCell: (params) => formatDateTime(params.row.orderDate),
     },
     {
       field: "totalAmount",
-      headerName: "Total",
+      headerName: "Tổng tiền",
+      flex: 1,
+      renderCell: (params) => formatPrice(params.row.totalAmount),
     },
     {
       field: "shippingCost",
-      headerName: "Shipping Cost",
+      headerName: "Phí giao hàng",
+      flex: 1,
+      renderCell: (params) => formatPrice(params.row.shippingCost),
     },
     {
       field: "status",
-      headerName: "Order Status",
+      headerName: "Trạng thái",
+      flex: 1.5,
+      renderCell: (params) => (
+        <Chip
+          sx={{ textTransform: "uppercase", fontSize: "1rem" }}
+          label={
+            params.row.status === 1
+              ? "Chờ thanh toán"
+              : params.row.status === 2
+              ? "Chờ lấy hàng"
+              : params.row.status === 3
+              ? "Đang vận chuyển"
+              : params.row.status === 4
+              ? "Đã vận chuyển"
+              : params.row.status === 5
+              ? "Chờ xác nhận"
+              : params.row.status === 10
+              ? "Bị từ chối"
+              : params.row.status === 11
+              ? "Người mua hủy"
+              : params.row.status === 12
+              ? "Người bán hủy"
+              : "Đang cập nhật"
+          }
+          color={
+            params.row.status === 1
+              ? "info"
+              : params.row.status === 2
+              ? "success"
+              : params.row.status === 3
+              ? "default"
+              : params.row.status === 4
+              ? "info"
+              : params.row.status === 5
+              ? "success"
+              : params.row.status === 6
+              ? "warning"
+              : params.row.status === 7
+              ? "secondary"
+              : "error"
+          }
+        />
+      ),
     },
     {
       field: "actions",
-      headerName: "Actions",
+      headerName: "Thao tác",
       flex: 1,
-      renderCell: (params) => (
+      renderCell: (row) => (
         <>
           <IconButton
             color={colors.primary[400]}
-            onClick={() => handleViewOrder(params.row.id)}>
-            <ListOutlined />
+            onClick={() => handleViewOrder(row.id)}>
+            <Visibility />
           </IconButton>
         </>
       ),
@@ -86,8 +189,9 @@ const Orders = () => {
       </Helmet>
       <Box>
         <Box>
-          <Header title={"Orders"} />
+          <Header title={"Danh sách đơn hàng"} />
         </Box>
+
         <Box
           m={"20px 0"} // Reduced top margin
           sx={{
@@ -100,6 +204,9 @@ const Orders = () => {
             },
             "& .auctionName-column--cell": {
               color: colors.primary[300],
+            },
+            "& .MuiTablePagination-toolbar": {
+              // display: "none",
             },
             "& .staffName-column--cell": {
               color: colors.primary[300],
@@ -136,12 +243,143 @@ const Orders = () => {
             style={{
               fontSize: "18px",
             }}
-            rows={mockDataOrders}
+            rows={orders}
             columns={columns}
             components={{ Toolbar: GridToolbar }}
+            rowCount={orders.length}
+            pageSizeOptions={[5]}
+            paginationModel={paginationModel}
+            paginationMode='server'
+            onPaginationModelChange={setPaginationModel}
           />
         </Box>
       </Box>
+
+      {/* View order details */}
+      <Dialog
+        fullWidth
+        open={isOpenViewOrder}
+        onClose={() => setIsOpenViewOrder(false)}
+        aria-labelledby='alert-dialog-title'
+        aria-describedby='alert-dialog-description'>
+        <DialogTitle id='alert-dialog-title' variant='h4'>
+          Chi tiết đơn hàng số {orderDetails.id}
+        </DialogTitle>
+        <DialogContent>
+          <Box>
+            <Box
+              display={"flex"}
+              justifyContent={"space-between"}
+              gap={"20px"}
+              alignItems={"center"}>
+              <Typography variant='h4' fontWeight={"bold"}>
+                ID:
+              </Typography>
+              <Typography variant='h5'>{orderDetails.id}</Typography>
+            </Box>
+            <Box
+              display={"flex"}
+              justifyContent={"space-between"}
+              gap={"20px"}
+              alignItems={"center"}>
+              <Typography variant='h4' fontWeight={"bold"}>
+                ID Người mua :
+              </Typography>
+              <Typography variant='h5'>{orderDetails.buyerId}</Typography>
+            </Box>
+            <Box
+              display={"flex"}
+              justifyContent={"space-between"}
+              gap={"20px"}
+              alignItems={"center"}>
+              <Typography variant='h4' fontWeight={"bold"}>
+                ID Người bán :
+              </Typography>
+              <Typography variant='h5'>{orderDetails.sellerId}</Typography>
+            </Box>
+            <Box
+              display={"flex"}
+              justifyContent={"space-between"}
+              gap={"20px"}
+              alignItems={"center"}>
+              <Typography variant='h4' fontWeight={"bold"}>
+                Tên người mua :
+              </Typography>
+              <Typography variant='h5'>{orderDetails.recipientName}</Typography>
+            </Box>
+            <Box
+              display={"flex"}
+              justifyContent={"space-between"}
+              gap={"20px"}
+              alignItems={"center"}>
+              <Typography variant='h4' fontWeight={"bold"}>
+                Số điện thoại người mua:
+              </Typography>
+              <Typography variant='h5'>
+                {orderDetails.recipientPhone}
+              </Typography>
+            </Box>
+            <Box
+              display={"flex"}
+              justifyContent={"space-between"}
+              gap={"20px"}
+              alignItems={"center"}>
+              <Typography variant='h4' fontWeight={"bold"}>
+                Địa chỉ nhận hàng người mua:
+              </Typography>
+              <Typography variant='h5'>
+                {orderDetails.recipientAddress}
+              </Typography>
+            </Box>
+            <Box
+              display={"flex"}
+              justifyContent={"space-between"}
+              gap={"20px"}
+              alignItems={"center"}>
+              <Typography variant='h4' fontWeight={"bold"}>
+                Ngày đặt hàng:
+              </Typography>
+              <Typography variant='h5'>{orderDetails.orderDate}</Typography>
+            </Box>
+            <Box
+              display={"flex"}
+              justifyContent={"space-between"}
+              gap={"20px"}
+              alignItems={"center"}>
+              <Typography variant='h4' fontWeight={"bold"}>
+                Tổng tiền:
+              </Typography>
+              <Typography variant='h5'>
+                {formatPrice(orderDetails.totalAmount)}
+              </Typography>
+            </Box>
+            <Box
+              display={"flex"}
+              justifyContent={"space-between"}
+              gap={"20px"}
+              alignItems={"center"}>
+              <Typography variant='h4' fontWeight={"bold"}>
+                Phí giao hàng:
+              </Typography>
+              <Typography variant='h5'>
+                {formatPrice(orderDetails.shippingCost)}
+              </Typography>
+            </Box>
+            <Box
+              display={"flex"}
+              justifyContent={"space-between"}
+              gap={"20px"}
+              alignItems={"center"}>
+              <Typography variant='h4' fontWeight={"bold"}>
+                Trạng thái:
+              </Typography>
+              <Typography variant='h5'>
+                {orderDetails.status === 1 ? "Pending" : orderDetails.status}
+              </Typography>
+            </Box>
+          </Box>
+        </DialogContent>
+      </Dialog>
     </Container>
   );
 };
