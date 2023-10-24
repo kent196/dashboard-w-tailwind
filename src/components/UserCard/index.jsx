@@ -1,7 +1,8 @@
 import { Box, Typography } from "@mui/material";
 import React from "react";
+import { formatPrice } from "../../libs/formaters";
 
-const UserCard = ({ avatar, bidderName, bidDate, bidAmmount, email }) => {
+const UserCard = ({ avatar, bidderName, bidDate, bidAmmount, email, icon }) => {
   return (
     <Box
       display={"flex"}
@@ -31,9 +32,16 @@ const UserCard = ({ avatar, bidderName, bidDate, bidAmmount, email }) => {
           />
         </Box>
         <Box width={"60%"}>
-          <Typography variant='h5' fontWeight={"bold"}>
-            {bidderName}
-          </Typography>
+          <Box
+            display={"flex"}
+            justifyContent={"space-between"}
+            gap={"10px"}
+            alignItems={"center"}>
+            <Typography variant='h5' fontWeight={"bold"}>
+              {bidderName}
+            </Typography>
+            <Box>{icon}</Box>
+          </Box>
           <Typography variant='h6'>{bidDate}</Typography>
           <Typography variant='h6'>{email}</Typography>
         </Box>
@@ -42,7 +50,7 @@ const UserCard = ({ avatar, bidderName, bidDate, bidAmmount, email }) => {
       <Box display={"flex"} justifyContent={"flex-end"} width={"40%"}>
         <Box>
           <Typography variant='h5' fontWeight={"bold"}>
-            {bidAmmount}
+            {formatPrice(bidAmmount)}
           </Typography>
         </Box>
       </Box>

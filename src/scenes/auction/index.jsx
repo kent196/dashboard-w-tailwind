@@ -45,7 +45,7 @@ const Auction = ({ userId }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [paginationModel, setPaginationModel] = React.useState({
     page: 0,
-    pageSize: 1,
+    pageSize: 5,
   });
   const [rowCountState, setRowCountState] = React.useState(auctionCount || 0);
   const theme = useTheme();
@@ -312,7 +312,7 @@ const Auction = ({ userId }) => {
               components={{ Toolbar: GridToolbar }}
               rowCount={rowCountState}
               loading={isLoading}
-              pageSizeOptions={[1, 2, 3]}
+              pageSizeOptions={[3, 5, 10]}
               paginationModel={paginationModel}
               paginationMode='server'
               onPaginationModelChange={setPaginationModel}

@@ -95,7 +95,7 @@ const StaffChooserModal = ({
                   {user.name}
                 </Typography>
                 <Typography variant='h5' color={colors.primary[300]}>
-                  {user.phone}
+                  {user.email}
                 </Typography>
               </Box>
             ))}

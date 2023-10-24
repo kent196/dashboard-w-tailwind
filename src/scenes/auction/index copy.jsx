@@ -29,6 +29,7 @@ import {
   fetchAuctions,
   fetchBidders,
   managerApproval,
+  managerReject,
 } from "../../libs/auctionService";
 import { formatDateTime, formatPrice } from "../../libs/formaters";
 import { fetchProduct } from "../../libs/productServices";
@@ -109,6 +110,9 @@ const AuctionManager = () => {
         fetchAuctionDetail(auctionId).then((res) => {
           setAuctionDetails(res.data);
         });
+        fetchAuctions().then((res) => {
+          setAuctions(res.data.auctionList);
+        });
       })
       .catch((err) => {
         console.log(err);
@@ -117,9 +121,14 @@ const AuctionManager = () => {
   };
 
   const handleReject = (auctionId) => {
-    managerApproval(auctionId)
+    managerReject(auctionId)
       .then((res) => {
-        setAuctionDetails(res.data);
+        fetchAuctionDetail(auctionId).then((res) => {
+          setAuctionDetails(res.data);
+        });
+        fetchAuctions().then((res) => {
+          setAuctions(res.data.auctionList);
+        });
       })
       .catch((err) => {
         console.log(err);

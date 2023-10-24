@@ -3,13 +3,20 @@ import {
   Button,
   Chip,
   Container,
+  Dialog,
+  DialogContent,
+  DialogTitle,
   Skeleton,
   Typography,
 } from "@mui/material";
 import React from "react";
 import { useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { fetchAuctionDetail, fetchBidders } from "../../libs/auctionService";
+import {
+  endAuction,
+  fetchAuctionDetail,
+  fetchBidders,
+} from "../../libs/auctionService";
 import { useState } from "react";
 import { formatDateTime, formatPrice } from "../../libs/formaters";
 import Header from "../../components/Header";
@@ -19,7 +26,14 @@ import { useTheme } from "@emotion/react";
 import { token } from "../../theme";
 import CountdownTimer from "../../components/CountdownTimer";
 import { HttpTransportType, HubConnectionBuilder } from "@microsoft/signalr";
-import { ArrowBack } from "@mui/icons-material";
+import {
+  ArrowBack,
+  EmojiEventsOutlined,
+  GavelOutlined,
+} from "@mui/icons-material";
+import Error from "../../global/Error";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const Live = () => {
   const theme = useTheme();
@@ -30,6 +44,8 @@ const Live = () => {
   const [endedAt, setEndedAt] = useState(new Date()); // State to store auction details
   const [loading, setLoading] = useState(false); // State to store auction details
   const [connection, setConnection] = useState(); // State to store signal r connection
+  const [winner, setWinner] = useState({}); // State to store signal r connection
+  const [isOpenWinner, setIsOpenWinner] = useState(false); // State to store signal r connection
   const navigate = useNavigate();
   const styles = {
     gradientBox: {
@@ -122,6 +138,29 @@ const Live = () => {
     }
   }, [connection]);
 
+  const handleEndAuction = (auctionId) => {
+    endAuction(auctionId)
+      .then((res) => {
+        toast.success("Kết thúc phiên đấu giá", {
+          position: "top-right",
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
+        setEndedAt(0);
+        setWinner(res.data);
+        setIsOpenWinner(true);
+      })
+      .catch((err) => {
+        console.log(err);
+        return <Error />;
+      });
+  };
+
   const handleBack = () => {
     navigate(`/auction/${id}`);
   };
@@ -130,7 +169,7 @@ const Live = () => {
     return <Skeleton />;
   }
   return (
-    <Container maxWidth='xl' sx={{ paddingTop: "20px" }}>
+    <Container maxWidth='xl' sx={{ paddingTop: "20px", maxHeight: "100vh" }}>
       <Box
         p={"10px"}
         borderRadius={"5px"}
@@ -149,6 +188,7 @@ const Live = () => {
         </Box>
       </Box>
       <Box
+        maxHeight={"100vh"}
         width={"100%"}
         display={"flex"}
         justifyContent={"space-between"}
@@ -156,10 +196,11 @@ const Live = () => {
         {/* Product display */}
         <Box
           width={"30%"}
-          minHeight={"500px"}
+          // maxHeight={"700px"}
+          height={"75vh"}
           display={"flex"}
           flexDirection={"column"}
-          justifyContent={"flex-start"}
+          justifyContent={"space-between"}
           boxShadow={"1"}
           p={"10px"}
           gap={"20px"}
@@ -173,116 +214,119 @@ const Live = () => {
             fontSize={"24px"}
           />
           {/* product img */}
-          <Box display={"flex"} justifyContent={"center"} alignItems={"center"}>
-            <Box
-              width={"300px"}
-              height={"300px"}
-              sx={{
-                overflow: "hidden",
-                objectFit: "contain",
-              }}>
-              <img
-                width={"100%"}
-                height={"100%"}
-                src={auctionDetails.imageUrls}
-              />
-            </Box>
+          <Box
+            display={"flex"}
+            justifyContent={"center"}
+            alignItems={"center"}
+            width={"100%"}
+            height={"30%"}
+            sx={{
+              overflow: "hidden",
+              borderRadius: "10px",
+              objectFit: "contain",
+            }}>
+            <img
+              style={{
+                maxWidth: "100%",
+                maxHeight: "100%",
+                display: "block",
+              }}
+              src={auctionDetails.imageUrls}
+            />
           </Box>
 
           {/* product info */}
-          <Box width={"100%"}>
-            {/*title  */}
+          <Box
+            width={"100%"}
+            // height={"40%"}
+            display={"flex"}
+            flexDirection={"column"}
+            justifyContent={"space-between"}>
             <Box
-              width={"100%"}
+              p={"0 10px"}
               display={"flex"}
-              flexDirection={"column"}
-              // alignItems={"center"}
-              gap={"10px"}>
-              <Box
-                p={"0 10px"}
-                display={"flex"}
-                justifyContent={"flex-start"}
-                alignItems={"center"}
-                gap={"20px"}>
-                <Typography fontWeight={"bold"} variant={"h5"}>
-                  Trạng thái:
+              justifyContent={"flex-start"}
+              alignItems={"center"}
+              width={"100%"}
+              gap={"20px"}>
+              <Typography fontWeight={"bold"} variant={"h5"}>
+                Trạng thái:
+              </Typography>
+              <Chip
+                sx={{ textTransform: "uppercase", fontSize: "1rem" }}
+                label={
+                  auctionDetails.status === 1
+                    ? "Chưa có nhân viên"
+                    : auctionDetails.status === 0
+                    ? "Đang chờ duyệt"
+                    : auctionDetails.status === 2
+                    ? "Cập nhật thông tin"
+                    : auctionDetails.status === 3
+                    ? "Bị từ chối"
+                    : auctionDetails.status === 4
+                    ? "Mở đăng ký"
+                    : auctionDetails.status === 5
+                    ? "Đang diễn ra"
+                    : auctionDetails.status === 6
+                    ? "Đã kết thúc"
+                    : auctionDetails.status === 7
+                    ? "Không thành công"
+                    : "Đang cập nhật"
+                }
+                color={
+                  auctionDetails.status === 1
+                    ? "info"
+                    : auctionDetails.status === 0
+                    ? "warning"
+                    : auctionDetails.status === 2
+                    ? "warning"
+                    : auctionDetails.status === 3
+                    ? "error"
+                    : auctionDetails.status === 4
+                    ? "info"
+                    : auctionDetails.status === 5
+                    ? "success"
+                    : auctionDetails.status === 6
+                    ? "error"
+                    : auctionDetails.status === 7
+                    ? "secondary"
+                    : "warning"
+                }
+              />
+            </Box>
+            <Box p={"0 10px"}>
+              <Box m={"20px 0 5px 0"}>
+                <Typography variant='h4' fontWeight={"bold"}>
+                  {auctionDetails.title}
                 </Typography>
-                <Chip
-                  sx={{ textTransform: "uppercase", fontSize: "1rem" }}
-                  label={
-                    auctionDetails.status === 1
-                      ? "Chưa có nhân viên"
-                      : auctionDetails.status === 0
-                      ? "Đang chờ duyệt"
-                      : auctionDetails.status === 2
-                      ? "Cập nhật thông tin"
-                      : auctionDetails.status === 3
-                      ? "Bị từ chối"
-                      : auctionDetails.status === 4
-                      ? "Mở đăng ký"
-                      : auctionDetails.status === 5
-                      ? "Đang diễn ra"
-                      : auctionDetails.status === 6
-                      ? "Đã kết thúc"
-                      : auctionDetails.status === 7
-                      ? "Không thành công"
-                      : "Đang cập nhật"
-                  }
-                  color={
-                    auctionDetails.status === 1
-                      ? "info"
-                      : auctionDetails.status === 0
-                      ? "warning"
-                      : auctionDetails.status === 2
-                      ? "warning"
-                      : auctionDetails.status === 3
-                      ? "error"
-                      : auctionDetails.status === 4
-                      ? "info"
-                      : auctionDetails.status === 5
-                      ? "success"
-                      : auctionDetails.status === 6
-                      ? "error"
-                      : auctionDetails.status === 7
-                      ? "secondary"
-                      : "warning"
-                  }
-                />
               </Box>
-              <Box p={"0 10px"}>
-                <Box m={"20px 0 5px 0"}>
-                  <Typography variant='h4' fontWeight={"bold"}>
-                    {auctionDetails.title}
+              <Box m={"10px 0"}>
+                <Box display={"flex"} justifyContent={"space-between"}>
+                  <Typography variant='h5' fontWeight={"bold"}>
+                    Giá khởi điểm:
+                  </Typography>
+                  <Typography variant='h5'>
+                    {formatPrice(auctionDetails.startingPrice)}
                   </Typography>
                 </Box>
-                <Box m={"10px 0"}>
-                  <Box display={"flex"} justifyContent={"space-between"}>
-                    <Typography variant='h5' fontWeight={"bold"}>
-                      Giá khởi điểm:
-                    </Typography>
-                    <Typography variant='h5'>
-                      {formatPrice(auctionDetails.startingPrice)}
-                    </Typography>
-                  </Box>
-                  <Box display={"flex"} justifyContent={"space-between"}>
-                    <Typography variant='h5' fontWeight={"bold"}>
-                      Bước giá:
-                    </Typography>
-                    <Typography variant='h5'>
-                      {formatPrice(auctionDetails.step)}
-                    </Typography>
-                  </Box>
+                <Box display={"flex"} justifyContent={"space-between"}>
+                  <Typography variant='h5' fontWeight={"bold"}>
+                    Bước giá:
+                  </Typography>
+                  <Typography variant='h5'>
+                    {formatPrice(auctionDetails.step)}
+                  </Typography>
                 </Box>
               </Box>
-              <Box p={"0 10px"}>
-                <Typography variant='h5' fontWeight={"bold"} width={"100%"}>
-                  {" "}
-                  Thời gian còn lại:
-                </Typography>
-                <Typography textAlign={"right"} variant='h5'>
-                  <CountdownTimer targetTime={endedAt} />
-                </Typography>
-              </Box>
+            </Box>
+            <Box p={"0 10px"}>
+              <Typography variant='h5' fontWeight={"bold"} width={"100%"}>
+                {" "}
+                Thời gian còn lại:
+              </Typography>
+              <Typography textAlign={"right"} variant='h5'>
+                <CountdownTimer targetTime={endedAt} />
+              </Typography>
             </Box>
           </Box>
         </Box>
@@ -291,7 +335,7 @@ const Live = () => {
           borderRadius={"10px"}
           boxShadow={"1"}
           p={"10px"}
-          height={"100%"}
+          height={"75vh"}
           width={"40%"}
           sx={{
             backgroundColor: "white",
@@ -302,8 +346,8 @@ const Live = () => {
             fontSize={"24px"}
           />
           <Box
-            minHeight={"500px"}
-            height={"70%"}
+            // maxHeight={"80%"}
+            height={"80%"}
             sx={{
               overflowY: "scroll",
             }}>
@@ -343,45 +387,13 @@ const Live = () => {
               <Box>Chưa có ai đặt giá sản phẩm này</Box>
             )}
           </Box>
-
-          <Box
-            display={"flex"}
-            justifyContent={"center"}
-            alignItems={"center"}
-            width={"100%"}
-            m={"20px 0"}
-            borderRadius={"10px"}
-            minHeight={"100px"}
-            sx={
-              {
-                // backgroundColor: `${colors.blueAccent[800]} !important`,
-              }
-            }>
-            {/* {bids.length > 0 ? (
-              <Box
-                width={"80%"}
-                minHeight={"100px"}
-                display={"flex"}
-                justifyContent={"space-between"}
-                alignItems={"center"}>
-                <Typography variant='h5' fontWeight={"bold"}>
-                  Người thắng hiện tại:
-                </Typography>
-                <Typography variant='h5'>
-                  {formatPrice(auctionDetails.currentPrice)}
-                </Typography>
-              </Box>
-            ) : (
-              <Box>Chưa có người thắng cuộc</Box>
-            )} */}
-          </Box>
         </Box>
         {/* Staff actions */}
         <Box
           borderRadius={"10px"}
           boxShadow={"1"}
           p={"10px"}
-          minHeight={"500px"}
+          height={"75vh"}
           width={"30%"}
           sx={{
             backgroundColor: "white",
@@ -405,13 +417,59 @@ const Live = () => {
             </Box>
 
             <Box display={"flex"} justifyContent={"center"}>
-              <Button variant='contained' color='info'>
+              <Button
+                startIcon={<GavelOutlined />}
+                variant='contained'
+                color='error'
+                onClick={() => handleEndAuction(auctionDetails.id)}>
                 Kết thúc phiên
               </Button>
             </Box>
           </Box>
         </Box>
       </Box>
+
+      {/* Winner */}
+      <Dialog
+        fullWidth
+        sx={{
+          maxHeight: "70vh",
+          margin: "50px 0",
+        }}
+        open={isOpenWinner}
+        onClose={() => {
+          setIsOpenWinner(false);
+          navigate("/auctions");
+        }}
+        aria-labelledby='alert-dialog-title'
+        aria-describedby='alert-dialog-description'>
+        <DialogTitle id='alert-dialog-title' variant='h4'>
+          Người chiến thắng
+        </DialogTitle>
+        <DialogContent>
+          <Box
+            display={"flex"}
+            flexDirection={"column"}
+            justifyContent={"space-between"}
+            gap={"20px"}>
+            <UserCard
+              icon={<EmojiEventsOutlined color='warning' />}
+              avatar={winner.profilePicture}
+              bidderName={winner.name}
+              email={winner.email}
+              bidAmmount={winner.finalBid}
+            />
+            <Box display={"flex"} justifyContent={"flex-end"}>
+              <Button
+                variant='contained'
+                color='error'
+                onClick={() => navigate("/auctions")}>
+                Đóng
+              </Button>
+            </Box>
+          </Box>
+        </DialogContent>
+      </Dialog>
     </Container>
   );
 };

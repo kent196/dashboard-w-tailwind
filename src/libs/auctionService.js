@@ -155,7 +155,21 @@ const fetchAuctionRegisters = async (auctionId) => {
   }
 };
 
+const endAuction = async (auctionId) => {
+  const path = `/auction/end/${auctionId}`;
+  try {
+    const response = await authAxios.get(path);
+    if (!response.data) {
+      console.log("No data");
+    }
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
 export {
+  endAuction,
   fetchAuctions,
   fetchAuctionDetail,
   fetchBidders,

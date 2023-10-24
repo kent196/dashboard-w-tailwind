@@ -207,18 +207,19 @@ const AuctionDetail = () => {
     auction.status === 4
   ) {
     return (
-      <Container maxWidth='xl' sx={{ paddingTop: "20px" }}>
+      <Container maxWidth='xl' sx={{ paddingTop: "20px", maxHeight: "100vh" }}>
         {auction && (
           <>
-            <Box
+            {/* <Box
               display={"flex"}
               justifyContent={"flex-start"}
               gap={"20px"}
               flex={"1"}
               alignItems={"center"}
-              mb={"30px"}></Box>
+              mb={"30px"}></Box> */}
             <Box display={"flex"} justifyContent={"center"}>
               <Box
+                maxHeight={"100vh"}
                 display={"flex"}
                 justifyContent={"space-between"}
                 gap={"20px"}
@@ -233,304 +234,293 @@ const AuctionDetail = () => {
                 {/* Left */}
                 <Box
                   width={"70%"}
+                  maxHeight={"80vh"}
                   boxShadow={2}
-                  p={"20px"}
+                  display={"flex"}
+                  flexDirection={"column"}
+                  justifyContent={"space-between"}
+                  p={"10px"}
+                  gap={"10px"}
                   sx={{
                     backgroundColor: "white",
                   }}>
                   {/* Details */}
                   <Header title={`${auction.title}`} />
 
-                  <Box width={"90%"}>
+                  <Box
+                    height={"10%"}
+                    display={"flex"}
+                    justifyContent={"flex-start"}
+                    alignItems={"center"}
+                    gap={"20px"}
+                    m={"10px 0"}>
+                    <Typography fontWeight={"bold"} variant={"h5"}>
+                      Trạng thái:
+                    </Typography>
+                    <Chip
+                      sx={{ textTransform: "uppercase", fontSize: "1rem" }}
+                      label={
+                        auction.status === 1
+                          ? "Chưa có nhân viên"
+                          : auction.status === 0
+                          ? "Đang chờ duyệt"
+                          : auction.status === 2
+                          ? "Cập nhật thông tin"
+                          : auction.status === 3
+                          ? "Bị từ chối"
+                          : auction.status === 4
+                          ? "Mở đăng ký"
+                          : auction.status === 5
+                          ? "Đang diễn ra"
+                          : auction.status === 6
+                          ? "Đã kết thúc"
+                          : auction.status === 7
+                          ? "Không thành công"
+                          : "Đang cập nhật"
+                      }
+                      color={
+                        auction.status === 1
+                          ? "info"
+                          : auction.status === 0
+                          ? "warning"
+                          : auction.status === 2
+                          ? "warning"
+                          : auction.status === 3
+                          ? "error"
+                          : auction.status === 4
+                          ? "info"
+                          : auction.status === 5
+                          ? "success"
+                          : auction.status === 6
+                          ? "error"
+                          : auction.status === 7
+                          ? "secondary"
+                          : "warning"
+                      }
+                    />
+                  </Box>
+                  {/* Time */}
+                  <Box
+                    height={"auto"}
+                    display={"flex"}
+                    flexDirection={"column"}
+                    justifyContent={"space-between"}
+                    p={"10px 0"}>
                     <Box
-                      display={"flex"}
-                      justifyContent={"flex-start"}
+                      height={"20%"}
                       alignItems={"center"}
-                      gap={"20px"}
-                      m={"30px 0"}>
-                      <Typography fontWeight={"bold"} variant={"h5"}>
-                        Trạng thái:
+                      display={"flex"}
+                      justifyContent={"space-between"}>
+                      <Typography
+                        maxWidth={"100px"}
+                        fontWeight={"bold"}
+                        variant={"h5"}>
+                        Mở đăng kí:
                       </Typography>
-                      <Chip
-                        sx={{ textTransform: "uppercase", fontSize: "1rem" }}
-                        label={
-                          auction.status === 1
-                            ? "Chưa có nhân viên"
-                            : auction.status === 0
-                            ? "Đang chờ duyệt"
-                            : auction.status === 2
-                            ? "Cập nhật thông tin"
-                            : auction.status === 3
-                            ? "Bị từ chối"
-                            : auction.status === 4
-                            ? "Mở đăng ký"
-                            : auction.status === 5
-                            ? "Đang diễn ra"
-                            : auction.status === 6
-                            ? "Đã kết thúc"
-                            : auction.status === 7
-                            ? "Không thành công"
-                            : "Đang cập nhật"
-                        }
-                        color={
-                          auction.status === 1
-                            ? "info"
-                            : auction.status === 0
-                            ? "warning"
-                            : auction.status === 2
-                            ? "warning"
-                            : auction.status === 3
-                            ? "error"
-                            : auction.status === 4
-                            ? "info"
-                            : auction.status === 5
-                            ? "success"
-                            : auction.status === 6
-                            ? "error"
-                            : auction.status === 7
-                            ? "secondary"
-                            : "warning"
-                        }
-                      />
-                    </Box>
-                    {/* Time */}
-                    <Box>
-                      <Box
-                        alignItems={"center"}
-                        display={"flex"}
-                        justifyContent={"space-between"}
-                        m={"10px 0"}>
-                        <Typography
-                          maxWidth={"100px"}
-                          fontWeight={"bold"}
-                          variant={"h5"}>
-                          Mở đăng kí:
-                        </Typography>
 
-                        {auction.status === 2 || auction.status === 4 ? (
-                          <TextField
-                            sx={{
-                              maxWidth: "200px",
-                            }}
-                            id='startDate'
-                            type='datetime-local'
-                            name='registrationStart'
-                            // defaultValue={auction.startedAt}
-                            defaultValue={
-                              auction.registrationStart || new Date()
-                            }
-                            onChange={handleInputChange}
-                          />
-                        ) : (
-                          <Typography variant={"h5"}>
-                            {new Date(
-                              auction.registrationStart
-                            ).toLocaleString()}
-                          </Typography>
-                        )}
-                      </Box>
-                      <Box
-                        alignItems={"center"}
-                        display={"flex"}
-                        justifyContent={"space-between"}
-                        m={"10px 0"}>
-                        <Typography
-                          maxWidth={"100px"}
-                          fontWeight={"bold"}
-                          variant={"h5"}>
-                          Đóng đăng kí:
-                        </Typography>
-
-                        {auction.status === 2 || auction.status === 4 ? (
-                          <TextField
-                            sx={{
-                              maxWidth: "200px",
-                            }}
-                            id='startDate'
-                            type='datetime-local'
-                            name='registrationEnd'
-                            // defaultValue={auction.startedAt}
-                            defaultValue={auction.registrationEnd || new Date()}
-                            onChange={handleInputChange}
-                          />
-                        ) : (
-                          <Typography variant={"h5"}>
-                            {new Date(auction.registrationEnd).toLocaleString()}
-                          </Typography>
-                        )}
-                      </Box>
-                      <Box
-                        alignItems={"center"}
-                        display={"flex"}
-                        justifyContent={"space-between"}
-                        m={"10px 0"}>
-                        <Typography
-                          maxWidth={"100px"}
-                          fontWeight={"bold"}
-                          variant={"h5"}>
-                          Bắt đầu:
-                        </Typography>
-
-                        {auction.status === 2 || auction.status === 4 ? (
-                          <TextField
-                            sx={{
-                              maxWidth: "200px",
-                            }}
-                            id='startDate'
-                            type='datetime-local'
-                            name='startedAt'
-                            // defaultValue={auction.startedAt}
-                            defaultValue={auction.startedAt || new Date()}
-                            onChange={handleInputChange}
-                          />
-                        ) : (
-                          <Typography variant={"h5"}>
-                            {new Date(auction.startedAt).toLocaleString()}
-                          </Typography>
-                        )}
-                      </Box>
-                      <Box
-                        alignItems={"center"}
-                        display={"flex"}
-                        justifyContent={"space-between"}
-                        m={"10px 0"}>
-                        <Typography
-                          maxWidth={"100px"}
-                          fontWeight={"bold"}
-                          variant={"h5"}>
-                          Kết thúc:
-                        </Typography>
-                        {auction.status === 2 || auction.status === 4 ? (
-                          <TextField
-                            sx={{
-                              maxWidth: "200px",
-                            }}
-                            id='endDate'
-                            type='datetime-local'
-                            name='endedAt'
-                            // defaultValue={auction.endedAt}
-                            defaultValue={auction.endedAt || new Date()}
-                            onChange={handleInputChange}
-                          />
-                        ) : (
-                          <Typography variant={"h5"}>
-                            {new Date(auction.endedAt).toLocaleString()}
-                          </Typography>
-                        )}
-                      </Box>
-                    </Box>
-
-                    {/* Dash */}
-                    <Box
-                      sx={{
-                        width: "100%",
-                        height: "1px",
-                        backgroundColor: "black",
-                        margin: "20px 0",
-                      }}></Box>
-                    {/* Price */}
-                    <Box>
-                      {auction.status != 4 && auction.status != 2 ? (
-                        <Box
-                          display={"flex"}
-                          justifyContent={"space-between"}
-                          m={"10px 0"}>
-                          <Typography fontWeight={"bold"} variant={"h5"}>
-                            Giá cao nhất:
-                          </Typography>
-                          <Typography variant={"h5"}>
-                            {formatPrice(auction.currentPrice)}
-                          </Typography>
-                        </Box>
+                      {auction.status === 2 || auction.status === 4 ? (
+                        <TextField
+                          sx={{
+                            maxWidth: "200px",
+                          }}
+                          id='startDate'
+                          type='datetime-local'
+                          name='registrationStart'
+                          // defaultValue={auction.startedAt}
+                          defaultValue={auction.registrationStart || new Date()}
+                          onChange={handleInputChange}
+                        />
                       ) : (
-                        <Box></Box>
+                        <Typography variant={"h5"}>
+                          {new Date(auction.registrationStart).toLocaleString()}
+                        </Typography>
                       )}
-                      <Box
-                        display={"flex"}
-                        justifyContent={"space-between"}
-                        m={"10px 0"}>
-                        <Typography fontWeight={"bold"} variant={"h5"}>
-                          Giá khởi điểm:
-                        </Typography>
-                        <Typography variant={"h5"}>
-                          {formatPrice(auction.startingPrice)}
-                        </Typography>
-                      </Box>
-                      <Box
-                        display={"flex"}
-                        justifyContent={"space-between"}
-                        m={"10px 0"}>
-                        <Typography fontWeight={"bold"} variant={"h5"}>
-                          Bước giá:
-                        </Typography>
-                        <Typography variant={"h5"}>
-                          {formatPrice(auction.step)}
-                        </Typography>
-                      </Box>
-                      <Box display={"flex"} gap={"10px"}>
-                        <Box flex={"1"}>
-                          <Box
-                            display={"flex"}
-                            justifyContent={"space-between"}
-                            m={"10px 0"}>
-                            <Typography fontWeight={"bold"} variant={"h5"}>
-                              Số người tham gia:
-                            </Typography>
-                            <Typography variant={"h5"}>
-                              {auction.numberOfBidders}
-                            </Typography>
-                          </Box>
-                          <Box
-                            display={"flex"}
-                            justifyContent={"space-between"}
-                            m={"10px 0"}>
-                            <Typography fontWeight={"bold"} variant={"h5"}>
-                              Số lượt đấu giá:
-                            </Typography>
-                            <Typography variant={"h5"}>
-                              {auction.numberOfBids}
-                            </Typography>
-                          </Box>
-                          <Box
-                            m={"10px 0"}
-                            display={"flex"}
-                            justifyContent={"flex-end"}>
-                            <Button
-                              variant={"outlined"}
-                              color={"primary"}
-                              onClick={() => setIsOpenViewBidders(true)}>
-                              Xem chi tiết
-                            </Button>
-                          </Box>
-                        </Box>
-                      </Box>
                     </Box>
-                    {/* Dash */}
                     <Box
-                      sx={{
-                        width: "100%",
-                        height: "1px",
-                        backgroundColor: "black",
-                        margin: "20px 0",
-                      }}></Box>
-                    {/* Staff */}
-                    <Box>
+                      height={"20%"}
+                      alignItems={"center"}
+                      display={"flex"}
+                      justifyContent={"space-between"}>
+                      <Typography
+                        maxWidth={"100px"}
+                        fontWeight={"bold"}
+                        variant={"h5"}>
+                        Đóng đăng kí:
+                      </Typography>
+
+                      {auction.status === 2 || auction.status === 4 ? (
+                        <TextField
+                          sx={{
+                            maxWidth: "200px",
+                          }}
+                          id='startDate'
+                          type='datetime-local'
+                          name='registrationEnd'
+                          // defaultValue={auction.startedAt}
+                          defaultValue={auction.registrationEnd || new Date()}
+                          onChange={handleInputChange}
+                        />
+                      ) : (
+                        <Typography variant={"h5"}>
+                          {new Date(auction.registrationEnd).toLocaleString()}
+                        </Typography>
+                      )}
+                    </Box>
+                    <Box
+                      height={"20%"}
+                      alignItems={"center"}
+                      display={"flex"}
+                      justifyContent={"space-between"}>
+                      <Typography
+                        maxWidth={"100px"}
+                        fontWeight={"bold"}
+                        variant={"h5"}>
+                        Bắt đầu:
+                      </Typography>
+
+                      {auction.status === 2 || auction.status === 4 ? (
+                        <TextField
+                          sx={{
+                            maxWidth: "200px",
+                          }}
+                          id='startDate'
+                          type='datetime-local'
+                          name='startedAt'
+                          // defaultValue={auction.startedAt}
+                          defaultValue={auction.startedAt || new Date()}
+                          onChange={handleInputChange}
+                        />
+                      ) : (
+                        <Typography variant={"h5"}>
+                          {new Date(auction.startedAt).toLocaleString()}
+                        </Typography>
+                      )}
+                    </Box>
+                    <Box
+                      height={"20%"}
+                      alignItems={"center"}
+                      display={"flex"}
+                      justifyContent={"space-between"}>
+                      <Typography
+                        maxWidth={"100px"}
+                        fontWeight={"bold"}
+                        variant={"h5"}>
+                        Kết thúc:
+                      </Typography>
+                      {auction.status === 2 || auction.status === 4 ? (
+                        <TextField
+                          sx={{
+                            maxWidth: "200px",
+                          }}
+                          id='endDate'
+                          type='datetime-local'
+                          name='endedAt'
+                          // defaultValue={auction.endedAt}
+                          defaultValue={auction.endedAt || new Date()}
+                          onChange={handleInputChange}
+                        />
+                      ) : (
+                        <Typography variant={"h5"}>
+                          {new Date(auction.endedAt).toLocaleString()}
+                        </Typography>
+                      )}
+                    </Box>
+                  </Box>
+
+                  {/* Price */}
+                  <Box
+                    maxHeight={"auto"}
+                    display={"flex"}
+                    justifyContent={"space-between"}
+                    flexDirection={"column"}>
+                    {auction.status != 4 && auction.status != 2 ? (
                       <Box
+                        height={"auto"}
                         display={"flex"}
-                        justifyContent={"space-between"}
-                        m={"10px 0"}>
+                        justifyContent={"space-between"}>
                         <Typography fontWeight={"bold"} variant={"h5"}>
-                          Nhân viên:
+                          Giá cao nhất:
                         </Typography>
                         <Typography variant={"h5"}>
-                          {auction.staffName}
+                          {formatPrice(auction.currentPrice)}
                         </Typography>
                       </Box>
+                    ) : (
+                      <Box></Box>
+                    )}
+                    <Box
+                      height={"auto"}
+                      display={"flex"}
+                      justifyContent={"space-between"}>
+                      <Typography fontWeight={"bold"} variant={"h5"}>
+                        Giá khởi điểm:
+                      </Typography>
+                      <Typography variant={"h5"}>
+                        {formatPrice(auction.startingPrice)}
+                      </Typography>
                     </Box>
+                    <Box
+                      height={"auto"}
+                      display={"flex"}
+                      justifyContent={"space-between"}>
+                      <Typography fontWeight={"bold"} variant={"h5"}>
+                        Bước giá:
+                      </Typography>
+                      <Typography variant={"h5"}>
+                        {formatPrice(auction.step)}
+                      </Typography>
+                    </Box>
+                    <Box
+                      height={"auto"}
+                      display={"flex"}
+                      gap={"10px"}
+                      flexDirection={"column"}
+                      justifyContent={"space-between"}>
+                      <Box display={"flex"} justifyContent={"space-between"}>
+                        <Typography fontWeight={"bold"} variant={"h5"}>
+                          Số người tham gia:
+                        </Typography>
+                        <Typography variant={"h5"}>
+                          {auction.numberOfBidders}
+                        </Typography>
+                      </Box>
+                      <Box display={"flex"} justifyContent={"space-between"}>
+                        <Typography fontWeight={"bold"} variant={"h5"}>
+                          Số lượt đấu giá:
+                        </Typography>
+                        <Typography variant={"h5"}>
+                          {auction.numberOfBids}
+                        </Typography>
+                      </Box>
+                      <Box display={"flex"} justifyContent={"flex-end"}>
+                        <Button
+                          variant={"outlined"}
+                          color={"primary"}
+                          onClick={() => setIsOpenViewBidders(true)}>
+                          Xem chi tiết
+                        </Button>
+                      </Box>
+                    </Box>
+                  </Box>
+
+                  {/* Staff */}
+                  <Box
+                    height={"auto"}
+                    display={"flex"}
+                    flexDirection={"column"}
+                    justifyContent={"space-between"}>
                     <Box
                       display={"flex"}
                       justifyContent={"space-between"}
                       m={"10px 0"}>
+                      <Typography fontWeight={"bold"} variant={"h5"}>
+                        Nhân viên:
+                      </Typography>
+                      <Typography variant={"h5"}>
+                        {auction.staffName}
+                      </Typography>
+                    </Box>
+                    <Box display={"flex"} justifyContent={"space-between"}>
                       <Typography fontWeight={"bold"} variant={"h5"}>
                         Người bán:
                       </Typography>
@@ -538,13 +528,7 @@ const AuctionDetail = () => {
                         {formatPrice(auction.seller.name)}
                       </Typography>
                     </Box>
-                    <Box
-                      sx={{
-                        width: "100%",
-                        height: "1px",
-                        backgroundColor: "black",
-                        margin: "20px 0",
-                      }}></Box>
+
                     {auction.status === 2 || auction.status === 4 ? (
                       <Box
                         display={"flex"}
@@ -568,17 +552,18 @@ const AuctionDetail = () => {
                 </Box>
                 {/* Right */}
                 <Box
+                  maxHeight={"80vh"}
                   width={"50%"}
                   boxShadow={2}
                   p={"20px"}
                   sx={{
                     backgroundColor: "white",
                   }}>
-                  <Box mb={"20px"}>
+                  <Box mb={"20px"} width={"400px"} height={"400px"}>
                     <img
                       style={{
                         width: "100%",
-                        height: "500px",
+                        height: "100%",
                       }}
                       src={auction.imageUrls}
                     />
@@ -701,7 +686,7 @@ const AuctionDetail = () => {
     );
   } else {
     return (
-      <Container maxWidth='xl' sx={{ paddingTop: "20px" }}>
+      <Container maxWidth='xl' sx={{ paddingTop: "20px", maxHeight: "100vh" }}>
         {auction && (
           <>
             <Box
@@ -726,6 +711,7 @@ const AuctionDetail = () => {
 
                 {/* Left */}
                 <Box
+                  maxHeight={"80vh"}
                   width={"70%"}
                   boxShadow={2}
                   p={"20px"}
@@ -882,14 +868,7 @@ const AuctionDetail = () => {
                         </Typography>
                       </Box>
                     </Box>
-                    {/* Dash */}
-                    <Box
-                      sx={{
-                        width: "100%",
-                        height: "1px",
-                        backgroundColor: "black",
-                        margin: "20px 0",
-                      }}></Box>
+
                     {/* Price */}
                     <Box>
                       <Box
@@ -976,14 +955,7 @@ const AuctionDetail = () => {
                         </Box>
                       </Box>
                     </Box>
-                    {/* Dash */}
-                    <Box
-                      sx={{
-                        width: "100%",
-                        height: "1px",
-                        backgroundColor: "black",
-                        margin: "20px 0",
-                      }}></Box>
+
                     {/* Staff */}
                     <Box>
                       <Box
@@ -998,10 +970,7 @@ const AuctionDetail = () => {
                         </Typography>
                       </Box>
                     </Box>
-                    <Box
-                      display={"flex"}
-                      justifyContent={"space-between"}
-                      m={"10px 0"}>
+                    <Box display={"flex"} justifyContent={"space-between"}>
                       <Typography fontWeight={"bold"} variant={"h5"}>
                         Người bán:
                       </Typography>
@@ -1019,11 +988,17 @@ const AuctionDetail = () => {
                   sx={{
                     backgroundColor: "white",
                   }}>
-                  <Box display={"flex"} justifyContent={"flex-end"} mb={"20px"}>
+                  <Box
+                    display={"flex"}
+                    justifyContent={"center"}
+                    alignItems={"center"}
+                    mb={"20px"}
+                    width={"100%"}
+                    height={"400px"}>
                     <img
                       style={{
-                        width: "350px",
-                        height: "500px",
+                        width: "100%",
+                        height: "100%",
                       }}
                       src={auction.imageUrls}
                     />
@@ -1113,7 +1088,7 @@ const AuctionDetail = () => {
                       color: bidder.status === 1 ? "black" : "gray",
                     }}>
                     <Box display='flex' justifyContent='space-between'>
-                      <Typography variant='h5'>{bidder.bidderName}</Typography>
+                      <Typography variant='h5'>{bidder.bidder.name}</Typography>
                       <Typography variant='h5'>
                         {formatPrice(bidder.bidAmount) || ""}
                       </Typography>
