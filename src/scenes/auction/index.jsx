@@ -40,7 +40,7 @@ const Auction = ({ userId }) => {
   const [isOpenViewAuction, setIsOpenViewAuction] = useState(false);
   const [auctionDetails, setAuctionDetails] = useState({}); // State to store auction details
   const [auctions, setAuctions] = useState([]); // State to store auction details
-  const [auctionCount, setAuctionCount] = useState([]); // State to store auction details
+  const [auctionCount, setAuctionCount] = useState(0); // State to store auction details
   const [currentUser, setCurrentUser] = useState({}); // State to store current user details
   const [isLoading, setIsLoading] = useState(true);
   const [paginationModel, setPaginationModel] = React.useState({
@@ -104,7 +104,7 @@ const Auction = ({ userId }) => {
       case 6:
         return "Đã kết thúc";
       case 7:
-        return "Đã bán";
+        return "Bán không thành công";
       case 8:
         return "Đã hủy";
       default:
@@ -171,7 +171,7 @@ const Auction = ({ userId }) => {
               : params.row.status === 6
               ? "Đã kết thúc"
               : params.row.status === 7
-              ? "Đã bán"
+              ? "Bán không thành công"
               : "Đang cập nhật"
           }
           color={

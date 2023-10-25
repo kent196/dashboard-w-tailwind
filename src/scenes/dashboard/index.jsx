@@ -32,7 +32,7 @@ const Dashboard = () => {
     fetchOrders()
       .then((res) => {
         console.log(res.data);
-        setOrders(res.data);
+        setOrders(res.data.list);
       })
       .catch((err) => {
         console.log(err);

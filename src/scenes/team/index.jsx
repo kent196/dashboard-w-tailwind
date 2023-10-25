@@ -35,11 +35,13 @@ const Team = () => {
   const allowedRoles = ["Quản trị viên", "Quản lý"];
   const [paginationModel, setPaginationModel] = React.useState({
     page: 0,
-    pageSize: 10,
+    pageSize: 5,
   });
   const [userCount, setUserCount] = React.useState(0);
   const [customerCount, setCustomerCount] = React.useState(0);
-  const [rowCountState, setRowCountState] = React.useState(customerCount || 0);
+  const [rowCountState, setRowCountState] = React.useState(
+    customerCount || userCount || 0
+  );
   const [rowCountStateManager, setRowCountStateManager] = React.useState(
     userCount || 0
   );
@@ -56,9 +58,10 @@ const Team = () => {
   }, [userCount, setRowCountState]);
 
   useEffect(() => {
-    fetchCustomer()
+    fetchCustomer(paginationModel.pageSize, paginationModel.page)
       .then((res) => {
         console.log(res.data);
+        setCustomerCount(res.data.count);
         setCustomers(res.data.customerList);
       })
       .catch((err) => {
@@ -68,7 +71,7 @@ const Team = () => {
     return () => {
       setCustomers([]);
     };
-  }, []);
+  }, [paginationModel]);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -308,6 +311,11 @@ const Team = () => {
               rows={customers}
               columns={columns}
               components={{ Toolbar: GridToolbar }}
+              rowCount={rowCountState}
+              pageSizeOptions={[1, 3, 5]}
+              paginationModel={paginationModel}
+              paginationMode='server'
+              onPaginationModelChange={setPaginationModel}
             />
           </Box>
         </Container>

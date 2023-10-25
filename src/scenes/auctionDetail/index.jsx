@@ -105,7 +105,6 @@ const AuctionDetail = () => {
   };
 
   useEffect(() => {
-    window.scrollTo(0, 0);
     fetchAuctionRegisters(id)
       .then((res) => {
         console.log(`List of registers: ${res.data}`);
@@ -150,22 +149,35 @@ const AuctionDetail = () => {
     setIsOpenProductDetail(true);
   };
 
-  useEffect(() => {
-    fetchBidders(id)
+  const handleFetchBidders = (auctionId) => {
+    fetchBidders(auctionId)
       .then((res) => {
-        console.log(res.data);
+        console.log(`List of bidders: ${res.data}`);
         setBidders(res.data);
       })
       .catch((err) => {
         console.log(err);
       });
-    return () => {
-      setBidders([]);
-      console.log("unmount bidders");
-    };
-  }, []);
+  };
+
+  // useEffect(() => {
+  //   fetchBidders(id)
+  //     .then((res) => {
+  //       console.log(res.data);
+  //       setBidders(res.data);
+  //     })
+  //     .catch((err) => {
+  //       console.log(err);
+  //     });
+  //   return () => {
+  //     setBidders([]);
+  //     console.log("unmount bidders");
+  //   };
+  // }, []);
 
   useEffect(() => {
+    window.scrollTo(0, 0);
+
     fetchAuctionDetail(id)
       .then((res) => {
         console.log(`Auction details: ${res.data}`);
@@ -207,7 +219,7 @@ const AuctionDetail = () => {
     auction.status === 4
   ) {
     return (
-      <Container maxWidth='xl' sx={{ paddingTop: "20px", maxHeight: "100vh" }}>
+      <Container maxWidth='xl' sx={{ paddingTop: "20px" }}>
         {auction && (
           <>
             {/* <Box
@@ -219,11 +231,11 @@ const AuctionDetail = () => {
               mb={"30px"}></Box> */}
             <Box display={"flex"} justifyContent={"center"}>
               <Box
-                maxHeight={"100vh"}
+                // maxHeight={"100vh"}
                 display={"flex"}
-                justifyContent={"space-between"}
-                gap={"20px"}
-                width={"80%"}>
+                justifyContent={"space-evenly"}
+                width={"80%"}
+                gap={"20px"}>
                 {isStaffChooserOpen && (
                   <StaffChooser
                     isOpenChooser={isStaffChooserOpen}
@@ -234,18 +246,19 @@ const AuctionDetail = () => {
                 {/* Left */}
                 <Box
                   width={"70%"}
-                  maxHeight={"80vh"}
+                  // height={"80vh"}
                   boxShadow={2}
                   display={"flex"}
                   flexDirection={"column"}
-                  justifyContent={"space-between"}
-                  p={"10px"}
-                  gap={"10px"}
+                  // justifyContent={"space-between"}
+
+                  p={"0 20px"}
+                  // gap={"10px"}
                   sx={{
                     backgroundColor: "white",
                   }}>
                   {/* Details */}
-                  <Header title={`${auction.title}`} />
+                  <Header margin={"20px"} title={`${auction.title}`} />
 
                   <Box
                     height={"10%"}
@@ -301,7 +314,7 @@ const AuctionDetail = () => {
                   </Box>
                   {/* Time */}
                   <Box
-                    height={"auto"}
+                    // height={"50%"}
                     display={"flex"}
                     flexDirection={"column"}
                     justifyContent={"space-between"}
@@ -310,9 +323,10 @@ const AuctionDetail = () => {
                       height={"20%"}
                       alignItems={"center"}
                       display={"flex"}
-                      justifyContent={"space-between"}>
+                      justifyContent={"space-between"}
+                      m={"10px 0"}>
                       <Typography
-                        maxWidth={"100px"}
+                        width={"150px"}
                         fontWeight={"bold"}
                         variant={"h5"}>
                         Mở đăng kí:
@@ -340,9 +354,10 @@ const AuctionDetail = () => {
                       height={"20%"}
                       alignItems={"center"}
                       display={"flex"}
-                      justifyContent={"space-between"}>
+                      justifyContent={"space-between"}
+                      m={"10px 0"}>
                       <Typography
-                        maxWidth={"100px"}
+                        width={"150px"}
                         fontWeight={"bold"}
                         variant={"h5"}>
                         Đóng đăng kí:
@@ -370,9 +385,10 @@ const AuctionDetail = () => {
                       height={"20%"}
                       alignItems={"center"}
                       display={"flex"}
-                      justifyContent={"space-between"}>
+                      justifyContent={"space-between"}
+                      m={"10px 0"}>
                       <Typography
-                        maxWidth={"100px"}
+                        width={"150px"}
                         fontWeight={"bold"}
                         variant={"h5"}>
                         Bắt đầu:
@@ -400,9 +416,10 @@ const AuctionDetail = () => {
                       height={"20%"}
                       alignItems={"center"}
                       display={"flex"}
-                      justifyContent={"space-between"}>
+                      justifyContent={"space-between"}
+                      m={"10px 0"}>
                       <Typography
-                        maxWidth={"100px"}
+                        width={"150px"}
                         fontWeight={"bold"}
                         variant={"h5"}>
                         Kết thúc:
@@ -425,6 +442,25 @@ const AuctionDetail = () => {
                         </Typography>
                       )}
                     </Box>
+                    {auction.status === 2 || auction.status === 4 ? (
+                      <Box
+                        display={"flex"}
+                        justifyContent={"flex-end"}
+                        gap={"20px"}
+                        m={"10px 0"}>
+                        <Button
+                          sx={{ width: "100px" }}
+                          variant='contained'
+                          color='success'
+                          onClick={() =>
+                            handleAuctionApproval(auction.id, formData)
+                          }>
+                          Lưu
+                        </Button>
+                      </Box>
+                    ) : (
+                      <Box></Box>
+                    )}
                   </Box>
 
                   {/* Price */}
@@ -474,29 +510,22 @@ const AuctionDetail = () => {
                       height={"auto"}
                       display={"flex"}
                       gap={"10px"}
-                      flexDirection={"column"}
+                      alignItems={"center"}
                       justifyContent={"space-between"}>
-                      <Box display={"flex"} justifyContent={"space-between"}>
-                        <Typography fontWeight={"bold"} variant={"h5"}>
-                          Số người tham gia:
-                        </Typography>
-                        <Typography variant={"h5"}>
-                          {auction.numberOfBidders}
+                      <Box display={"flex"} justifyContent={"flex-start"}>
+                        <Typography variant={"h5"} fontWeight={"bold"}>
+                          Chi tiết đấu giá:
                         </Typography>
                       </Box>
-                      <Box display={"flex"} justifyContent={"space-between"}>
-                        <Typography fontWeight={"bold"} variant={"h5"}>
-                          Số lượt đấu giá:
-                        </Typography>
-                        <Typography variant={"h5"}>
-                          {auction.numberOfBids}
-                        </Typography>
-                      </Box>
+
                       <Box display={"flex"} justifyContent={"flex-end"}>
                         <Button
                           variant={"outlined"}
                           color={"primary"}
-                          onClick={() => setIsOpenViewBidders(true)}>
+                          onClick={() => {
+                            setIsOpenViewBidders(true);
+                            handleFetchBidders(id);
+                          }}>
                           Xem chi tiết
                         </Button>
                       </Box>
@@ -528,42 +557,37 @@ const AuctionDetail = () => {
                         {formatPrice(auction.seller.name)}
                       </Typography>
                     </Box>
-
-                    {auction.status === 2 || auction.status === 4 ? (
-                      <Box
-                        display={"flex"}
-                        justifyContent={"flex-end"}
-                        gap={"20px"}
-                        m={"10px 0"}>
-                        <Button
-                          sx={{ width: "100px" }}
-                          variant='contained'
-                          color='success'
-                          onClick={() =>
-                            handleAuctionApproval(auction.id, formData)
-                          }>
-                          Lưu
-                        </Button>
-                      </Box>
-                    ) : (
-                      <Box></Box>
-                    )}
                   </Box>
                 </Box>
                 {/* Right */}
                 <Box
-                  maxHeight={"80vh"}
+                  // maxHeight={"80vh"}
+                  display={"flex"}
+                  flexDirection={"column"}
+                  justifyContent={"space-around"}
                   width={"50%"}
                   boxShadow={2}
                   p={"20px"}
                   sx={{
                     backgroundColor: "white",
                   }}>
-                  <Box mb={"20px"} width={"400px"} height={"400px"}>
+                  <Box
+                    display={"flex"}
+                    justifyContent={"center"}
+                    alignItems={"center"}
+                    mb={"20px"}
+                    width={"100%"}
+                    height={"50%"}
+                    sx={{
+                      overflow: "hidden",
+                      borderRadius: "10px",
+                      objectFit: "contain",
+                    }}>
                     <img
                       style={{
-                        width: "100%",
-                        height: "100%",
+                        maxWidth: "100%",
+                        maxHeight: "100%",
+                        display: "block",
                       }}
                       src={auction.imageUrls}
                     />
@@ -592,6 +616,7 @@ const AuctionDetail = () => {
                       display={"flex"}
                       justifyContent={"flex-end"}>
                       <Button
+                        sx={{ width: "100px", height: "50px", p: "5px" }}
                         variant={"outlined"}
                         color={"primary"}
                         onClick={() => setIsOpenRegisList(true)}>
@@ -651,20 +676,20 @@ const AuctionDetail = () => {
                           ? "transparent"
                           : "#e7e9eb", // Highlight the first bidder
                       padding: "10px",
-                      color: bidder.status === 1 ? "black" : "gray",
+                      color: bidder.bidder.status === 1 ? "black" : "gray",
                     }}>
                     <Box display='flex' justifyContent='space-between'>
-                      <Typography variant='h5'>{bidder.bidderName}</Typography>
+                      <Typography variant='h5'>{bidder.bidder.name}</Typography>
                       <Typography variant='h5'>
-                        {formatPrice(bidder.bidAmount) || ""}
+                        {formatPrice(bidder.bidder.bidAmount) || ""}
                       </Typography>
                     </Box>
                     <Box display='flex' justifyContent='space-between'>
                       <Typography variant='h5'>
-                        {new Date(bidder.bidDate).toLocaleString()}
+                        {new Date(bidder.bidder.bidDate).toLocaleString()}
                       </Typography>
                       <Typography variant='h5'>
-                        {bidder.status === 1 ? "Hợp lệ" : "Đã rút"}
+                        {bidder.bidder.status === 1 ? "Hợp lệ" : "Đã rút"}
                       </Typography>
                     </Box>
                   </Box>
@@ -686,7 +711,7 @@ const AuctionDetail = () => {
     );
   } else {
     return (
-      <Container maxWidth='xl' sx={{ paddingTop: "20px", maxHeight: "100vh" }}>
+      <Container maxWidth='xl' sx={{ paddingTop: "20px" }}>
         {auction && (
           <>
             <Box
@@ -711,7 +736,7 @@ const AuctionDetail = () => {
 
                 {/* Left */}
                 <Box
-                  maxHeight={"80vh"}
+                  // maxHeight={"80vh"}
                   width={"70%"}
                   boxShadow={2}
                   p={"20px"}
@@ -727,6 +752,7 @@ const AuctionDetail = () => {
                       justifyContent={"flex-start"}
                       alignItems={"center"}
                       gap={"20px"}
+                      padding={"10px"}
                       m={"30px 0"}>
                       <Typography fontWeight={"bold"} variant={"h5"}>
                         Trạng thái:
@@ -774,14 +800,18 @@ const AuctionDetail = () => {
                       />
                     </Box>
                     {/* Time */}
-                    <Box>
+                    <Box
+                      height={"40%"}
+                      display={"flex"}
+                      flexDirection={"column"}
+                      justifyContent={"space-between"}>
                       <Box
                         alignItems={"center"}
                         display={"flex"}
                         justifyContent={"space-between"}
                         m={"10px 0"}>
                         <Typography
-                          maxWidth={"100px"}
+                          width={"150px"}
                           fontWeight={"bold"}
                           variant={"h5"}>
                           Mở đăng kí:
@@ -815,7 +845,7 @@ const AuctionDetail = () => {
                         justifyContent={"space-between"}
                         m={"10px 0"}>
                         <Typography
-                          maxWidth={"100px"}
+                          width={"150px"}
                           fontWeight={"bold"}
                           variant={"h5"}>
                           Đóng đăng kí:
@@ -844,7 +874,7 @@ const AuctionDetail = () => {
                         justifyContent={"space-between"}
                         m={"10px 0"}>
                         <Typography
-                          maxWidth={"100px"}
+                          width={"150px"}
                           fontWeight={"bold"}
                           variant={"h5"}>
                           Bắt đầu:
@@ -858,7 +888,7 @@ const AuctionDetail = () => {
                         justifyContent={"space-between"}
                         m={"10px 0"}>
                         <Typography
-                          maxWidth={"100px"}
+                          width={"150px"}
                           fontWeight={"bold"}
                           variant={"h5"}>
                           Kết thúc:
@@ -904,54 +934,29 @@ const AuctionDetail = () => {
                           {formatPrice(auction.step)}
                         </Typography>
                       </Box>
-                      <Box display={"flex"} gap={"10px"}>
-                        <Box flex={"1"}>
-                          <Box
-                            display={"flex"}
-                            justifyContent={"space-between"}
-                            m={"10px 0"}>
-                            <Typography fontWeight={"bold"} variant={"h5"}>
-                              Số người tham gia:
-                            </Typography>
-                            <Typography variant={"h5"}>
-                              {auction.numberOfBidders}
-                            </Typography>
-                          </Box>
-                          <Box
-                            display={"flex"}
-                            justifyContent={"space-between"}
-                            m={"10px 0"}>
-                            <Typography fontWeight={"bold"} variant={"h5"}>
-                              Số lượt đấu giá:
-                            </Typography>
-                            <Typography variant={"h5"}>
-                              {auction.numberOfBids}
-                            </Typography>
-                          </Box>
-                          <Box
-                            m={"10px 0"}
-                            display={"flex"}
-                            justifyContent={"flex-end"}>
-                            <Button
-                              variant={"outlined"}
-                              color={"primary"}
-                              onClick={() => setIsOpenViewBidders(true)}>
-                              Xem chi tiết
-                            </Button>
-                          </Box>
-                          {auction.status === 4 && (
-                            <Box
-                              m={"10px 0"}
-                              display={"flex"}
-                              justifyContent={"flex-end"}>
-                              <Button
-                                variant={"outlined"}
-                                color={"primary"}
-                                onClick={() => setIsOpenRegisList(true)}>
-                                Xem danh sách đăng ký
-                              </Button>
-                            </Box>
-                          )}
+
+                      <Box
+                        height={"auto"}
+                        display={"flex"}
+                        gap={"10px"}
+                        alignItems={"center"}
+                        justifyContent={"space-between"}>
+                        <Box display={"flex"} justifyContent={"flex-start"}>
+                          <Typography variant={"h5"} fontWeight={"bold"}>
+                            Chi tiết đấu giá:
+                          </Typography>
+                        </Box>
+
+                        <Box display={"flex"} justifyContent={"flex-end"}>
+                          <Button
+                            variant={"outlined"}
+                            color={"primary"}
+                            onClick={() => {
+                              setIsOpenViewBidders(true);
+                              handleFetchBidders(id);
+                            }}>
+                            Xem chi tiết
+                          </Button>
                         </Box>
                       </Box>
                     </Box>
@@ -994,11 +999,17 @@ const AuctionDetail = () => {
                     alignItems={"center"}
                     mb={"20px"}
                     width={"100%"}
-                    height={"400px"}>
+                    height={"50%"}
+                    sx={{
+                      overflow: "hidden",
+                      borderRadius: "10px",
+                      objectFit: "contain",
+                    }}>
                     <img
                       style={{
-                        width: "100%",
-                        height: "100%",
+                        maxWidth: "100%",
+                        maxHeight: "100%",
+                        display: "block",
                       }}
                       src={auction.imageUrls}
                     />
@@ -1065,7 +1076,10 @@ const AuctionDetail = () => {
                 margin: "50px 0",
               }}
               open={isOpenViewBidders}
-              onClose={() => setIsOpenViewBidders(false)}
+              onClose={() => {
+                setIsOpenViewBidders(false);
+                setBidders([]);
+              }}
               aria-labelledby='alert-dialog-title'
               aria-describedby='alert-dialog-description'>
               <DialogTitle>

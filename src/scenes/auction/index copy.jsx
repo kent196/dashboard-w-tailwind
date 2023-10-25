@@ -235,7 +235,7 @@ const AuctionManager = () => {
       case 6:
         return "Đã kết thúc";
       case 7:
-        return "Đã bán";
+        return "Bán không thành công";
       case 8:
         return "Đã hủy";
       default:
@@ -325,7 +325,7 @@ const AuctionManager = () => {
               : params.row.status === 6
               ? "Đã kết thúc"
               : params.row.status === 7
-              ? "Đã bán"
+              ? "Bán không thành công"
               : "Đang cập nhật"
           }
           color={

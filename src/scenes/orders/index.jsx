@@ -36,16 +36,25 @@ const Orders = () => {
     totalAmount: 0,
     shippingCost: 0,
   }); // State to store order details
+  const [ordersCount, setOrdersCount] = useState(0); // State to store auction details
+  const [rowCountState, setRowCountState] = React.useState(ordersCount || 0);
+
   const navigate = useNavigate();
   const theme = useTheme();
   const [page, setPage] = useState(1);
-  const [pageSize, setPageSize] = useState(3);
+  // const [pageSize, setPageSize] = useState(3);
+
   const [pageInput, setPageInput] = useState(1); // State for page input
   const [pageSizeInput, setPageSizeInput] = useState(3);
   const [paginationModel, setPaginationModel] = React.useState({
     page: 0,
     pageSize: 5,
   });
+  React.useEffect(() => {
+    setRowCountState((prevRowCountState) =>
+      ordersCount !== undefined ? ordersCount : prevRowCountState
+    );
+  }, [ordersCount, setRowCountState]);
   const colors = token(theme.palette.mode);
 
   function formatPrice(price) {
@@ -59,11 +68,11 @@ const Orders = () => {
   useEffect(() => {
     window.scrollTo(0, 0);
 
-    fetchOrders(pageSize, page)
+    fetchOrders(paginationModel.pageSize, paginationModel.page + 1)
       .then((res) => {
-        console.log(pageSize, page);
         console.log(res.data);
-        setOrders(res.data);
+        setOrdersCount(res.data.count);
+        setOrders(res.data.list);
       })
       .catch((err) => {
         console.log(err);
@@ -72,7 +81,7 @@ const Orders = () => {
     return () => {
       setOrders([]);
     };
-  }, [page, pageSize]);
+  }, [paginationModel]);
 
   const handleViewOrder = (orderId) => {
     // setIsOpenViewOrder(true);
@@ -246,8 +255,8 @@ const Orders = () => {
             rows={orders}
             columns={columns}
             components={{ Toolbar: GridToolbar }}
-            rowCount={orders.length}
-            pageSizeOptions={[5]}
+            rowCount={rowCountState}
+            pageSizeOptions={[1, 3, 5]}
             paginationModel={paginationModel}
             paginationMode='server'
             onPaginationModelChange={setPaginationModel}

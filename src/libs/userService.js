@@ -27,9 +27,11 @@ const fetchStaffs = async () => {
   }
 };
 
-const fetchCustomer = async () => {
+const fetchCustomer = async (pageSize, pageNumber) => {
   try {
-    const response = await authAxios.get("/user/customer");
+    const response = await authAxios.get(
+      `/user/customer?PageSize=${pageSize}&PageNumber=${pageNumber}`
+    );
     if (!response.data) {
       console.log("No data");
     }
