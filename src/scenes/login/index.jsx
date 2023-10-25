@@ -76,16 +76,16 @@ const Login = () => {
         localStorage.setItem("refreshToken", refreshToken);
         console.log(localStorage.accessToken);
         console.log(localStorage.refreshToken);
-        buildConnection()
+        buildConnection();
         navigate("/dashboard"); // Navigate to the auctions page
-      } else {
-        console.log(response.data);
+      } else if (response.status === 401) {
+        console.log(response.data.message);
         setError(response.data.message);
         // Handle the login failure
       }
     } catch (error) {
       console.error("An error occurred:", error);
-      setError("An error occurred");
+      setError(error.response.data.message);
       // Handle the error
     }
   };

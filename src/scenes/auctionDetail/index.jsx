@@ -295,39 +295,39 @@ const AuctionDetail = () => {
                         auction.status === 1
                           ? "Chưa có nhân viên"
                           : auction.status === 0
-                            ? "Đang chờ duyệt"
-                            : auction.status === 2
-                              ? "Cập nhật thông tin"
-                              : auction.status === 3
-                                ? "Bị từ chối"
-                                : auction.status === 4
-                                  ? "Mở đăng ký"
-                                  : auction.status === 5
-                                    ? "Đang diễn ra"
-                                    : auction.status === 6
-                                      ? "Đã kết thúc"
-                                      : auction.status === 7
-                                        ? "Không thành công"
-                                        : "Đang cập nhật"
+                          ? "Đang chờ duyệt"
+                          : auction.status === 2
+                          ? "Cập nhật thông tin"
+                          : auction.status === 3
+                          ? "Bị từ chối"
+                          : auction.status === 4
+                          ? "Mở đăng ký"
+                          : auction.status === 5
+                          ? "Đang diễn ra"
+                          : auction.status === 6
+                          ? "Đã kết thúc"
+                          : auction.status === 7
+                          ? "Không thành công"
+                          : "Đang cập nhật"
                       }
                       color={
                         auction.status === 1
                           ? "info"
                           : auction.status === 0
-                            ? "warning"
-                            : auction.status === 2
-                              ? "warning"
-                              : auction.status === 3
-                                ? "error"
-                                : auction.status === 4
-                                  ? "info"
-                                  : auction.status === 5
-                                    ? "success"
-                                    : auction.status === 6
-                                      ? "error"
-                                      : auction.status === 7
-                                        ? "secondary"
-                                        : "warning"
+                          ? "warning"
+                          : auction.status === 2
+                          ? "warning"
+                          : auction.status === 3
+                          ? "error"
+                          : auction.status === 4
+                          ? "info"
+                          : auction.status === 5
+                          ? "success"
+                          : auction.status === 6
+                          ? "error"
+                          : auction.status === 7
+                          ? "secondary"
+                          : "warning"
                       }
                     />
                   </Box>
@@ -487,6 +487,7 @@ const AuctionDetail = () => {
                     maxHeight={"auto"}
                     display={"flex"}
                     justifyContent={"space-between"}
+                    gap={"20px"}
                     flexDirection={"column"}>
                     {auction.status != 4 && auction.status != 2 ? (
                       <Box
@@ -553,6 +554,7 @@ const AuctionDetail = () => {
 
                   {/* Staff */}
                   <Box
+                    margin={"20px 0"}
                     height={"auto"}
                     display={"flex"}
                     flexDirection={"column"}
@@ -583,7 +585,7 @@ const AuctionDetail = () => {
                   // maxHeight={"80vh"}
                   display={"flex"}
                   flexDirection={"column"}
-                  justifyContent={"space-around"}
+                  justifyContent={"flex-start"}
                   width={"50%"}
                   boxShadow={2}
                   p={"20px"}
@@ -619,45 +621,47 @@ const AuctionDetail = () => {
                       {auction.product.name}
                     </Typography>
                   </Box>
-                  <Box
-                    m={"10px 0"}
-                    display={"flex"}
-                    justifyContent={"flex-end"}>
-                    <Button
-                      variant='outlined'
-                      onClick={() => handleViewProduct(auction.product.id)}>
-                      Xem chi tiết
-                    </Button>
-                  </Box>
-                  {auction.status === 4 && (
+                  <Box>
                     <Box
                       m={"10px 0"}
                       display={"flex"}
                       justifyContent={"flex-end"}>
                       <Button
-                        sx={{ width: "100px", height: "50px", p: "5px" }}
-                        variant={"outlined"}
-                        color={"primary"}
-                        onClick={() => {
-                          openRegistrationList();
-                        }}>
-                        Xem danh sách đăng ký
+                        variant='outlined'
+                        onClick={() => handleViewProduct(auction.product.id)}>
+                        Xem chi tiết
                       </Button>
                     </Box>
-                  )}
+                    {auction.status === 4 && (
+                      <Box
+                        m={"10px 0"}
+                        display={"flex"}
+                        justifyContent={"flex-end"}>
+                        <Button
+                          sx={{ width: "100px", height: "50px", p: "5px" }}
+                          variant={"outlined"}
+                          color={"primary"}
+                          onClick={() => {
+                            openRegistrationList();
+                          }}>
+                          Xem danh sách đăng ký
+                        </Button>
+                      </Box>
+                    )}
 
-                  {auction.status === 5 && (
-                    <Box
-                      m={"10px 0"}
-                      display={"flex"}
-                      justifyContent={"flex-end"}>
-                      <Button
-                        variant='contained'
-                        onClick={() => handleNavigateToLive(auction.id)}>
-                        Tới phiên đấu giá
-                      </Button>
-                    </Box>
-                  )}
+                    {auction.status === 5 && (
+                      <Box
+                        m={"10px 0"}
+                        display={"flex"}
+                        justifyContent={"flex-end"}>
+                        <Button
+                          variant='contained'
+                          onClick={() => handleNavigateToLive(auction.id)}>
+                          Tới phiên đấu giá
+                        </Button>
+                      </Box>
+                    )}
+                  </Box>
                 </Box>
               </Box>
             </Box>
@@ -694,8 +698,8 @@ const AuctionDetail = () => {
                         index === 0
                           ? "yellow"
                           : bidder.status === 1
-                            ? "transparent"
-                            : "#e7e9eb", // Highlight the first bidder
+                          ? "transparent"
+                          : "#e7e9eb", // Highlight the first bidder
                       padding: "10px",
                       color: bidder.bidder.status === 1 ? "black" : "gray",
                     }}>
@@ -784,39 +788,39 @@ const AuctionDetail = () => {
                           auction.status === 1
                             ? "Chưa có nhân viên"
                             : auction.status === 0
-                              ? "Đang chờ duyệt"
-                              : auction.status === 2
-                                ? "Cập nhật thông tin"
-                                : auction.status === 3
-                                  ? "Bị từ chối"
-                                  : auction.status === 4
-                                    ? "Mở đăng ký"
-                                    : auction.status === 5
-                                      ? "Đang diễn ra"
-                                      : auction.status === 6
-                                        ? "Đã kết thúc"
-                                        : auction.status === 7
-                                          ? "Không thành công"
-                                          : "Đang cập nhật"
+                            ? "Đang chờ duyệt"
+                            : auction.status === 2
+                            ? "Cập nhật thông tin"
+                            : auction.status === 3
+                            ? "Bị từ chối"
+                            : auction.status === 4
+                            ? "Mở đăng ký"
+                            : auction.status === 5
+                            ? "Đang diễn ra"
+                            : auction.status === 6
+                            ? "Đã kết thúc"
+                            : auction.status === 7
+                            ? "Không thành công"
+                            : "Đang cập nhật"
                         }
                         color={
                           auction.status === 1
                             ? "info"
                             : auction.status === 0
-                              ? "warning"
-                              : auction.status === 2
-                                ? "warning"
-                                : auction.status === 3
-                                  ? "error"
-                                  : auction.status === 4
-                                    ? "info"
-                                    : auction.status === 5
-                                      ? "success"
-                                      : auction.status === 6
-                                        ? "error"
-                                        : auction.status === 7
-                                          ? "secondary"
-                                          : "warning"
+                            ? "warning"
+                            : auction.status === 2
+                            ? "warning"
+                            : auction.status === 3
+                            ? "error"
+                            : auction.status === 4
+                            ? "info"
+                            : auction.status === 5
+                            ? "success"
+                            : auction.status === 6
+                            ? "error"
+                            : auction.status === 7
+                            ? "secondary"
+                            : "warning"
                         }
                       />
                     </Box>
@@ -921,7 +925,12 @@ const AuctionDetail = () => {
                     </Box>
 
                     {/* Price */}
-                    <Box>
+                    <Box
+                      maxHeight={"auto"}
+                      display={"flex"}
+                      justifyContent={"space-between"}
+                      gap={"20px"}
+                      flexDirection={"column"}>
                       <Box
                         display={"flex"}
                         justifyContent={"space-between"}
@@ -996,7 +1005,10 @@ const AuctionDetail = () => {
                         </Typography>
                       </Box>
                     </Box>
-                    <Box display={"flex"} justifyContent={"space-between"}>
+                    <Box
+                      display={"flex"}
+                      justifyContent={"space-between"}
+                      marginBottom={"20px"}>
                       <Typography fontWeight={"bold"} variant={"h5"}>
                         Người bán:
                       </Typography>
@@ -1008,6 +1020,9 @@ const AuctionDetail = () => {
                 </Box>
                 {/* Right */}
                 <Box
+                  display={"flex"}
+                  flexDirection={"column"}
+                  justifyContent={"flex-start"}
                   width={"50%"}
                   boxShadow={2}
                   p={"20px"}
@@ -1043,41 +1058,43 @@ const AuctionDetail = () => {
                       {auction.product.name}
                     </Typography>
                   </Box>
-                  <Box
-                    m={"10px 0"}
-                    display={"flex"}
-                    justifyContent={"flex-end"}>
-                    <Button
-                      variant='outlined'
-                      onClick={() => handleViewProduct(auction.product.id)}>
-                      Xem chi tiết
-                    </Button>
+                  <Box>
+                    <Box
+                      m={"10px 0"}
+                      display={"flex"}
+                      justifyContent={"flex-end"}>
+                      <Button
+                        variant='outlined'
+                        onClick={() => handleViewProduct(auction.product.id)}>
+                        Xem chi tiết
+                      </Button>
+                    </Box>
+                    {auction.status === 4 && (
+                      <Box
+                        m={"10px 0"}
+                        display={"flex"}
+                        justifyContent={"flex-end"}>
+                        <Button
+                          variant={"outlined"}
+                          color={"primary"}
+                          onClick={() => setIsOpenRegisList(true)}>
+                          Xem danh sách đăng ký
+                        </Button>
+                      </Box>
+                    )}
+                    {auction.status === 5 && (
+                      <Box
+                        m={"10px 0"}
+                        display={"flex"}
+                        justifyContent={"flex-end"}>
+                        <Button
+                          variant='contained'
+                          onClick={() => handleNavigateToLive(auction.id)}>
+                          Tới phiên đấu giá
+                        </Button>
+                      </Box>
+                    )}
                   </Box>
-                  {auction.status === 4 && (
-                    <Box
-                      m={"10px 0"}
-                      display={"flex"}
-                      justifyContent={"flex-end"}>
-                      <Button
-                        variant={"outlined"}
-                        color={"primary"}
-                        onClick={() => setIsOpenRegisList(true)}>
-                        Xem danh sách đăng ký
-                      </Button>
-                    </Box>
-                  )}
-                  {auction.status === 5 && (
-                    <Box
-                      m={"10px 0"}
-                      display={"flex"}
-                      justifyContent={"flex-end"}>
-                      <Button
-                        variant='contained'
-                        onClick={() => handleNavigateToLive(auction.id)}>
-                        Tới phiên đấu giá
-                      </Button>
-                    </Box>
-                  )}
                 </Box>
               </Box>
             </Box>
@@ -1117,8 +1134,8 @@ const AuctionDetail = () => {
                         index === 0
                           ? "yellow"
                           : bidder.status === 1
-                            ? "transparent"
-                            : "#e7e9eb", // Highlight the first bidder
+                          ? "transparent"
+                          : "#e7e9eb", // Highlight the first bidder
                       padding: "10px",
                       color: bidder.status === 1 ? "black" : "gray",
                     }}>
