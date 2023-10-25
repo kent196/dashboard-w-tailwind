@@ -483,74 +483,88 @@ const AuctionDetail = () => {
                   </Box>
 
                   {/* Price */}
-                  <Box
-                    maxHeight={"auto"}
-                    display={"flex"}
-                    justifyContent={"space-between"}
-                    gap={"20px"}
-                    flexDirection={"column"}>
-                    {auction.status != 4 && auction.status != 2 ? (
+                  {auction.status == 6 ? (
+                    <Box
+                      display={"flex"}
+                      justifyContent={"space-between"}
+                      alignItems={"center"}>
+                      <Typography variant={"h5"} fontWeight={"bold"}>
+                        Người chiến thắng:
+                      </Typography>
+                      <Typography variant={"h5"}>
+                        {auction.winner.name}
+                      </Typography>
+                    </Box>
+                  ) : (
+                    <Box
+                      maxHeight={"auto"}
+                      display={"flex"}
+                      justifyContent={"space-between"}
+                      gap={"20px"}
+                      flexDirection={"column"}>
+                      {auction.status != 4 && auction.status != 2 ? (
+                        <Box
+                          height={"auto"}
+                          display={"flex"}
+                          justifyContent={"space-between"}>
+                          <Typography fontWeight={"bold"} variant={"h5"}>
+                            Giá cao nhất:
+                          </Typography>
+                          <Typography variant={"h5"}>
+                            {formatPrice(auction.currentPrice)}
+                          </Typography>
+                        </Box>
+                      ) : (
+                        <Box></Box>
+                      )}
                       <Box
                         height={"auto"}
                         display={"flex"}
                         justifyContent={"space-between"}>
                         <Typography fontWeight={"bold"} variant={"h5"}>
-                          Giá cao nhất:
+                          Giá khởi điểm:
                         </Typography>
                         <Typography variant={"h5"}>
-                          {formatPrice(auction.currentPrice)}
+                          {formatPrice(auction.startingPrice)}
                         </Typography>
                       </Box>
-                    ) : (
-                      <Box></Box>
-                    )}
-                    <Box
-                      height={"auto"}
-                      display={"flex"}
-                      justifyContent={"space-between"}>
-                      <Typography fontWeight={"bold"} variant={"h5"}>
-                        Giá khởi điểm:
-                      </Typography>
-                      <Typography variant={"h5"}>
-                        {formatPrice(auction.startingPrice)}
-                      </Typography>
-                    </Box>
-                    <Box
-                      height={"auto"}
-                      display={"flex"}
-                      justifyContent={"space-between"}>
-                      <Typography fontWeight={"bold"} variant={"h5"}>
-                        Bước giá:
-                      </Typography>
-                      <Typography variant={"h5"}>
-                        {formatPrice(auction.step)}
-                      </Typography>
-                    </Box>
-                    <Box
-                      height={"auto"}
-                      display={"flex"}
-                      gap={"10px"}
-                      alignItems={"center"}
-                      justifyContent={"space-between"}>
-                      <Box display={"flex"} justifyContent={"flex-start"}>
-                        <Typography variant={"h5"} fontWeight={"bold"}>
-                          Chi tiết đấu giá:
+                      <Box
+                        height={"auto"}
+                        display={"flex"}
+                        justifyContent={"space-between"}>
+                        <Typography fontWeight={"bold"} variant={"h5"}>
+                          Bước giá:
+                        </Typography>
+                        <Typography variant={"h5"}>
+                          {formatPrice(auction.step)}
                         </Typography>
                       </Box>
+                      <Box
+                        height={"auto"}
+                        display={"flex"}
+                        gap={"10px"}
+                        alignItems={"center"}
+                        justifyContent={"space-between"}>
+                        <Box display={"flex"} justifyContent={"flex-start"}>
+                          <Typography variant={"h5"} fontWeight={"bold"}>
+                            Chi tiết đấu giá:
+                          </Typography>
+                        </Box>
 
-                      <Box display={"flex"} justifyContent={"flex-end"}>
-                        <Button
-                          variant={"outlined"}
-                          color={"primary"}
-                          onClick={() => {
-                            setIsOpenViewBidders(true);
-                            handleFetchBidders(id);
-                          }}>
-                          Xem chi tiết
-                        </Button>
+                        <Box display={"flex"} justifyContent={"flex-end"}>
+                          <Button
+                            variant={"outlined"}
+                            color={"primary"}
+                            onClick={() => {
+                              setIsOpenViewBidders(true);
+                              handleFetchBidders(id);
+                            }}>
+                            Xem chi tiết
+                          </Button>
+                        </Box>
                       </Box>
                     </Box>
-                  </Box>
+                  )}
 
                   {/* Staff */}
                   <Box
@@ -925,71 +939,89 @@ const AuctionDetail = () => {
                     </Box>
 
                     {/* Price */}
-                    <Box
-                      maxHeight={"auto"}
-                      display={"flex"}
-                      justifyContent={"space-between"}
-                      gap={"20px"}
-                      flexDirection={"column"}>
+                    {auction.status == 6 ? (
                       <Box
+                        margin={"20px 0"}
                         display={"flex"}
                         justifyContent={"space-between"}
-                        m={"10px 0"}>
-                        <Typography fontWeight={"bold"} variant={"h5"}>
-                          Giá cao nhất:
+                        alignItems={"center"}>
+                        <Typography variant={"h5"} fontWeight={"bold"}>
+                          Người chiến thắng:
                         </Typography>
                         <Typography variant={"h5"}>
-                          {formatPrice(auction.currentPrice)}
+                          {auction.winner.name}
                         </Typography>
                       </Box>
+                    ) : (
                       <Box
+                        maxHeight={"auto"}
                         display={"flex"}
                         justifyContent={"space-between"}
-                        m={"10px 0"}>
-                        <Typography fontWeight={"bold"} variant={"h5"}>
-                          Giá khởi điểm:
-                        </Typography>
-                        <Typography variant={"h5"}>
-                          {formatPrice(auction.startingPrice)}
-                        </Typography>
-                      </Box>
-                      <Box
-                        display={"flex"}
-                        justifyContent={"space-between"}
-                        m={"10px 0"}>
-                        <Typography fontWeight={"bold"} variant={"h5"}>
-                          Bước giá:
-                        </Typography>
-                        <Typography variant={"h5"}>
-                          {formatPrice(auction.step)}
-                        </Typography>
-                      </Box>
-
-                      <Box
-                        height={"auto"}
-                        display={"flex"}
-                        gap={"10px"}
-                        alignItems={"center"}
-                        justifyContent={"space-between"}>
-                        <Box display={"flex"} justifyContent={"flex-start"}>
-                          <Typography variant={"h5"} fontWeight={"bold"}>
-                            Chi tiết đấu giá:
+                        gap={"20px"}
+                        flexDirection={"column"}>
+                        {auction.status != 4 && auction.status != 2 ? (
+                          <Box
+                            height={"auto"}
+                            display={"flex"}
+                            justifyContent={"space-between"}>
+                            <Typography fontWeight={"bold"} variant={"h5"}>
+                              Giá cao nhất:
+                            </Typography>
+                            <Typography variant={"h5"}>
+                              {formatPrice(auction.currentPrice)}
+                            </Typography>
+                          </Box>
+                        ) : (
+                          <Box></Box>
+                        )}
+                        <Box
+                          height={"auto"}
+                          display={"flex"}
+                          justifyContent={"space-between"}>
+                          <Typography fontWeight={"bold"} variant={"h5"}>
+                            Giá khởi điểm:
+                          </Typography>
+                          <Typography variant={"h5"}>
+                            {formatPrice(auction.startingPrice)}
                           </Typography>
                         </Box>
+                        <Box
+                          height={"auto"}
+                          display={"flex"}
+                          justifyContent={"space-between"}>
+                          <Typography fontWeight={"bold"} variant={"h5"}>
+                            Bước giá:
+                          </Typography>
+                          <Typography variant={"h5"}>
+                            {formatPrice(auction.step)}
+                          </Typography>
+                        </Box>
+                        <Box
+                          height={"auto"}
+                          display={"flex"}
+                          gap={"10px"}
+                          alignItems={"center"}
+                          justifyContent={"space-between"}>
+                          <Box display={"flex"} justifyContent={"flex-start"}>
+                            <Typography variant={"h5"} fontWeight={"bold"}>
+                              Chi tiết đấu giá:
+                            </Typography>
+                          </Box>
 
-                        <Box display={"flex"} justifyContent={"flex-end"}>
-                          <Button
-                            variant={"outlined"}
-                            color={"primary"}
-                            onClick={() => {
-                              setIsOpenViewBidders(true);
-                              handleFetchBidders(id);
-                            }}>
-                            Xem chi tiết
-                          </Button>
+                          <Box display={"flex"} justifyContent={"flex-end"}>
+                            <Button
+                              variant={"outlined"}
+                              color={"primary"}
+                              onClick={() => {
+                                setIsOpenViewBidders(true);
+                                handleFetchBidders(id);
+                              }}>
+                              Xem chi tiết
+                            </Button>
+                          </Box>
                         </Box>
                       </Box>
-                    </Box>
+                    )}
 
                     {/* Staff */}
                     <Box>
