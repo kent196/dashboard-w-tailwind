@@ -17,12 +17,12 @@ import {
   HowToRegOutlined,
 } from "@mui/icons-material";
 import { Box, IconButton, Tooltip, Typography, useTheme } from "@mui/material";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { Menu, MenuItem, ProSidebar } from "react-pro-sidebar";
 import "react-pro-sidebar/dist/css/styles.css";
 import { Link } from "react-router-dom";
 import { token } from "../theme";
-
+import { SignalRContext } from "../context/SignalRContext";
 import logo from "../assets/user_logo.jpg";
 import { fetchUserData } from "../libs/accountServices";
 
@@ -41,6 +41,22 @@ const Item = ({ icon, title, to, selected, setSelected }) => {
   const [isHovered, setIsHovered] = useState(false);
   const theme = useTheme();
   const colors = token(theme.palette.mode);
+  // Signal R context
+  const signalRContext = useContext(SignalRContext);
+  const handleLogout = () => {
+    console.log("Logout button clicked");
+    localStorage.clear();
+    // Perform any additional logout actions here
+    if (signalRContext?.connection) {
+      signalRContext.connection.stop()
+        .then(() => {
+          console.log('stop connection');
+        })
+        .catch(err => {
+          console.log(err);
+        })
+    }
+  };
   return (
     <MenuItem
       active={selected === title}
@@ -62,12 +78,6 @@ const Item = ({ icon, title, to, selected, setSelected }) => {
       <Link to={to} />
     </MenuItem>
   );
-};
-
-const handleLogout = () => {
-  console.log("Logout button clicked");
-  localStorage.clear();
-  // Perform any additional logout actions here
 };
 
 const Sidebar = ({ userRole, currentLocation }) => {
@@ -594,10 +604,10 @@ const Sidebar = ({ userRole, currentLocation }) => {
                   {user.role === 3
                     ? "Admin"
                     : user.role === 4
-                    ? "Manager"
-                    : user.role === 5
-                    ? "Staff"
-                    : ""}
+                      ? "Manager"
+                      : user.role === 5
+                        ? "Staff"
+                        : ""}
                 </Typography>
                 <IconButton>
                   <MenuOutlined />
@@ -638,10 +648,10 @@ const Sidebar = ({ userRole, currentLocation }) => {
                   {user.role === 3
                     ? "Admin"
                     : user.role === 4
-                    ? "Manager"
-                    : user.role === 5
-                    ? "Staff"
-                    : ""}
+                      ? "Manager"
+                      : user.role === 5
+                        ? "Staff"
+                        : ""}
                 </Typography>
               </Box>
             </Box>

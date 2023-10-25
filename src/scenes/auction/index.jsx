@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useContext} from "react";
 import {
   Box,
   Button,
@@ -33,6 +33,7 @@ import {
 import { formatPrice, formatDateTime } from "../../libs/formaters";
 import { fetchUserData } from "../../libs/accountServices";
 import Error from "../../global/Error";
+import { SignalRContext } from "../../context/SignalRContext";
 
 const Auction = ({ userId }) => {
   const navigate = useNavigate();
@@ -51,6 +52,9 @@ const Auction = ({ userId }) => {
   const theme = useTheme();
   const colors = token(theme.palette.mode);
 
+  // Signal R context
+  const signalRContext = useContext(SignalRContext);
+
   React.useEffect(() => {
     setRowCountState((prevRowCountState) =>
       auctionCount !== undefined ? auctionCount : prevRowCountState
@@ -66,9 +70,23 @@ const Auction = ({ userId }) => {
       .catch((err) => {
         console.log(err);
       });
+
+    if (signalRContext?.connection) {
+      signalRContext.connection.on("ReceiveAuctionOpen", (auctionTitle) => {
+        getAuctionByStaff();
+      });
+
+      signalRContext.connection.on("ReceiveAuctionEnd", (auctionTitle) => {
+        getAuctionByStaff();
+      });
+
+      signalRContext.connection.on("ReceiveAuctionAssigned", (auctionId, auctionTitle) => {
+        getAuctionByStaff();
+      });
+    }
   }, []);
 
-  useEffect(() => {
+  function getAuctionByStaff() {
     fetchStaffAuctions(paginationModel.pageSize, paginationModel.page)
       .then((res) => {
         console.log(paginationModel);
@@ -81,6 +99,10 @@ const Auction = ({ userId }) => {
         console.log(err);
         setIsLoading(false); // Set isLoading to false on error as well
       });
+  }
+
+  useEffect(() => {
+    getAuctionByStaff();
     return () => {
       setAuctions([]);
       console.log("unmount");
@@ -159,39 +181,39 @@ const Auction = ({ userId }) => {
             params.row.status === 1
               ? "Chưa có nhân viên"
               : params.row.status === 2
-              ? "Cập nhật thông tin"
-              : params.row.status === 0
-              ? "Đang chờ duyệt"
-              : params.row.status === 3
-              ? "Bị từ chối"
-              : params.row.status === 4
-              ? "Mở đăng ký"
-              : params.row.status === 5
-              ? "Đang diễn ra"
-              : params.row.status === 6
-              ? "Đã kết thúc"
-              : params.row.status === 7
-              ? "Bán không thành công"
-              : "Đang cập nhật"
+                ? "Cập nhật thông tin"
+                : params.row.status === 0
+                  ? "Đang chờ duyệt"
+                  : params.row.status === 3
+                    ? "Bị từ chối"
+                    : params.row.status === 4
+                      ? "Mở đăng ký"
+                      : params.row.status === 5
+                        ? "Đang diễn ra"
+                        : params.row.status === 6
+                          ? "Đã kết thúc"
+                          : params.row.status === 7
+                            ? "Bán không thành công"
+                            : "Đang cập nhật"
           }
           color={
             params.row.status === 1
               ? "info"
               : params.row.status === 2
-              ? "warning"
-              : params.row.status === 0
-              ? "warning"
-              : params.row.status === 3
-              ? "error"
-              : params.row.status === 4
-              ? "info"
-              : params.row.status === 5
-              ? "success"
-              : params.row.status === 6
-              ? "error"
-              : params.row.status === 7
-              ? "secondary"
-              : "warning"
+                ? "warning"
+                : params.row.status === 0
+                  ? "warning"
+                  : params.row.status === 3
+                    ? "error"
+                    : params.row.status === 4
+                      ? "info"
+                      : params.row.status === 5
+                        ? "success"
+                        : params.row.status === 6
+                          ? "error"
+                          : params.row.status === 7
+                            ? "secondary"
+                            : "warning"
           }
         />
       ),

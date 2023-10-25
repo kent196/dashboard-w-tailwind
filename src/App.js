@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { ThemeProvider, CssBaseline, Box } from "@mui/material";
 import { Routes, Route, useLocation } from "react-router-dom";
 import jwtDecode from "jwt-decode"; // Import JWT decoding library
@@ -31,6 +31,9 @@ import Error from "./global/Error";
 import Live from "./scenes/live";
 import Profile from "./scenes/profile";
 import SellerRequest from "./scenes/sellerReq";
+import { SignalRContext } from "./context/SignalRContext";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function App() {
   // let role = "admin";
@@ -39,6 +42,88 @@ function App() {
   const location = useLocation();
   const [theme, colorMode] = useMode();
   const [user, setUser] = useState(null); // State to store user role
+
+  // Signal R context
+  const signalRContext = useContext(SignalRContext);
+
+  // Establish signal R connection
+  useEffect(() => {
+    if (signalRContext?.connection) {
+      signalRContext.connection
+        .start()
+        .then(() => {
+          console.log("Connection started!");
+          signalRContext.connection.on("ReceiveMessage", (user, message) => {
+            console.log(`'${message}' - ${user}`);
+          });
+
+          signalRContext.connection.on("ReceiveNewBid", (userName, auctionTitle) => {
+            console.log(`'${userName} just place a bid in '${auctionTitle}'`);
+          });
+
+          signalRContext.connection.on("ReceiveAuctionOpen", (auctionTitle) => {
+            console.log(`${auctionTitle} da bat dau`);
+            toast.success(`'${auctionTitle}' đã bắt đầu!`, {
+              position: "top-right",
+              autoClose: 2000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              theme: "light",
+            });
+          });
+
+          signalRContext.connection.on("ReceiveAuctionEnd", (auctionTitle) => {
+            console.log(`${auctionTitle} da ket thuc`);
+            toast.success(`'${auctionTitle}' đã kết thúc!`, {
+              position: "top-right",
+              autoClose: 2000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              theme: "light",
+            });
+          });
+
+          signalRContext.connection.on("ReceiveAuctionAssigned", (auctionId, auctionTitle) => {
+            console.log(`${auctionTitle} da duoc assign cho ban`);
+            toast.success(`'${auctionTitle}' đã được giao cho bạn!`, {
+              position: "top-right",
+              autoClose: 2000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              theme: "light",
+            });
+            signalRContext.connection?.invoke("JoinGroup", `AUCTION_${auctionId}`).catch(function (err) {
+              return console.error(err.toString());
+            });
+          });
+        })
+        .catch((error) => {
+          console.log("Error while establishing connection :(");
+          console.log(error);
+        })
+    }
+
+    return () => {
+      if (signalRContext?.connection) {
+        signalRContext.connection.stop()
+          .then(() => {
+            console.log('stop connection');
+          })
+          .catch(err => {
+            console.log(err);
+          })
+      }
+    };
+  }, [signalRContext?.connection]);
 
   useEffect(() => {
     // Check if the user is logged in

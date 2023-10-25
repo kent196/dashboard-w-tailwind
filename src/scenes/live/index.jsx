@@ -10,7 +10,7 @@ import {
   Typography,
 } from "@mui/material";
 import React from "react";
-import { useEffect } from "react";
+import { useEffect, useContext } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import {
   endAuction,
@@ -21,11 +21,9 @@ import { useState } from "react";
 import { formatDateTime, formatPrice } from "../../libs/formaters";
 import Header from "../../components/Header";
 import UserCard from "../../components/UserCard";
-import { formatDate } from "@fullcalendar/core";
 import { useTheme } from "@emotion/react";
 import { token } from "../../theme";
 import CountdownTimer from "../../components/CountdownTimer";
-import { HttpTransportType, HubConnectionBuilder } from "@microsoft/signalr";
 import {
   ArrowBack,
   EmojiEventsOutlined,
@@ -34,6 +32,7 @@ import {
 import Error from "../../global/Error";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { SignalRContext } from "../../context/SignalRContext";
 
 const Live = () => {
   const theme = useTheme();
@@ -44,7 +43,9 @@ const Live = () => {
   const [endedAt, setEndedAt] = useState(new Date()); // State to store auction details
   const [loading, setLoading] = useState(false); // State to store auction details
   const [connection, setConnection] = useState(); // State to store signal r connection
-  const [winner, setWinner] = useState({}); // State to store signal r connection
+  const [winner, setWinner] = useState({
+    bidder: {}
+  }); // State to store signal r connection
   const [isOpenWinner, setIsOpenWinner] = useState(false); // State to store signal r connection
   const navigate = useNavigate();
   const styles = {
@@ -56,6 +57,9 @@ const Live = () => {
       padding: "10px", // Add padding for content inside the box
     },
   };
+
+  // Signal R context
+  const signalRContext = useContext(SignalRContext);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -84,59 +88,31 @@ const Live = () => {
       .catch((err) => {
         console.log(err);
       });
-    buildConnection();
+    //buildConnection();
+
+    // SignalR onreceive
+    if (signalRContext?.connection) {
+      signalRContext?.connection.on("ReceiveNewBid", (userName, auctionTitle) => {
+        fetchBidders(id)
+          .then((res) => {
+            setBids(res.data);
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      });
+
+      signalRContext?.connection.on("ReceiveAuctionEnd", (auctionTitle) => {
+        //setWinner(bids[0]);
+        setIsOpenWinner(true);
+      });
+    }
 
     return () => {
       setAuctionDetails({});
       setBids([]);
     };
   }, []);
-
-  const buildConnection = () => {
-    const connection = new HubConnectionBuilder()
-      .withUrl(`${process.env.REACT_APP_BASE_URL}/auctionHub`, {
-        skipNegotiation: true,
-        transport: HttpTransportType.WebSockets,
-        accessTokenFactory: async () => {
-          return localStorage.getItem("accessToken");
-        },
-      })
-      .withAutomaticReconnect()
-      .build();
-    setConnection(connection);
-  };
-
-  useEffect(() => {
-    if (connection) {
-      connection
-        .start()
-        .then(() => {
-          console.log("Connection started!");
-          connection.on("ReceiveMessage", (user, message) => {
-            console.log(`'${message}' - ${user}`);
-          });
-
-          connection.on("ReceiveNewBid", (userName, auctionTitle) => {
-            console.log(`'${userName} just place a bid in '${auctionTitle}'`);
-            fetchBidders(id)
-              .then((res) => {
-                setBids(res.data);
-              })
-              .catch((err) => {
-                console.log(err);
-              });
-          });
-
-          connection
-            .invoke("JoinGroup", parseInt(id))
-            .catch((err) => console.log(err));
-        })
-        .catch((error) => {
-          console.log("Error while establishing connection :(");
-          console.log(error);
-        });
-    }
-  }, [connection]);
 
   const handleEndAuction = (auctionId) => {
     endAuction(auctionId)
@@ -152,7 +128,7 @@ const Live = () => {
           theme: "light",
         });
         setEndedAt(0);
-        setWinner(res.data);
+        //setWinner(bids[0]);
         setIsOpenWinner(true);
       })
       .catch((err) => {
@@ -258,39 +234,39 @@ const Live = () => {
                   auctionDetails.status === 1
                     ? "Chưa có nhân viên"
                     : auctionDetails.status === 0
-                    ? "Đang chờ duyệt"
-                    : auctionDetails.status === 2
-                    ? "Cập nhật thông tin"
-                    : auctionDetails.status === 3
-                    ? "Bị từ chối"
-                    : auctionDetails.status === 4
-                    ? "Mở đăng ký"
-                    : auctionDetails.status === 5
-                    ? "Đang diễn ra"
-                    : auctionDetails.status === 6
-                    ? "Đã kết thúc"
-                    : auctionDetails.status === 7
-                    ? "Không thành công"
-                    : "Đang cập nhật"
+                      ? "Đang chờ duyệt"
+                      : auctionDetails.status === 2
+                        ? "Cập nhật thông tin"
+                        : auctionDetails.status === 3
+                          ? "Bị từ chối"
+                          : auctionDetails.status === 4
+                            ? "Mở đăng ký"
+                            : auctionDetails.status === 5
+                              ? "Đang diễn ra"
+                              : auctionDetails.status === 6
+                                ? "Đã kết thúc"
+                                : auctionDetails.status === 7
+                                  ? "Không thành công"
+                                  : "Đang cập nhật"
                 }
                 color={
                   auctionDetails.status === 1
                     ? "info"
                     : auctionDetails.status === 0
-                    ? "warning"
-                    : auctionDetails.status === 2
-                    ? "warning"
-                    : auctionDetails.status === 3
-                    ? "error"
-                    : auctionDetails.status === 4
-                    ? "info"
-                    : auctionDetails.status === 5
-                    ? "success"
-                    : auctionDetails.status === 6
-                    ? "error"
-                    : auctionDetails.status === 7
-                    ? "secondary"
-                    : "warning"
+                      ? "warning"
+                      : auctionDetails.status === 2
+                        ? "warning"
+                        : auctionDetails.status === 3
+                          ? "error"
+                          : auctionDetails.status === 4
+                            ? "info"
+                            : auctionDetails.status === 5
+                              ? "success"
+                              : auctionDetails.status === 6
+                                ? "error"
+                                : auctionDetails.status === 7
+                                  ? "secondary"
+                                  : "warning"
                 }
               />
             </Box>
@@ -366,8 +342,8 @@ const Live = () => {
                       index === 0
                         ? `${colors.blueAccent[800]} !important`
                         : bid.status === 1
-                        ? "transparent"
-                        : "#e7e9eb",
+                          ? "transparent"
+                          : "#e7e9eb",
                     textDecoration: bid.status === 2 ? "line-through" : "",
                   }}>
                   {/* <Typography variant='h6'>{bid.bidder.name}</Typography>
@@ -444,7 +420,7 @@ const Live = () => {
         aria-labelledby='alert-dialog-title'
         aria-describedby='alert-dialog-description'>
         <DialogTitle id='alert-dialog-title' variant='h4'>
-          Người chiến thắng
+          Cuộc đấu giá đã kết thúc
         </DialogTitle>
         <DialogContent>
           <Box
@@ -452,13 +428,13 @@ const Live = () => {
             flexDirection={"column"}
             justifyContent={"space-between"}
             gap={"20px"}>
-            <UserCard
+            {/* <UserCard
               icon={<EmojiEventsOutlined color='warning' />}
-              avatar={winner.profilePicture}
-              bidderName={winner.name}
-              email={winner.email}
-              bidAmmount={winner.finalBid}
-            />
+              avatar={winner.bidder.profilePicture}
+              bidderName={winner.bidder.name}
+              email={winner.bidder.email}
+              bidAmmount={winner.bidAmount}
+            /> */}
             <Box display={"flex"} justifyContent={"flex-end"}>
               <Button
                 variant='contained'

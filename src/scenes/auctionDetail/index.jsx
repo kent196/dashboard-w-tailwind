@@ -13,7 +13,7 @@ import {
 } from "@mui/material";
 import MuiAlert from "@mui/material/Alert";
 import SnackBar from "@mui/material/Snackbar";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import Header from "../../components/Header";
 import ProductDetailModal from "../../components/ProductDetailModal";
@@ -33,6 +33,7 @@ import { fetchProduct } from "../../libs/productServices";
 import { token } from "../../theme";
 import RegistrationList from "../../components/AuctionRegisList";
 import { ToastContainer } from "react-toastify";
+import { SignalRContext } from "../../context/SignalRContext";
 
 const AuctionDetail = () => {
   const theme = useTheme();
@@ -58,6 +59,9 @@ const AuctionDetail = () => {
     // registrationStart: "",
     // registrationEnd: "",
   });
+
+  // Signal R context
+  const signalRContext = useContext(SignalRContext);
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
@@ -103,17 +107,6 @@ const AuctionDetail = () => {
         console.log(err);
       });
   };
-
-  useEffect(() => {
-    fetchAuctionRegisters(id)
-      .then((res) => {
-        console.log(`List of registers: ${res.data}`);
-        setRegisList(res.data);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }, []);
 
   const handleNavigateToLive = (auctionId) => {
     navigate(`/auction/live/${auctionId}`);
@@ -175,9 +168,7 @@ const AuctionDetail = () => {
   //   };
   // }, []);
 
-  useEffect(() => {
-    window.scrollTo(0, 0);
-
+  function getAuctionDetail() {
     fetchAuctionDetail(id)
       .then((res) => {
         console.log(`Auction details: ${res.data}`);
@@ -198,6 +189,34 @@ const AuctionDetail = () => {
       .catch((err) => {
         console.log(err);
       });
+  }
+
+  function openRegistrationList() {
+    fetchAuctionRegisters(id)
+      .then((res) => {
+        console.log(`List of registers: ${res.data}`);
+        setRegisList(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+    setIsOpenRegisList(true);
+  }
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+
+    getAuctionDetail();
+
+    if (signalRContext?.connection) {
+      signalRContext.connection.on("ReceiveAuctionOpen", (auctionTitle) => {
+        getAuctionDetail();
+      });
+
+      signalRContext.connection.on("ReceiveAuctionEnd", (auctionTitle) => {
+        getAuctionDetail();
+      });
+    }
     return () => {
       setAuction(null);
       setSelectedStartDate(null);
@@ -276,39 +295,39 @@ const AuctionDetail = () => {
                         auction.status === 1
                           ? "Chưa có nhân viên"
                           : auction.status === 0
-                          ? "Đang chờ duyệt"
-                          : auction.status === 2
-                          ? "Cập nhật thông tin"
-                          : auction.status === 3
-                          ? "Bị từ chối"
-                          : auction.status === 4
-                          ? "Mở đăng ký"
-                          : auction.status === 5
-                          ? "Đang diễn ra"
-                          : auction.status === 6
-                          ? "Đã kết thúc"
-                          : auction.status === 7
-                          ? "Không thành công"
-                          : "Đang cập nhật"
+                            ? "Đang chờ duyệt"
+                            : auction.status === 2
+                              ? "Cập nhật thông tin"
+                              : auction.status === 3
+                                ? "Bị từ chối"
+                                : auction.status === 4
+                                  ? "Mở đăng ký"
+                                  : auction.status === 5
+                                    ? "Đang diễn ra"
+                                    : auction.status === 6
+                                      ? "Đã kết thúc"
+                                      : auction.status === 7
+                                        ? "Không thành công"
+                                        : "Đang cập nhật"
                       }
                       color={
                         auction.status === 1
                           ? "info"
                           : auction.status === 0
-                          ? "warning"
-                          : auction.status === 2
-                          ? "warning"
-                          : auction.status === 3
-                          ? "error"
-                          : auction.status === 4
-                          ? "info"
-                          : auction.status === 5
-                          ? "success"
-                          : auction.status === 6
-                          ? "error"
-                          : auction.status === 7
-                          ? "secondary"
-                          : "warning"
+                            ? "warning"
+                            : auction.status === 2
+                              ? "warning"
+                              : auction.status === 3
+                                ? "error"
+                                : auction.status === 4
+                                  ? "info"
+                                  : auction.status === 5
+                                    ? "success"
+                                    : auction.status === 6
+                                      ? "error"
+                                      : auction.status === 7
+                                        ? "secondary"
+                                        : "warning"
                       }
                     />
                   </Box>
@@ -619,7 +638,9 @@ const AuctionDetail = () => {
                         sx={{ width: "100px", height: "50px", p: "5px" }}
                         variant={"outlined"}
                         color={"primary"}
-                        onClick={() => setIsOpenRegisList(true)}>
+                        onClick={() => {
+                          openRegistrationList();
+                        }}>
                         Xem danh sách đăng ký
                       </Button>
                     </Box>
@@ -673,8 +694,8 @@ const AuctionDetail = () => {
                         index === 0
                           ? "yellow"
                           : bidder.status === 1
-                          ? "transparent"
-                          : "#e7e9eb", // Highlight the first bidder
+                            ? "transparent"
+                            : "#e7e9eb", // Highlight the first bidder
                       padding: "10px",
                       color: bidder.bidder.status === 1 ? "black" : "gray",
                     }}>
@@ -763,39 +784,39 @@ const AuctionDetail = () => {
                           auction.status === 1
                             ? "Chưa có nhân viên"
                             : auction.status === 0
-                            ? "Đang chờ duyệt"
-                            : auction.status === 2
-                            ? "Cập nhật thông tin"
-                            : auction.status === 3
-                            ? "Bị từ chối"
-                            : auction.status === 4
-                            ? "Mở đăng ký"
-                            : auction.status === 5
-                            ? "Đang diễn ra"
-                            : auction.status === 6
-                            ? "Đã kết thúc"
-                            : auction.status === 7
-                            ? "Không thành công"
-                            : "Đang cập nhật"
+                              ? "Đang chờ duyệt"
+                              : auction.status === 2
+                                ? "Cập nhật thông tin"
+                                : auction.status === 3
+                                  ? "Bị từ chối"
+                                  : auction.status === 4
+                                    ? "Mở đăng ký"
+                                    : auction.status === 5
+                                      ? "Đang diễn ra"
+                                      : auction.status === 6
+                                        ? "Đã kết thúc"
+                                        : auction.status === 7
+                                          ? "Không thành công"
+                                          : "Đang cập nhật"
                         }
                         color={
                           auction.status === 1
                             ? "info"
                             : auction.status === 0
-                            ? "warning"
-                            : auction.status === 2
-                            ? "warning"
-                            : auction.status === 3
-                            ? "error"
-                            : auction.status === 4
-                            ? "info"
-                            : auction.status === 5
-                            ? "success"
-                            : auction.status === 6
-                            ? "error"
-                            : auction.status === 7
-                            ? "secondary"
-                            : "warning"
+                              ? "warning"
+                              : auction.status === 2
+                                ? "warning"
+                                : auction.status === 3
+                                  ? "error"
+                                  : auction.status === 4
+                                    ? "info"
+                                    : auction.status === 5
+                                      ? "success"
+                                      : auction.status === 6
+                                        ? "error"
+                                        : auction.status === 7
+                                          ? "secondary"
+                                          : "warning"
                         }
                       />
                     </Box>
@@ -1096,8 +1117,8 @@ const AuctionDetail = () => {
                         index === 0
                           ? "yellow"
                           : bidder.status === 1
-                          ? "transparent"
-                          : "#e7e9eb", // Highlight the first bidder
+                            ? "transparent"
+                            : "#e7e9eb", // Highlight the first bidder
                       padding: "10px",
                       color: bidder.status === 1 ? "black" : "gray",
                     }}>

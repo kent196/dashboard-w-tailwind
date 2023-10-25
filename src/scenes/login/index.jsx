@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { Box, Typography, TextField, Button } from "@mui/material";
 import { useTheme } from "@emotion/react";
 import { ColorModeContext, useMode, token } from "../../theme";
@@ -9,7 +9,8 @@ import { useNavigate } from "react-router-dom"; // Import useNavigate
 import axios from "../../api/publicAxios"; // Import Axios
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-
+import { SignalRContext } from "../../context/SignalRContext";
+import { HttpTransportType, HubConnectionBuilder } from "@microsoft/signalr";
 const Login = () => {
   const theme = useTheme();
   const colors = token(theme.palette.mode);
@@ -20,6 +21,10 @@ const Login = () => {
     email: "",
     password: "",
   });
+
+  // Signal R context
+  const signalRContext = useContext(SignalRContext);
+
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
@@ -31,6 +36,21 @@ const Login = () => {
     });
   };
 
+  // Build signal r connection
+  const buildConnection = () => {
+    const connection = new HubConnectionBuilder()
+      .withUrl(`${process.env.REACT_APP_BASE_URL}/auctionHub`, {
+        skipNegotiation: true,
+        transport: HttpTransportType.WebSockets,
+        accessTokenFactory: async () => {
+          return localStorage.getItem("accessToken");
+        },
+      })
+      .withAutomaticReconnect()
+      .build();
+    signalRContext?.setConnection(connection);
+  };
+
   const handleLogin = async () => {
     try {
       console.log("Sending login request...");
@@ -40,7 +60,7 @@ const Login = () => {
       console.log("Response received:", response.data);
 
       if (response.status === 200) {
-        toast.success("Login success", {
+        toast.success("Đăng nhập thành công", {
           position: "top-right",
           autoClose: 2000,
           hideProgressBar: false,
@@ -56,6 +76,7 @@ const Login = () => {
         localStorage.setItem("refreshToken", refreshToken);
         console.log(localStorage.accessToken);
         console.log(localStorage.refreshToken);
+        buildConnection()
         navigate("/dashboard"); // Navigate to the auctions page
       } else {
         console.log(response.data);
