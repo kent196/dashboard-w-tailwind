@@ -320,10 +320,10 @@ const Sidebar = ({ userRole, currentLocation }) => {
               />
             </Box>
           </Tooltip>
-          <Tooltip title='Sản phẩm đấu giá' placement='right'>
+          <Tooltip title='Sản phẩm' placement='right'>
             <Box>
               <Item
-                title={"Sản phẩm đấu giá"}
+                title={"Sản phẩm"}
                 to={"/products"}
                 icon={<StoreOutlined />}
                 selected={selected}
