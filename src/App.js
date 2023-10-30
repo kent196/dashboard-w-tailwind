@@ -89,6 +89,20 @@ function App() {
             });
           });
 
+          signalRContext.connection.on("ReceiveAuctionAboutToEnd", (auctionTitle) => {
+            console.log(`${auctionTitle} sap ket thuc`);
+            toast.success(`'${auctionTitle}' chuẩn bị kết thúc!`, {
+              position: "top-right",
+              autoClose: 2000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              theme: "light",
+            });
+          });
+
           signalRContext.connection.on("ReceiveAuctionAssigned", (auctionId, auctionTitle) => {
             console.log(`${auctionTitle} da duoc assign cho ban`);
             toast.success(`'${auctionTitle}' đã được giao cho bạn!`, {
