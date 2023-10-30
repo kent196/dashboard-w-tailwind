@@ -1,9 +1,11 @@
 import authAxios from "../api/authAxios";
 import publicAxios from "../api/publicAxios";
 
-const fetchUsers = async () => {
+const fetchUsers = async (pageSize, pageNumber) => {
   try {
-    const response = await publicAxios.get("/user");
+    const response = await publicAxios.get(
+      `/user?PageSize=${pageSize}&PageNumber=${pageNumber}`
+    );
     if (!response.data) {
       console.log("No data");
     }
@@ -13,9 +15,11 @@ const fetchUsers = async () => {
     throw error;
   }
 };
-const fetchAllStaffs = async () => {
+const fetchAllStaffs = async (pageSize, pageNumber) => {
   try {
-    const response = await authAxios.get("/staff");
+    const response = await authAxios.get(
+      `/staff?PageSize=${pageSize}&PageNumber=${pageNumber}`
+    );
     if (!response.data) {
       console.log("No data");
     }

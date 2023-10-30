@@ -76,9 +76,11 @@ const Team = () => {
 
   useEffect(() => {
     if (currentUser.role === 3) {
-      fetchUsers()
+      fetchUsers(paginationModel.pageSize, paginationModel.page + 1)
         .then((res) => {
-          setUsers(res.data);
+          setCustomerCount(res.data.count);
+
+          setUsers(res.data.userList);
           console.log(res.data);
           console.log(users);
         })
@@ -86,16 +88,17 @@ const Team = () => {
           console.log(err);
         });
     } else if (currentUser.role === 4) {
-      fetchAllStaffs()
+      fetchAllStaffs(paginationModel.pageSize, paginationModel.page + 1)
         .then((res) => {
-          setUsers(res.data);
+          setCustomerCount(res.data.count);
+          setUsers(res.data.staffList);
           console.log(res.data);
         })
         .catch((err) => {
           console.log(err);
         });
     } else if (currentUser.role === 5) {
-      fetchCustomer(paginationModel.pageSize, paginationModel.page)
+      fetchCustomer(paginationModel.pageSize, paginationModel.page + 1)
         .then((res) => {
           console.log(res.data);
           setCustomerCount(res.data.count);
@@ -213,7 +216,18 @@ const Team = () => {
           <Helmet>
             <title>User Management</title>
           </Helmet>
-          <Header title='Người dùng' subTitle={"Danh sách người dùng"} />
+          <Header
+            title={
+              currentUser.role === 3
+                ? "Người dùng"
+                : currentUser.role === 4
+                ? "Nhân viên"
+                : currentUser.role === 5
+                ? "Người dùng"
+                : "Người dùng"
+            }
+            subTitle={"Danh sách người dùng"}
+          />
           <Box
             m={"20px 0"} // Reduced top margin
             sx={{
@@ -262,6 +276,11 @@ const Team = () => {
               rows={users}
               columns={columns}
               components={{ Toolbar: GridToolbar }}
+              rowCount={rowCountState}
+              pageSizeOptions={[1, 3, 5]}
+              paginationModel={paginationModel}
+              paginationMode='server'
+              onPaginationModelChange={setPaginationModel}
             />
           </Box>
         </Container>
@@ -272,7 +291,18 @@ const Team = () => {
           <Helmet>
             <title>User Management</title>
           </Helmet>
-          <Header title='Người dùng' subTitle={"Danh sách người dùng"} />
+          <Header
+            title={
+              currentUser.role === 3
+                ? "Người dùng"
+                : currentUser.role === 4
+                ? "Nhân viên"
+                : currentUser.role === 5
+                ? "Người dùng"
+                : "Người dùng"
+            }
+            subTitle={"Danh sách người dùng"}
+          />
           <Box
             m={"20px 0"} // Reduced top margin
             sx={{
