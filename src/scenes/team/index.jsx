@@ -21,7 +21,11 @@ import ActionButtons from "../../components/ActionButtons";
 import Header from "../../components/Header";
 import { mockDataTeam } from "../../data/mockData";
 import { token } from "../../theme";
-import { fetchCustomer, fetchUsers } from "../../libs/userService";
+import {
+  fetchAllStaffs,
+  fetchCustomer,
+  fetchUsers,
+} from "../../libs/userService";
 import { fetchUserData } from "../../libs/accountServices";
 import Unauthorize from "../../global/Unauthorize";
 
@@ -58,22 +62,6 @@ const Team = () => {
   }, [userCount, setRowCountState]);
 
   useEffect(() => {
-    fetchCustomer(paginationModel.pageSize, paginationModel.page)
-      .then((res) => {
-        console.log(res.data);
-        setCustomerCount(res.data.count);
-        setCustomers(res.data.customerList);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-
-    return () => {
-      setCustomers([]);
-    };
-  }, [paginationModel]);
-
-  useEffect(() => {
     window.scrollTo(0, 0);
 
     fetchUserData()
@@ -87,15 +75,37 @@ const Team = () => {
   }, []);
 
   useEffect(() => {
-    fetchUsers()
-      .then((res) => {
-        setUsers(res.data);
-        console.log(res.data);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }, []);
+    if (currentUser.role === 3) {
+      fetchUsers()
+        .then((res) => {
+          setUsers(res.data);
+          console.log(res.data);
+          console.log(users);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    } else if (currentUser.role === 4) {
+      fetchAllStaffs()
+        .then((res) => {
+          setUsers(res.data);
+          console.log(res.data);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    } else if (currentUser.role === 5) {
+      fetchCustomer(paginationModel.pageSize, paginationModel.page)
+        .then((res) => {
+          console.log(res.data);
+          setCustomerCount(res.data.count);
+          setCustomers(res.data.customerList);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+  }, [paginationModel, currentUser.role]);
 
   const columns = [
     { field: "id", headerName: "ID" },

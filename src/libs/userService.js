@@ -13,6 +13,18 @@ const fetchUsers = async () => {
     throw error;
   }
 };
+const fetchAllStaffs = async () => {
+  try {
+    const response = await authAxios.get("/staff");
+    if (!response.data) {
+      console.log("No data");
+    }
+
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
 
 const fetchStaffs = async () => {
   try {
@@ -55,4 +67,10 @@ const fetchUserDetails = async (id) => {
   }
 };
 
-export { fetchUsers, fetchStaffs, fetchCustomer, fetchUserDetails };
+export {
+  fetchUsers,
+  fetchStaffs,
+  fetchCustomer,
+  fetchUserDetails,
+  fetchAllStaffs,
+};

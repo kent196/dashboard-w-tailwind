@@ -67,7 +67,7 @@ const Dashboard = () => {
         .catch((err) => {
           console.log(err);
         });
-    } else if (currentUser.role === 4) {
+    } else if (currentUser.role === 4 || currentUser.role === 3) {
       // If currentUser.role is not 5, you can handle it as needed
       fetchAuctions(5, 0)
         .then((res) => {
