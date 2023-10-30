@@ -10,6 +10,7 @@ const Header = ({
   textTransform,
   margin,
   padding,
+  position,
 }) => {
   return (
     <Box>
@@ -17,6 +18,7 @@ const Header = ({
         variant='h3'
         color={color}
         sx={{
+          position: position,
           textTransform: textTransform,
           fontWeight: "bold",
           marginBottom: "10px",

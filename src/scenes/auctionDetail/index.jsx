@@ -7,6 +7,7 @@ import {
   Dialog,
   DialogContent,
   DialogTitle,
+  Skeleton,
   TextField,
   Typography,
   useTheme,
@@ -52,6 +53,7 @@ const AuctionDetail = () => {
   const [selectedRegisEnd, setSelectedRegisEnd] = useState(new Date());
   const [openSnackBar, setOpenSnackBar] = useState(false);
   const [isOpenRegisList, setIsOpenRegisList] = useState(false);
+  const [isLoadingAuctionDetail, setIsLoadingAuctionDetail] = useState(false);
   const [regisList, setRegisList] = useState([]); // State to store auction details
   const [formData, setFormData] = useState({
     // startedAt: "",
@@ -105,6 +107,16 @@ const AuctionDetail = () => {
       })
       .catch((err) => {
         console.log(err);
+        toast.error("Thông tin cập nhật chưa chính xác", {
+          position: "top-right",
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
       });
   };
 
@@ -169,6 +181,7 @@ const AuctionDetail = () => {
   // }, []);
 
   function getAuctionDetail() {
+    setIsLoadingAuctionDetail(true);
     fetchAuctionDetail(id)
       .then((res) => {
         console.log(`Auction details: ${res.data}`);
@@ -188,6 +201,10 @@ const AuctionDetail = () => {
       })
       .catch((err) => {
         console.log(err);
+        return <Error />;
+      })
+      .finally(() => {
+        setIsLoadingAuctionDetail(false);
       });
   }
 
@@ -226,12 +243,23 @@ const AuctionDetail = () => {
       console.log("unmount auction details");
     };
   }, []);
-
-  if (!auction) {
-    return <Error />; // Handle the case where the user is not found
-  }
-
-  if (
+  if (auction === null) {
+    return (
+      <Skeleton
+        variant='rectangular'
+        animation='wave'
+        width='100%'
+        height={"70vh"} // Adjust the height according to your needs
+      />
+    ); // Show loading indicator when auction is null
+  } else if (isLoadingAuctionDetail) {
+    <Skeleton
+      variant='rectangular'
+      animation='wave'
+      width='100%'
+      height={"70vh"} // Adjust the height according to your needs
+    />;
+  } else if (
     auction.status === 1 ||
     auction.status === 2 ||
     auction.status === 3 ||
@@ -461,25 +489,6 @@ const AuctionDetail = () => {
                         </Typography>
                       )}
                     </Box>
-                    {auction.status === 2 || auction.status === 4 ? (
-                      <Box
-                        display={"flex"}
-                        justifyContent={"flex-end"}
-                        gap={"20px"}
-                        m={"10px 0"}>
-                        <Button
-                          sx={{ width: "100px" }}
-                          variant='contained'
-                          color='success'
-                          onClick={() =>
-                            handleAuctionApproval(auction.id, formData)
-                          }>
-                          Lưu
-                        </Button>
-                      </Box>
-                    ) : (
-                      <Box></Box>
-                    )}
                   </Box>
 
                   {/* Price */}
@@ -531,13 +540,31 @@ const AuctionDetail = () => {
                       <Box
                         height={"auto"}
                         display={"flex"}
-                        justifyContent={"space-between"}>
+                        justifyContent={"space-between"}
+                        alignItems={"center"}>
                         <Typography fontWeight={"bold"} variant={"h5"}>
                           Bước giá:
                         </Typography>
-                        <Typography variant={"h5"}>
-                          {formatPrice(auction.step)}
-                        </Typography>
+                        {auction.status === 4 || auction.status == 2 ? (
+                          <Box
+                            display={"flex"}
+                            justifyContent={"flex-end"}
+                            alignItems={"center"}
+                            gap={"5px"}>
+                            <TextField
+                              type='decimal'
+                              name='step'
+                              defaultValue={auction.step}
+                              sx={{ textAlign: "right" }}
+                              onChange={handleInputChange}
+                            />
+                            <span>đ</span>
+                          </Box>
+                        ) : (
+                          <Typography variant={"h5"}>
+                            {formatPrice(auction.step)}
+                          </Typography>
+                        )}
                       </Box>
                       <Box
                         height={"auto"}
@@ -593,6 +620,25 @@ const AuctionDetail = () => {
                       </Typography>
                     </Box>
                   </Box>
+                  {auction.status === 2 || auction.status === 4 ? (
+                    <Box
+                      display={"flex"}
+                      justifyContent={"flex-end"}
+                      gap={"20px"}
+                      m={"10px 0"}>
+                      <Button
+                        sx={{ width: "100px" }}
+                        variant='contained'
+                        color='success'
+                        onClick={() =>
+                          handleAuctionApproval(auction.id, formData)
+                        }>
+                        Lưu
+                      </Button>
+                    </Box>
+                  ) : (
+                    <Box></Box>
+                  )}
                 </Box>
                 {/* Right */}
                 <Box

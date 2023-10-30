@@ -1,5 +1,11 @@
 import React, { useEffect, useState, useContext } from "react";
-import { Box, Typography, TextField, Button } from "@mui/material";
+import {
+  Box,
+  Typography,
+  TextField,
+  Button,
+  CircularProgress,
+} from "@mui/material";
 import { useTheme } from "@emotion/react";
 import { ColorModeContext, useMode, token } from "../../theme";
 import loginBackground from "../../assets/login_bg_1.png";
@@ -16,6 +22,7 @@ const Login = () => {
   const colors = token(theme.palette.mode);
   const navigate = useNavigate(); // Initialize useNavigate for navigation
   const [error, setError] = useState(null); // Initialize error state
+  const [loading, setLoading] = useState(false);
 
   const [formData, setFormData] = useState({
     email: "",
@@ -53,12 +60,14 @@ const Login = () => {
 
   const handleLogin = async () => {
     try {
+      setLoading(true);
       console.log("Sending login request...");
 
       const response = await axios.post("/login", formData);
 
       console.log("Response received:", response.data);
 
+      setFormData({}); // Clear the form
       if (response.status === 200) {
         toast.success("Đăng nhập thành công", {
           position: "top-right",
@@ -77,6 +86,7 @@ const Login = () => {
         console.log(localStorage.accessToken);
         console.log(localStorage.refreshToken);
         buildConnection();
+        setFormData({});
         navigate("/dashboard"); // Navigate to the auctions page
       } else if (response.status === 401) {
         console.log(response.data.message);
@@ -87,6 +97,8 @@ const Login = () => {
       console.error("An error occurred:", error);
       setError(error.response.data.message);
       // Handle the error
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -171,8 +183,12 @@ const Login = () => {
             </Typography>
           )}
           <Button
+            disabled={
+              formData.email === "" || formData.password === "" || loading
+            }
             type='submit'
             variant='contained'
+            startIcon={loading && <CircularProgress size={20} />}
             sx={{
               width: "150px",
               height: "50px",
@@ -183,7 +199,7 @@ const Login = () => {
               },
             }}
             onClick={handleLogin}>
-            Đăng nhập
+            {loading ? "Đang đăng nhập" : "Đăng nhập"}
           </Button>
         </Box>
       </Box>
