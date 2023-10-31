@@ -25,9 +25,12 @@ import { token } from "../theme";
 import { SignalRContext } from "../context/SignalRContext";
 import logo from "../assets/user_logo.jpg";
 import { fetchUserData } from "../libs/accountServices";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
-const Item = ({ icon, title, to, selected, setSelected }) => {
+const Item = ({ icon, title, to, selected, setSelected, onClick }) => {
   const typographyStyle = {
+    onclick: "handleLogout()",
     whiteSpace: "nowrap", // Prevent text from wrapping to the next line
     overflow: "hidden", // Hide any overflowing content
     textOverflow: "ellipsis", // Display an ellipsis (...) if text overflows
@@ -46,15 +49,26 @@ const Item = ({ icon, title, to, selected, setSelected }) => {
   const handleLogout = () => {
     console.log("Logout button clicked");
     localStorage.clear();
+    toast.info("Đăng xuất thành công", {
+      position: "top-right",
+      autoClose: 2000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "light",
+    });
     // Perform any additional logout actions here
     if (signalRContext?.connection) {
-      signalRContext.connection.stop()
+      signalRContext.connection
+        .stop()
         .then(() => {
-          console.log('stop connection');
+          console.log("stop connection");
         })
-        .catch(err => {
+        .catch((err) => {
           console.log(err);
-        })
+        });
     }
   };
   return (
@@ -254,7 +268,8 @@ const Sidebar = ({ userRole, currentLocation }) => {
                 to={"/login"}
                 icon={<ExitToAppOutlined />}
                 selected={selected}
-                setSelected={setSelected}></Item>
+                setSelected={setSelected}
+                onClick></Item>
             </Box>
           </Tooltip>
         </Box>
@@ -372,7 +387,8 @@ const Sidebar = ({ userRole, currentLocation }) => {
                 to={"/login"}
                 icon={<ExitToAppOutlined />}
                 selected={selected}
-                setSelected={setSelected}></Item>
+                setSelected={setSelected}
+                onClick></Item>
             </Box>
           </Tooltip>
         </Box>
@@ -552,7 +568,8 @@ const Sidebar = ({ userRole, currentLocation }) => {
                 to={"/login"}
                 icon={<ExitToAppOutlined />}
                 selected={selected}
-                setSelected={setSelected}></Item>
+                setSelected={setSelected}
+                onClick></Item>
             </Box>
           </Tooltip>
         </Box>
@@ -604,10 +621,10 @@ const Sidebar = ({ userRole, currentLocation }) => {
                   {user.role === 3
                     ? "Admin"
                     : user.role === 4
-                      ? "Manager"
-                      : user.role === 5
-                        ? "Staff"
-                        : ""}
+                    ? "Manager"
+                    : user.role === 5
+                    ? "Staff"
+                    : ""}
                 </Typography>
                 <IconButton>
                   <MenuOutlined />
@@ -648,10 +665,10 @@ const Sidebar = ({ userRole, currentLocation }) => {
                   {user.role === 3
                     ? "Admin"
                     : user.role === 4
-                      ? "Manager"
-                      : user.role === 5
-                        ? "Staff"
-                        : ""}
+                    ? "Manager"
+                    : user.role === 5
+                    ? "Staff"
+                    : ""}
                 </Typography>
               </Box>
             </Box>

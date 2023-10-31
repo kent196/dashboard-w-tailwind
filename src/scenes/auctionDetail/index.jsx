@@ -83,7 +83,7 @@ const AuctionDetail = () => {
         setAuction(res.data);
 
         // Display a success toast
-        toast.success("Cập nhật thời gian thành công", {
+        toast.success("Cập nhật thông tin thành công", {
           position: "top-right",
           autoClose: 2000,
           hideProgressBar: false,
