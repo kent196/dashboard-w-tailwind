@@ -16,11 +16,13 @@ const RegistrationList = ({
     <Dialog
       fullWidth
       open={isOpenRegisList}
-      onClose={() => setIsOpenRegisList(false)}
+      onClose={() => {
+        setIsOpenRegisList(false);
+      }}
       aria-labelledby='alert-dialog-title'
       aria-describedby='alert-dialog-description'>
       <DialogTitle fontSize={"24px"}>
-        Số người đăng kí: {regisList.length}
+        Số người đăng kí hợp lệ: {regisList.length}
       </DialogTitle>
       <DialogContent>
         <Box height={"400px"}>

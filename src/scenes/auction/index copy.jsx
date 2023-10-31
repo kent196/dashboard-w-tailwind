@@ -243,6 +243,28 @@ const AuctionManager = () => {
     }
   };
 
+  const handleFetchBidders = (auctionId) => {
+    fetchBidders(auctionId)
+      .then((res) => {
+        console.log(res.data);
+        setBidders(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  const handleFetchRegisters = (auctionId) => {
+    fetchAuctionRegisters(auctionId)
+      .then((res) => {
+        console.log(`List of registers: ${res.data}`);
+        setRegisList(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
   const handleViewAuction = (auctionId) => {
     fetchAuctionDetail(auctionId)
       .then((res) => {
@@ -252,25 +274,6 @@ const AuctionManager = () => {
       .catch((err) => {
         console.log(err);
       });
-    if (auctionDetails.status === 5) {
-      fetchBidders(auctionId)
-        .then((res) => {
-          console.log(res.data);
-          setBidders(res.data);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    } else if (auctionDetails.status === 4) {
-      fetchAuctionRegisters(auctionId)
-        .then((res) => {
-          console.log(`List of registers: ${res.data}`);
-          setRegisList(res.data);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    }
   };
   const columns = [
     { field: "id", headerName: "ID" },
@@ -669,7 +672,10 @@ const AuctionManager = () => {
                               <Button
                                 variant={"outlined"}
                                 color={"primary"}
-                                onClick={() => setIsOpenViewBidders(true)}>
+                                onClick={() => {
+                                  setIsOpenViewBidders(true);
+                                  handleFetchBidders(auctionDetails.id);
+                                }}>
                                 Xem chi tiết
                               </Button>
                             </Box>
@@ -769,9 +775,10 @@ const AuctionManager = () => {
                         <Button
                           variant={"outlined"}
                           color={"primary"}
-                          onClick={() =>
-                            handleOpenRegisList(auctionDetails.id)
-                          }>
+                          onClick={() => {
+                            handleOpenRegisList(auctionDetails.id);
+                            handleFetchRegisters(auctionDetails.id);
+                          }}>
                           Xem danh sách đăng ký
                         </Button>
                       </Box>
@@ -816,7 +823,10 @@ const AuctionManager = () => {
               margin: "50px 0",
             }}
             open={isOpenViewBidders}
-            onClose={() => setIsOpenViewBidders(false)}
+            onClose={() => {
+              setIsOpenViewBidders(false);
+              setBidders([]);
+            }}
             aria-labelledby='alert-dialog-title'
             aria-describedby='alert-dialog-description'>
             <DialogTitle>
@@ -839,7 +849,7 @@ const AuctionManager = () => {
                     color: bidder.status === 1 ? "black" : "gray",
                   }}>
                   <Box display='flex' justifyContent='space-between'>
-                    <Typography variant='h5'>{bidder.bidderName}</Typography>
+                    <Typography variant='h5'>{bidder.bidder.name}</Typography>
                     <Typography variant='h5'>
                       {formatPrice(bidder.bidAmount)}
                     </Typography>
