@@ -24,4 +24,18 @@ const fetchUserData = async () => {
   }
 };
 
-export { fetchUserData };
+const createAccount = async (data) => {
+  try {
+    const response = await authAxios.post("/admin/staff", data);
+    if (response.status === 200) {
+      console.log("Account created successfully");
+      return response.data;
+    } else {
+      console.error("Failed to create account");
+    }
+  } catch (error) {
+    console.error("An error occurred:", error);
+  }
+};
+
+export { fetchUserData, createAccount };

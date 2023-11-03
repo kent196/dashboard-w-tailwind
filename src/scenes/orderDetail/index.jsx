@@ -219,6 +219,13 @@ const OrderDetail = () => {
               }}>
               {orderDetail.orderItems.map((item) => (
                 <Box
+                  sx={{
+                    padding: "10px",
+                    "&:hover": {
+                      cursor: "pointer",
+                      backgroundColor: "#f5f5f5",
+                    },
+                  }}
                   key={item.productId}
                   onClick={() => {
                     console.log(item.id);

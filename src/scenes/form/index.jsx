@@ -1,12 +1,15 @@
 // Libraries import
 import { Box, Button, Select, TextField, Typography } from "@mui/material";
 import React from "react";
-import { Formik } from "formik";
+import { Field, Formik } from "formik";
 import * as yup from "yup";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import Header from "../../components/Header";
 import { Helmet } from "react-helmet";
 import { useEffect } from "react";
+import { MenuItem } from "react-pro-sidebar";
+import { createAccount } from "../../libs/accountServices";
+import { toast } from "react-toastify";
 
 const Form = () => {
   const isNonMobile = useMediaQuery("(min-width:600px)");
@@ -15,12 +18,26 @@ const Form = () => {
     email: "",
     password: "",
     phone: "",
+    gender: "",
+    dob: "",
   };
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
   const handleFormSubmit = (values) => {
     console.log(values);
+    createAccount(values)
+      .then((res) => {
+        console.log(res);
+        if (res.status === 400) {
+          toast.error(res.data.message);
+        }
+        toast.success("Create account successfully");
+      })
+      .catch((err) => {
+        console.log(err);
+        toast.error("Create account failed");
+      });
   };
 
   const phoneRegExp = /^((\+84-?)|0)?[0-9]{10}$/;
@@ -125,10 +142,57 @@ const Form = () => {
                   gridColumn: "span 4",
                 }}
               />
-              <Select>
-                <option value='male'>Male</option>
-                <option value='female'>Female</option>
-              </Select>
+              <Box
+                alignItems={"center"}
+                display={"flex"}
+                justifyContent={"flex-start"}
+                gap={"20px"}
+                sx={{
+                  gridColumn: "span 4",
+                }}>
+                <Typography>Gender:</Typography>
+                <Field
+                  as='select'
+                  name='gender'
+                  label='Gender'
+                  variant='filled'
+                  fullWidth
+                  onBlur={handleBlur}
+                  onChange={handleChange}
+                  value={values.gender}
+                  error={!!touched.gender && !!errors.gender}
+                  helperText={touched.gender && errors.gender}
+                  sx={{
+                    gridColumn: "span 4",
+                  }}>
+                  <option value={1}>Male</option>
+                  <option value={0}>Female</option>
+                </Field>
+              </Box>
+              <Box
+                alignItems={"center"}
+                display={"flex"}
+                justifyContent={"flex-start"}
+                gap={"20px"}
+                sx={{
+                  gridColumn: "span 4",
+                }}>
+                <Typography>Date of birth:</Typography>
+                <TextField
+                  fullWidth
+                  variant='filled'
+                  type='datetime-local'
+                  onBlur={handleBlur}
+                  onChange={handleChange}
+                  value={values.dob}
+                  name='dob'
+                  error={!!touched.dob && !!errors.dob}
+                  helperText={touched.dob && errors.dob}
+                  sx={{
+                    gridColumn: "span 4",
+                  }}
+                />
+              </Box>
             </Box>
             <Box display={"flex"} justifyContent={"end"}>
               <Button
