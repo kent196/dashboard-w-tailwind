@@ -611,6 +611,7 @@ const Sidebar = ({ userRole, currentLocation }) => {
         }}>
         <Menu iconShape='square'>
           <MenuItem
+            style={{ color: colors.primary[100] }}
             icon={collapsed ? <MenuOutlined /> : undefined}
             onClick={() => setCollapsed(!collapsed)}>
             {!collapsed && (
@@ -632,7 +633,7 @@ const Sidebar = ({ userRole, currentLocation }) => {
                     ? "Staff"
                     : ""}
                 </Typography>
-                <IconButton>
+                <IconButton color={colors.primary[100]}>
                   <MenuOutlined />
                 </IconButton>
               </Box>

@@ -134,7 +134,7 @@ const ActionButtons = ({ row }) => {
         }}>
         <Visibility />
       </IconButton>
-      <IconButton
+      {/* <IconButton
         style={{
           color: colors.gray[100],
         }}
@@ -142,7 +142,7 @@ const ActionButtons = ({ row }) => {
         color='primary'
         aria-label='Edit'>
         <Edit />
-      </IconButton>
+      </IconButton> */}
       <IconButton
         onClick={() => handleDeleteUser(row.id)}
         color='error'

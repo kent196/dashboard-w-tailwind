@@ -28,6 +28,7 @@ import {
 } from "../../libs/userService";
 import { fetchUserData } from "../../libs/accountServices";
 import Unauthorize from "../../global/Unauthorize";
+import Error from "../../global/Error";
 
 const Team = () => {
   const isSmallScreen = useMediaQuery((theme) => theme.breakpoints.down("md"));
@@ -75,38 +76,43 @@ const Team = () => {
   }, []);
 
   useEffect(() => {
-    if (currentUser.role === 3) {
-      fetchUsers(paginationModel.pageSize, paginationModel.page + 1)
-        .then((res) => {
-          setCustomerCount(res.data.count);
+    try {
+      if (currentUser.role === 3) {
+        fetchUsers(paginationModel.pageSize, paginationModel.page + 1)
+          .then((res) => {
+            setCustomerCount(res.data.count);
 
-          setUsers(res.data.userList);
-          console.log(res.data);
-          console.log(users);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    } else if (currentUser.role === 4) {
-      fetchAllStaffs(paginationModel.pageSize, paginationModel.page + 1)
-        .then((res) => {
-          setCustomerCount(res.data.count);
-          setUsers(res.data.staffList);
-          console.log(res.data);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    } else if (currentUser.role === 5) {
-      fetchCustomer(paginationModel.pageSize, paginationModel.page + 1)
-        .then((res) => {
-          console.log(res.data);
-          setCustomerCount(res.data.count);
-          setCustomers(res.data.customerList);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+            setUsers(res.data.userList);
+            console.log(res.data);
+            console.log(users);
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      } else if (currentUser.role === 4) {
+        fetchAllStaffs(paginationModel.pageSize, paginationModel.page + 1)
+          .then((res) => {
+            setCustomerCount(res.data.count);
+            setUsers(res.data.staffList);
+            console.log(res.data);
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      } else if (currentUser.role === 5) {
+        fetchCustomer(paginationModel.pageSize, paginationModel.page + 1)
+          .then((res) => {
+            console.log(res.data);
+            setCustomerCount(res.data.count);
+            setCustomers(res.data.customerList);
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      }
+    } catch (err) {
+      console.log(err);
+      return <Error />;
     }
   }, [paginationModel, currentUser.role]);
 
@@ -137,7 +143,7 @@ const Team = () => {
             Đang hoạt động
           </Typography>
         ) : (
-          <Typography variant='h5' color={colors.red[400]}>
+          <Typography variant='h5' color={colors.primary[900]}>
             Đã khóa
           </Typography>
         ),

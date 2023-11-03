@@ -266,7 +266,9 @@ const AuctionDetail = () => {
     auction.status === 4
   ) {
     return (
-      <Container maxWidth='xl' sx={{ paddingTop: "20px" }}>
+      <Container
+        maxWidth='xl'
+        sx={{ padding: "0 !important", paddingTop: "20px" }}>
         {auction && (
           <>
             {/* <Box

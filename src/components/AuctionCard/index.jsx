@@ -15,6 +15,7 @@ const AuctionCard = ({ image, title, startingPrice, status, id }) => {
       justifyContent={"space-between"}
       alignItems={"center"}
       sx={{
+        bgcolor: "white",
         boxShadow: 2,
         padding: "10px 30px",
         margin: "10px 20px",
