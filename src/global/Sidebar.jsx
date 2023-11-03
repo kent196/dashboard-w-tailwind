@@ -579,7 +579,7 @@ const Sidebar = ({ userRole, currentLocation }) => {
 
   return (
     <Box
-      height={"100vh"}
+      height={"auto"}
       borderRight={`1px solid ${colors.gray[900]}`}
       display={"flex"}
       flexDirection={"column"}
