@@ -57,9 +57,12 @@ function App() {
             console.log(`'${message}' - ${user}`);
           });
 
-          signalRContext.connection.on("ReceiveNewBid", (userName, auctionTitle) => {
-            console.log(`'${userName} just place a bid in '${auctionTitle}'`);
-          });
+          signalRContext.connection.on(
+            "ReceiveNewBid",
+            (userName, auctionTitle) => {
+              console.log(`'${userName} just place a bid in '${auctionTitle}'`);
+            }
+          );
 
           signalRContext.connection.on("ReceiveAuctionOpen", (auctionTitle) => {
             console.log(`${auctionTitle} da bat dau`);
@@ -89,52 +92,61 @@ function App() {
             });
           });
 
-          signalRContext.connection.on("ReceiveAuctionAboutToEnd", (auctionTitle) => {
-            console.log(`${auctionTitle} sap ket thuc`);
-            toast.success(`'${auctionTitle}' chuẩn bị kết thúc!`, {
-              position: "top-right",
-              autoClose: 2000,
-              hideProgressBar: false,
-              closeOnClick: true,
-              pauseOnHover: true,
-              draggable: true,
-              progress: undefined,
-              theme: "light",
-            });
-          });
+          signalRContext.connection.on(
+            "ReceiveAuctionAboutToEnd",
+            (auctionTitle) => {
+              console.log(`${auctionTitle} sap ket thuc`);
+              toast.success(`'${auctionTitle}' chuẩn bị kết thúc!`, {
+                position: "top-right",
+                autoClose: 2000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "light",
+              });
+            }
+          );
 
-          signalRContext.connection.on("ReceiveAuctionAssigned", (auctionId, auctionTitle) => {
-            console.log(`${auctionTitle} da duoc assign cho ban`);
-            toast.success(`'${auctionTitle}' đã được giao cho bạn!`, {
-              position: "top-right",
-              autoClose: 2000,
-              hideProgressBar: false,
-              closeOnClick: true,
-              pauseOnHover: true,
-              draggable: true,
-              progress: undefined,
-              theme: "light",
-            });
-            signalRContext.connection?.invoke("JoinGroup", `AUCTION_${auctionId}`).catch(function (err) {
-              return console.error(err.toString());
-            });
-          });
+          signalRContext.connection.on(
+            "ReceiveAuctionAssigned",
+            (auctionId, auctionTitle) => {
+              console.log(`${auctionTitle} da duoc assign cho ban`);
+              toast.success(`'${auctionTitle}' đã được giao cho bạn!`, {
+                position: "top-right",
+                autoClose: 2000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "light",
+              });
+              signalRContext.connection
+                ?.invoke("JoinGroup", `AUCTION_${auctionId}`)
+                .catch(function (err) {
+                  return console.error(err.toString());
+                });
+            }
+          );
         })
         .catch((error) => {
           console.log("Error while establishing connection :(");
           console.log(error);
-        })
+        });
     }
 
     return () => {
       if (signalRContext?.connection) {
-        signalRContext.connection.stop()
+        signalRContext.connection
+          .stop()
           .then(() => {
-            console.log('stop connection');
+            console.log("stop connection");
           })
-          .catch(err => {
+          .catch((err) => {
             console.log(err);
-          })
+          });
       }
     };
   }, [signalRContext?.connection]);
@@ -163,7 +175,7 @@ function App() {
     <ColorModeContext.Provider value={colorMode}>
       <ThemeProvider theme={theme}>
         <CssBaseline />
-        <div className='app '>
+        <div className='app'>
           {/* Check if user is logged in to print out sidebar */}
           {/* Pass the current location to Sidebar */}
           {location.pathname !== "/login" && location.pathname !== "/" && (

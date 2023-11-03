@@ -579,13 +579,15 @@ const Sidebar = ({ userRole, currentLocation }) => {
 
   return (
     <Box
+      height={"100vh"}
       borderRight={`1px solid ${colors.gray[900]}`}
       display={"flex"}
       flexDirection={"column"}
       sx={{
         "& .pro-sidebar-inner": {
-          background: `${colors.primary[400]} !important`,
+          background: `${colors.primary[900]} !important`,
         },
+        backgroundColor: "#f0f2f5",
         "& .pro-icon-wrapper": {
           backgroundColor: "transparent !important",
         },
@@ -602,7 +604,11 @@ const Sidebar = ({ userRole, currentLocation }) => {
         },
       }}>
       {/* Head */}
-      <ProSidebar collapsed={collapsed}>
+      <ProSidebar
+        collapsed={collapsed}
+        style={{
+          flex: "1",
+        }}>
         <Menu iconShape='square'>
           <MenuItem
             icon={collapsed ? <MenuOutlined /> : undefined}
