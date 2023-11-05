@@ -1,13 +1,102 @@
-import { Box, Container, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  CircularProgress,
+  Container,
+  IconButton,
+  TextField,
+  Typography,
+} from "@mui/material";
 import React from "react";
 import { useEffect } from "react";
 import { fetchUserData } from "../../libs/accountServices";
 import { useState } from "react";
 import Header from "../../components/Header";
 import { formatDateTime } from "../../libs/formaters";
+import { Field } from "formik";
+import { CameraAltOutlined } from "@mui/icons-material";
+import { storage } from "../../firebase/firebase";
+import Error from "../../global/Error";
+import { updateProfile as update } from "../../libs/userService";
 
 const Profile = () => {
   const [currentUser, setCurrentUser] = useState({}); // State to store auction details
+  const [isEditing, setIsEditing] = useState(false); // State to store auction details
+  const [formData, setFormData] = useState({
+    name: "",
+    phone: "",
+    gender: 0,
+    dob: new Date(),
+  });
+  const [file, setFile] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [imageAsUrl, setImageAsUrl] = useState("");
+
+  const handleImageAsFile = (e) => {
+    const file = e.target.files[0];
+    setFile(e.target.files[0]);
+    const reader = new FileReader();
+
+    reader.onloadend = () => {
+      setImageAsUrl(reader.result);
+    };
+
+    reader.readAsDataURL(file);
+  };
+
+  const handleInputChange = (event) => {
+    const { name, value } = event.target;
+    setFormData({
+      ...formData,
+      [name]: value,
+    });
+    console.log({
+      ...formData,
+      [name]: value,
+    });
+  };
+
+  async function handleUpload() {
+    const filename =
+      new Date().getTime() +
+      "_" +
+      file.name.substring(file.name.lastIndexOf("/"));
+
+    const path = `/profilePicture/${filename}`;
+    const ref = storage.ref(path);
+    await ref.put(file);
+    const url = await ref.getDownloadURL();
+    setImageAsUrl(url);
+    setFile(null);
+    console.log(`Image url: ${url}`);
+    return url;
+  }
+
+  async function updateProfile() {
+    setLoading(true);
+    let imageUrl = currentUser.profilePicture;
+    if (file != null) {
+      imageUrl = await handleUpload();
+    }
+
+    // Xu ly gui formdata{...formData, profilePicture: imageUrl}
+    const newFormdata = {
+      ...formData,
+      profilePicture: imageUrl,
+    };
+
+    update(newFormdata)
+      .then((res) => {
+        console.log(res);
+        setIsEditing(false);
+      })
+      .catch((err) => {
+        console.log(err);
+        return <Error />;
+      });
+
+    setLoading(false);
+  }
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -15,15 +104,11 @@ const Profile = () => {
     fetchUserData()
       .then((res) => {
         setCurrentUser(res.data);
-        console.log(`load profile ${res.data}`);
       })
       .catch((err) => {
         console.log(err);
       });
-    return () => {
-      setCurrentUser({});
-    };
-  }, []);
+  }, [isEditing]);
   return (
     <Container maxWidth='xl' sx={{ paddingTop: "20px" }}>
       <Box display={"flex"} justifyContent={"space-between"} gap={"20px"}>
@@ -40,17 +125,48 @@ const Profile = () => {
           sx={{
             backgroundColor: "white",
           }}>
-          <Box height={"200px"} display={"flex"} justifyContent={"center"}>
-            <img
-              style={{
-                borderRadius: "50%", // Set the border radius to 50% for a circular shape
-                width: "200px",
-                height: "200px",
-                objectFit: "cover",
-              }}
-              src={currentUser.profilePicture}
-            />
-          </Box>
+          {isEditing ? (
+            <>
+              <Box height={"200px"} display={"flex"} justifyContent={"center"}>
+                <img
+                  style={{
+                    borderRadius: "50%", // Set the border radius to 50% for a circular shape
+                    width: "200px",
+                    height: "200px",
+                    objectFit: "cover",
+                  }}
+                  // preview picture after choose
+                  src={imageAsUrl}
+                />
+              </Box>
+              <IconButton component='label' htmlFor='profilePicture'>
+                <TextField
+                  sx={{
+                    display: "none",
+                  }}
+                  type='file'
+                  id='profilePicture'
+                  name='profilePicture'
+                  onChange={handleImageAsFile}
+                />
+                <CameraAltOutlined />
+              </IconButton>
+            </>
+          ) : (
+            <Box height={"200px"} display={"flex"} justifyContent={"center"}>
+              <img
+                style={{
+                  borderRadius: "50%", // Set the border radius to 50% for a circular shape
+                  width: "200px",
+                  height: "200px",
+                  objectFit: "cover",
+                }}
+                // preview picture after upload
+
+                src={currentUser.profilePicture}
+              />
+            </Box>
+          )}
           {/* info */}
           <Box
             display={"flex"}
@@ -84,38 +200,187 @@ const Profile = () => {
           sx={{
             backgroundColor: "white",
           }}>
-          <Header title={"Thông tin cá nhân"} />
-          <Box display={"flex"} gap={"10px"} alignItems={"center"}>
-            <Typography variant='h5' fontWeight={"bold"}>
-              Email:
-            </Typography>
-            <Typography variant='h5'>{currentUser.email}</Typography>
-          </Box>
-          <Box display={"flex"} gap={"10px"} alignItems={"center"}>
-            <Typography variant='h5' fontWeight={"bold"}>
-              SDT:
-            </Typography>
-            <Typography variant='h5'>{currentUser.phone}</Typography>
-          </Box>
-          <Box display={"flex"} gap={"10px"} alignItems={"center"}>
-            <Typography variant='h5' fontWeight={"bold"}>
-              Ngày sinh:
-            </Typography>
-            <Typography variant='h5'>
-              {formatDateTime(currentUser.dob)}
-            </Typography>
-          </Box>
-          <Box display={"flex"} gap={"10px"} alignItems={"center"}>
-            <Typography variant='h5' fontWeight={"bold"}>
-              Giới tính:
-            </Typography>
-            <Typography variant='h5'>
-              {currentUser.gender === 0
-                ? "Nữ"
-                : currentUser.gender === 1
-                ? "Nam"
-                : "Không muốn đề cập"}
-            </Typography>
+          <Header
+            title={`${isEditing ? "Cập nhật thông tin" : "Thông tin cá nhân"}`}
+          />
+          {isEditing ? (
+            <>
+              <Box
+                display={"flex"}
+                gap={"10px"}
+                alignItems={"center"}
+                justifyContent={"space-between"}
+                width={"100%"}>
+                <Typography variant='h5' fontWeight={"bold"}>
+                  Name:
+                </Typography>
+                <TextField
+                  sx={{ width: "50%" }}
+                  id='name'
+                  type='name'
+                  name='name'
+                  defaultValue={currentUser.name}
+                  onChange={handleInputChange}
+                />
+              </Box>
+              <Box
+                display={"flex"}
+                gap={"10px"}
+                alignItems={"center"}
+                justifyContent={"space-between"}
+                width={"100%"}>
+                <Typography variant='h5' fontWeight={"bold"}>
+                  SDT:
+                </Typography>
+                <TextField
+                  sx={{ width: "50%" }}
+                  id='phone'
+                  type='number'
+                  name='phone'
+                  defaultValue={currentUser.phone}
+                  onChange={handleInputChange}
+                />
+              </Box>
+              <Box
+                display={"flex"}
+                gap={"10px"}
+                alignItems={"center"}
+                justifyContent={"space-between"}
+                width={"100%"}>
+                <Typography variant='h5' fontWeight={"bold"}>
+                  Ngày sinh:
+                </Typography>
+                <TextField
+                  sx={{ width: "50%" }}
+                  id='dob'
+                  type='datetime-local'
+                  name='dob'
+                  defaultValue={formatDateTime(currentUser.dob)}
+                  onChange={handleInputChange}
+                />
+              </Box>
+              <Box
+                display={"flex"}
+                gap={"10px"}
+                alignItems={"center"}
+                justifyContent={"space-between"}
+                width={"100%"}>
+                <Typography variant='h5' fontWeight={"bold"}>
+                  Giới tính:
+                </Typography>
+                <select
+                  style={{
+                    width: "50%",
+                    border: "1px solid #000",
+                    padding: "5px",
+                    borderRadius: "5px",
+                  }}
+                  value={formData.gender}
+                  id='gender'
+                  name='gender'
+                  onChange={handleInputChange}>
+                  <option value={1}>Nam</option>
+                  <option value={0}>Nữ</option>
+                </select>
+              </Box>
+            </>
+          ) : (
+            <>
+              <Box
+                display={"flex"}
+                gap={"10px"}
+                alignItems={"center"}
+                justifyContent={"space-between"}
+                width={"100%"}>
+                <Typography variant='h5' fontWeight={"bold"}>
+                  Email:
+                </Typography>
+                <Typography variant='h5'>{currentUser.email}</Typography>
+              </Box>
+              <Box
+                display={"flex"}
+                gap={"10px"}
+                alignItems={"center"}
+                justifyContent={"space-between"}
+                width={"100%"}>
+                <Typography variant='h5' fontWeight={"bold"}>
+                  SDT:
+                </Typography>
+                <Typography variant='h5'>{currentUser.phone}</Typography>
+              </Box>
+              <Box
+                display={"flex"}
+                gap={"10px"}
+                alignItems={"center"}
+                justifyContent={"space-between"}
+                width={"100%"}>
+                <Typography variant='h5' fontWeight={"bold"}>
+                  Ngày sinh:
+                </Typography>
+                <Typography variant='h5'>
+                  {formatDateTime(currentUser.dob)}
+                </Typography>
+              </Box>
+              <Box
+                display={"flex"}
+                gap={"10px"}
+                alignItems={"center"}
+                justifyContent={"space-between"}
+                width={"100%"}>
+                <Typography variant='h5' fontWeight={"bold"}>
+                  Giới tính:
+                </Typography>
+                <Typography variant='h5'>
+                  {currentUser.gender === 0
+                    ? "Nữ"
+                    : currentUser.gender === 1
+                    ? "Nam"
+                    : "Không muốn đề cập"}
+                </Typography>
+              </Box>
+            </>
+          )}
+
+          <Box display={"flex"} justifyContent={"flex-end"} width={"100%"}>
+            {isEditing ? (
+              <Box
+                display={"flex"}
+                justifyContent={"space-between"}
+                gap={"10px"}>
+                <Button
+                  sx={{ display: `${loading ? "none" : "block"}` }}
+                  variant='contained'
+                  color='error'
+                  onClick={() => {
+                    setIsEditing(false);
+                  }}>
+                  Hủy
+                </Button>
+                <Button
+                  disabled={loading}
+                  startIcon={loading && <CircularProgress size={20} />}
+                  variant='contained'
+                  color='success'
+                  onClick={() => {
+                    updateProfile(formData);
+                  }}>
+                  {loading ? "Đang cập nhật" : "Lưu"}
+                </Button>
+              </Box>
+            ) : (
+              <Box>
+                <Button
+                  variant='contained'
+                  color='warning'
+                  onClick={() => {
+                    setImageAsUrl(currentUser.profilePicture);
+                    setIsEditing(true);
+                    console.log(currentUser);
+                  }}>
+                  Cập nhật
+                </Button>
+              </Box>
+            )}
           </Box>
         </Box>
       </Box>

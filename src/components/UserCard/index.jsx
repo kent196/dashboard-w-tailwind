@@ -9,6 +9,7 @@ const UserCard = ({ avatar, bidderName, bidDate, bidAmmount, email, icon }) => {
       justifyContent={"space-between"}
       width={"100%"}
       p={"10px"}
+      margin={"10px 0"}
       boxShadow={2}>
       {/* left */}
       <Box
@@ -50,7 +51,7 @@ const UserCard = ({ avatar, bidderName, bidDate, bidAmmount, email, icon }) => {
       <Box display={"flex"} justifyContent={"flex-end"} width={"40%"}>
         <Box>
           <Typography variant='h5' fontWeight={"bold"}>
-            {formatPrice(bidAmmount)}
+            {bidAmmount && formatPrice(bidAmmount)}
           </Typography>
         </Box>
       </Box>

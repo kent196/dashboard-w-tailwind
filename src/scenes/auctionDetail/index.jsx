@@ -213,6 +213,7 @@ const AuctionDetail = () => {
       .then((res) => {
         console.log(`List of registers: ${res.data}`);
         setRegisList(res.data);
+        console.log(`Regis list: ${regisList}`);
       })
       .catch((err) => {
         console.log(err);

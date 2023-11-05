@@ -71,10 +71,24 @@ const fetchUserDetails = async (id) => {
   }
 };
 
+const updateProfile = async (data) => {
+  try {
+    const response = await authAxios.post(`/user/updateprofile`, data);
+    if (!response.data) {
+      console.log("No data");
+    }
+
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
 export {
   fetchUsers,
   fetchStaffs,
   fetchCustomer,
   fetchUserDetails,
   fetchAllStaffs,
+  updateProfile,
 };

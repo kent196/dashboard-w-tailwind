@@ -13,7 +13,11 @@ import {
   Person2Outlined,
   StoreOutlined,
 } from "@mui/icons-material";
-import { fetchCustomer, fetchUsers } from "../../libs/userService";
+import {
+  fetchAllStaffs,
+  fetchCustomer,
+  fetchUsers,
+} from "../../libs/userService";
 import Header from "../../components/Header";
 import { fetchAuctions, fetchStaffAuctions } from "../../libs/auctionService";
 import { fetchProducts } from "../../libs/productServices";
@@ -24,6 +28,7 @@ const Dashboard = () => {
   const [customers, setCustomers] = useState([]);
   const [currentUser, setCurrentUser] = useState({}); // State to store auction details
   const [auctionsCount, setAuctionsCount] = useState(0); // State to store auction details
+  const [customerCount, setCustomerCount] = useState(0); // State to store auction details
   const [auctions, setAuctions] = useState([]); // State to store auction details
   const [products, setProducts] = useState({}); // State to store auction details
   const [orders, setOrders] = useState({}); // State to store auction details
@@ -94,6 +99,7 @@ const Dashboard = () => {
       .catch((err) => {
         console.log(err);
       });
+
     return () => {
       setCurrentUser({});
     };
@@ -103,27 +109,40 @@ const Dashboard = () => {
     if (currentUser.role === 5) {
       fetchCustomer()
         .then((res) => {
+          console.log("Count as staff");
           console.log(res.data);
           setCustomers(res.data.customerList);
+          setCustomerCount(res.data.count);
+          console.log(customerCount);
         })
         .catch((err) => {
           console.log(err);
         });
-    } else {
-      fetchUsers()
+    } else if (currentUser.role === 4) {
+      fetchAllStaffs()
         .then((res) => {
           console.log(res.data);
-          setCustomers(res.data);
+          setCustomers(res.data.customerList);
+          setCustomerCount(res.data.count);
+          console.log(customers);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    } else if (currentUser.role === 3) {
+      fetchUsers()
+        .then((res) => {
+          console.log("Count as admin");
+
+          console.log(res.data);
+          setCustomers(res.data.userList);
+          setCustomerCount(res.data.count);
         })
         .catch((err) => {
           console.log(err);
         });
     }
-
-    return () => {
-      setCustomers([]);
-    };
-  }, []);
+  }, [currentUser.role]);
 
   return (
     <div>
@@ -142,8 +161,14 @@ const Dashboard = () => {
         <Grid container spacing={2}>
           <Grid item xs={12} sm={6} md={3} lg={3} xl={3}>
             <Statbox
-              title={"Người dùng"}
-              subTitle={`${customers.length} đang hoạt động`}
+              title={`${
+                currentUser.role === 5
+                  ? "Khách hàng"
+                  : currentUser.role === 4
+                  ? "Nhân viên"
+                  : "Người dùng"
+              }`}
+              subTitle={`${customerCount} đang hoạt động`}
               icon={<Person2Outlined />}
             />
           </Grid>

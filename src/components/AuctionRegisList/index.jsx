@@ -6,6 +6,7 @@ import {
   Typography,
 } from "@mui/material";
 import React from "react";
+import UserCard from "../UserCard";
 
 const RegistrationList = ({
   isOpenRegisList,
@@ -25,12 +26,14 @@ const RegistrationList = ({
         Số người đăng kí hợp lệ: {regisList.length}
       </DialogTitle>
       <DialogContent>
-        <Box height={"400px"}>
+        <Box height={"500px"} sx={{ overflowY: "scroll" }}>
           {regisList.map((item) => (
-            <Box m={"10px 0"} key={item.id} p={"10px"} boxShadow={2}>
-              <Typography variant='h5'>
-                {item.bidder.name} ({item.bidder.email})
-              </Typography>
+            <Box key={item.bidder.bidAmount}>
+              <UserCard
+                avatar={item.bidder.profilePicture}
+                bidderName={item.bidder.name}
+                email={item.bidder.email}
+              />
             </Box>
           ))}
         </Box>
@@ -38,5 +41,11 @@ const RegistrationList = ({
     </Dialog>
   );
 };
-
+{
+  /* <Box m={"10px 0"} key={item.id} p={"10px"} boxShadow={2}>
+              <Typography variant='h5'>
+                {item.bidder.name} ({item.bidder.email})
+              </Typography>
+            </Box> */
+}
 export default RegistrationList;

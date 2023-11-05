@@ -111,7 +111,7 @@ const Sidebar = ({ userRole, currentLocation }) => {
         setUser(res.data);
       })
       .catch((err) => console.log(err));
-  }, []);
+  }, [collapsed]);
 
   // Function to handle resizing of the window
   const handleResize = () => {
