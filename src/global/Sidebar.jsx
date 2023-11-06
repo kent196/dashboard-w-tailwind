@@ -261,6 +261,16 @@ const Sidebar = ({ userRole, currentLocation }) => {
                 setSelected={setSelected}></Item>
             </Box>
           </Tooltip>
+          <Tooltip title='Đổi mật khẩu' placement='right'>
+            <Box>
+              <Item
+                title={"Đổi mật khẩu"}
+                to={"/user/changePassword"} //Update later when API is updated
+                icon={<Person2Outlined />}
+                selected={selected}
+                setSelected={setSelected}></Item>
+            </Box>
+          </Tooltip>
           <Tooltip title='Đăng xuất' placement='right'>
             <Box>
               <Item
@@ -375,6 +385,16 @@ const Sidebar = ({ userRole, currentLocation }) => {
               <Item
                 title={"Tài khoản của tôi"}
                 to={"/profile"} //Update later when API is updated
+                icon={<Person2Outlined />}
+                selected={selected}
+                setSelected={setSelected}></Item>
+            </Box>
+          </Tooltip>
+          <Tooltip title='Đổi mật khẩu' placement='right'>
+            <Box>
+              <Item
+                title={"Đổi mật khẩu"}
+                to={"/user/changePassword"} //Update later when API is updated
                 icon={<Person2Outlined />}
                 selected={selected}
                 setSelected={setSelected}></Item>
@@ -555,6 +575,16 @@ const Sidebar = ({ userRole, currentLocation }) => {
               <Item
                 title={"Tài khoản của tôi"}
                 to={"/profile"} //Update later when API is updated
+                icon={<Person2Outlined />}
+                selected={selected}
+                setSelected={setSelected}></Item>
+            </Box>
+          </Tooltip>
+          <Tooltip title='Đổi mật khẩu' placement='right'>
+            <Box>
+              <Item
+                title={"Đổi mật khẩu"}
+                to={"/user/changePassword"} //Update later when API is updated
                 icon={<Person2Outlined />}
                 selected={selected}
                 setSelected={setSelected}></Item>

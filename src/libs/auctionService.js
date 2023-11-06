@@ -129,7 +129,7 @@ const managerReject = async (auctionId) => {
 };
 
 const updateAuctionInfo = async (auctionId, formData) => {
-  const path = `/auction/staff/time/${auctionId}`;
+  const path = `/auction/staff/info/${auctionId}`;
   try {
     const response = await authAxios.post(path, formData);
     if (!response.data) {

@@ -34,6 +34,7 @@ import SellerRequest from "./scenes/sellerReq";
 import { SignalRContext } from "./context/SignalRContext";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import ChangePassword from "./scenes/password";
 
 function App() {
   // let role = "admin";
@@ -214,6 +215,7 @@ function App() {
               <Route path='/auction/live/:id' element={<Live />} />
               <Route path='/profile' element={<Profile />} />
               <Route path='/sellerRequest' element={<SellerRequest />} />
+              <Route path='/user/changePassword' element={<ChangePassword />} />
               {/* <Route path='/invoices' element={<Invoices />} /> */}
               {/* <Route path='/contacts' element={<Contacts />} /> */}
               {/* <Route path='/line' element={<Line />} /> */}

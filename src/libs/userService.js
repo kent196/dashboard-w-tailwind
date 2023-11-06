@@ -73,7 +73,7 @@ const fetchUserDetails = async (id) => {
 
 const updateProfile = async (data) => {
   try {
-    const response = await authAxios.post(`/user/updateprofile`, data);
+    const response = await authAxios.post(`/user/profile`, data);
     if (!response.data) {
       console.log("No data");
     }
@@ -96,6 +96,18 @@ const deactivateAccount = async (id) => {
   }
 };
 
+const updateUserPassword = async (data) => {
+  try {
+    const response = await authAxios.post(`/user/password`, data);
+    if (!response.data) {
+      console.log("No data");
+    }
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
 export {
   fetchUsers,
   fetchStaffs,
@@ -104,4 +116,5 @@ export {
   fetchAllStaffs,
   updateProfile,
   deactivateAccount,
+  updateUserPassword,
 };

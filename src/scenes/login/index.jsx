@@ -23,6 +23,16 @@ const Login = () => {
   const navigate = useNavigate(); // Initialize useNavigate for navigation
   const [error, setError] = useState(null); // Initialize error state
   const [loading, setLoading] = useState(false);
+  const [resetForm, setResetForm] = useState(false); // State variable to trigger re-render
+
+  // Effect to reset the form when resetForm state changes
+  useEffect(() => {
+    if (resetForm) {
+      console.log("reset form");
+      setFormData({});
+      setResetForm(false);
+    }
+  }, [resetForm]);
 
   const [formData, setFormData] = useState({
     email: "",
@@ -63,7 +73,7 @@ const Login = () => {
       setLoading(true);
       console.log("Sending login request...");
 
-      const response = await axios.post("/login", formData);
+      const response = await axios.post("/staff/login", formData);
 
       console.log("Response received:", response.data);
 
@@ -87,6 +97,7 @@ const Login = () => {
         console.log(localStorage.refreshToken);
         buildConnection();
         setFormData({});
+        setError(null);
         navigate("/dashboard"); // Navigate to the auctions page
       } else if (response.status === 401) {
         console.log(response.data.message);
@@ -161,7 +172,7 @@ const Login = () => {
             variant='outlined'
             sx={{ width: "70%" }}
             name='email'
-            value={formData.email}
+            value={formData.email || ""}
             onChange={handleInputChange}
           />
           <Typography variant='h5' fontWeight={"bold"}>
@@ -174,10 +185,10 @@ const Login = () => {
             sx={{ width: "70%" }}
             type='password'
             name='password'
-            value={formData.password}
+            value={formData.password || ""}
             onChange={handleInputChange}
           />
-          {error && ( // Display the error message only if there's an error
+          {error != "" && ( // Display the error message only if there's an error
             <Typography variant='body2' color='error'>
               {error}
             </Typography>
