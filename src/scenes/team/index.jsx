@@ -37,7 +37,6 @@ const Team = () => {
   const [currentUser, setCurrentUser] = useState({}); // State to store auction details
   const colors = token(theme.palette.mode);
   const [customers, setCustomers] = useState([]);
-  const allowedRoles = ["Quản trị viên", "Quản lý"];
   const [paginationModel, setPaginationModel] = React.useState({
     page: 0,
     pageSize: 5,

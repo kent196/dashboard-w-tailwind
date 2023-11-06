@@ -84,6 +84,18 @@ const updateProfile = async (data) => {
   }
 };
 
+const deactivateAccount = async (id) => {
+  try {
+    const response = await authAxios.get(`/user/deactivate/${id}`);
+    if (!response.data) {
+      console.log("No data");
+    }
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
 export {
   fetchUsers,
   fetchStaffs,
@@ -91,4 +103,5 @@ export {
   fetchUserDetails,
   fetchAllStaffs,
   updateProfile,
+  deactivateAccount,
 };

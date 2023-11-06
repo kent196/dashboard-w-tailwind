@@ -16,7 +16,14 @@ import { useNavigate, useParams } from "react-router-dom";
 import { token } from "../../theme";
 import { mockDataTeam } from "../../data/mockData";
 import Header from "../Header";
-import { fetchUserData, fetchUserDetails } from "../../libs/userService";
+import {
+  deactivateAccount,
+  fetchUserData,
+  fetchUserDetails,
+} from "../../libs/userService";
+import Error from "../../global/Error";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const ActionButtons = ({ row }) => {
   const theme = useTheme();
@@ -102,14 +109,38 @@ const ActionButtons = ({ row }) => {
   };
 
   const handleDeleteUser = (userId) => {
+    fetchUserDetails(userId)
+      .then((res) => {
+        setUserDetails(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+        return <Error />;
+      });
     setDeletedId(userId);
     setDeleteConfirmationOpen(true);
   };
 
   const handleConfirmDelete = () => {
-    // Implement the actual delete action here, if needed
-    // For now, let's just close the dialog
+    deactivateAccount(deletedId)
+      .then((res) => {
+        console.log(res.data);
+        toast.success("Xóa thành công", {
+          position: "top-right",
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+        return <Error />;
+      });
     setDeleteConfirmationOpen(false);
+    setTimeout(() => {
+      window.location.reload();
+    }, 3000);
   };
 
   const handleCancelDelete = () => {

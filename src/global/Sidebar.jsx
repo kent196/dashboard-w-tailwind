@@ -621,7 +621,6 @@ const Sidebar = ({ userRole, currentLocation }) => {
                 alignItems={"center"}>
                 <Typography
                   variant='h6'
-                  color={colors.greenAccent[300]}
                   sx={{
                     textTransform: "uppercase",
                   }}>

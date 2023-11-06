@@ -18,6 +18,8 @@ import { CameraAltOutlined } from "@mui/icons-material";
 import { storage } from "../../firebase/firebase";
 import Error from "../../global/Error";
 import { updateProfile as update } from "../../libs/userService";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const Profile = () => {
   const [currentUser, setCurrentUser] = useState({}); // State to store auction details
@@ -88,6 +90,16 @@ const Profile = () => {
     update(newFormdata)
       .then((res) => {
         console.log(res);
+        toast.success("Cập nhật thông tin thành công", {
+          position: "top-right",
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
         setIsEditing(false);
       })
       .catch((err) => {
@@ -139,7 +151,10 @@ const Profile = () => {
                   src={imageAsUrl}
                 />
               </Box>
-              <IconButton component='label' htmlFor='profilePicture'>
+              <IconButton
+                disabled={loading}
+                component='label'
+                htmlFor='profilePicture'>
                 <TextField
                   sx={{
                     display: "none",
@@ -215,7 +230,11 @@ const Profile = () => {
                   Name:
                 </Typography>
                 <TextField
-                  sx={{ width: "50%" }}
+                  sx={{
+                    width: "50%",
+                    bgcolor: `${loading ? "#f5f5f5" : "white"}`,
+                    interactive: `${loading ? "false" : "true"}`,
+                  }}
                   id='name'
                   type='name'
                   name='name'
@@ -233,7 +252,11 @@ const Profile = () => {
                   SDT:
                 </Typography>
                 <TextField
-                  sx={{ width: "50%" }}
+                  sx={{
+                    width: "50%",
+                    bgcolor: `${loading ? "#f5f5f5" : "white"}`,
+                    interactive: `${loading ? "false" : "true"}`,
+                  }}
                   id='phone'
                   type='number'
                   name='phone'
@@ -251,11 +274,15 @@ const Profile = () => {
                   Ngày sinh:
                 </Typography>
                 <TextField
-                  sx={{ width: "50%" }}
+                  sx={{
+                    width: "50%",
+                    bgcolor: `${loading ? "#f5f5f5" : "white"}`,
+                    interactive: `${loading ? "false" : "true"}`,
+                  }}
                   id='dob'
                   type='datetime-local'
                   name='dob'
-                  defaultValue={formatDateTime(currentUser.dob)}
+                  defaultValue={formatDateTime(currentUser.dob) || new Date()}
                   onChange={handleInputChange}
                 />
               </Box>
@@ -270,6 +297,8 @@ const Profile = () => {
                 </Typography>
                 <select
                   style={{
+                    bgcolor: `${loading ? "#f5f5f5" : "white"}`,
+                    interactive: `${loading ? "false" : "true"}`,
                     width: "50%",
                     border: "1px solid #000",
                     padding: "5px",
