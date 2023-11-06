@@ -15,6 +15,7 @@ import {
   Person2Outlined,
   VpnKey,
   HowToRegOutlined,
+  LockOutlined,
 } from "@mui/icons-material";
 import { Box, IconButton, Tooltip, Typography, useTheme } from "@mui/material";
 import React, { useEffect, useState, useContext } from "react";
@@ -266,7 +267,7 @@ const Sidebar = ({ userRole, currentLocation }) => {
               <Item
                 title={"Đổi mật khẩu"}
                 to={"/user/changePassword"} //Update later when API is updated
-                icon={<Person2Outlined />}
+                icon={<LockOutlined />}
                 selected={selected}
                 setSelected={setSelected}></Item>
             </Box>
@@ -395,7 +396,7 @@ const Sidebar = ({ userRole, currentLocation }) => {
               <Item
                 title={"Đổi mật khẩu"}
                 to={"/user/changePassword"} //Update later when API is updated
-                icon={<Person2Outlined />}
+                icon={<LockOutlined />}
                 selected={selected}
                 setSelected={setSelected}></Item>
             </Box>
@@ -585,7 +586,7 @@ const Sidebar = ({ userRole, currentLocation }) => {
               <Item
                 title={"Đổi mật khẩu"}
                 to={"/user/changePassword"} //Update later when API is updated
-                icon={<Person2Outlined />}
+                icon={<LockOutlined />}
                 selected={selected}
                 setSelected={setSelected}></Item>
             </Box>

@@ -98,7 +98,16 @@ const Topbar = () => {
             <MenuItem onClick={() => navigation("/profile")}>
               Tài khoản
             </MenuItem>
-            <MenuItem onClick={() => navigation("/login")}>Đăng xuất</MenuItem>
+            <MenuItem onClick={() => navigation("/user/changePassword")}>
+              Đổi mật khẩu
+            </MenuItem>
+            <MenuItem
+              onClick={() => {
+                localStorage.clear();
+                navigation("/login");
+              }}>
+              Đăng xuất
+            </MenuItem>
           </Box>
         </Popper>
       </Box>
