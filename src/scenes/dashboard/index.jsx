@@ -1,13 +1,22 @@
 import React, { useState } from "react";
 import { Helmet } from "react-helmet";
 import BarChart from "../../components/BarChart";
-import { Box, Grid, List, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  Grid,
+  List,
+  Menu,
+  MenuItem,
+  Typography,
+} from "@mui/material";
 import { fetchUserData } from "../../libs/accountServices";
 import { useEffect } from "react";
 import logo from "../../assets/landing_page_bg.jpg";
 import cart from "../../assets/cart.png";
 import Statbox from "../../components/Statbox";
 import {
+  CalendarMonthOutlined,
   Checklist,
   ListOutlined,
   Person2Outlined,
@@ -23,6 +32,8 @@ import { fetchAuctions, fetchStaffAuctions } from "../../libs/auctionService";
 import { fetchProducts } from "../../libs/productServices";
 import { fetchOrders } from "../../libs/orderService";
 import AuctionCard from "../../components/AuctionCard";
+import { token } from "../../theme";
+import { useTheme } from "@emotion/react";
 
 const Dashboard = () => {
   const [customers, setCustomers] = useState([]);
@@ -32,6 +43,25 @@ const Dashboard = () => {
   const [auctions, setAuctions] = useState([]); // State to store auction details
   const [products, setProducts] = useState({}); // State to store auction details
   const [orders, setOrders] = useState({}); // State to store auction details
+  const [anchorEl, setAnchorEl] = useState(null);
+  const [selectedFilter, setSelectedFilter] = useState(1); // Default selected filter
+  const [filterValue, setFilterValue] = useState(0); // Default selected filter
+  const theme = useTheme();
+  const colors = token(theme.palette.mode);
+
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = (filter, value) => {
+    setAnchorEl(null);
+    if (filter) {
+      setSelectedFilter(filter);
+      setFilterValue(value);
+      // You can perform some filtering action here based on the selected filter.
+      // For demonstration purposes, we're just updating the state.
+    }
+  };
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -202,66 +232,152 @@ const Dashboard = () => {
             />
           </Grid>
         </Grid>
-        <Grid
-          container
-          spacing={2}
-          sx={{ height: "100%", margin: "0 0 0 20px" }}>
-          <Grid
-            item
-            xs={12}
-            sm={12}
-            md={6}
-            lg={6}
-            xl={6}
-            sx={{
-              height: "100%",
-              padding: "10px",
-              boxShadow: 2,
-              bgcolor: "white",
-            }}>
-            <Header title={"Các phiên đấu giá gần đây"} fontSize={"24px"} />
-            <Box
-              // margin={"0 0 0 20px"}
-              sx={{
-                height: "70%",
-                overflowY: "scroll",
-              }}>
-              {auctions &&
-                auctions.map((auction) => (
-                  <Box key={auction.productId}>
-                    <AuctionCard
-                      title={auction.title}
-                      image={auction.imageUrl}
-                      startingPrice={auction.startingPrice}
-                      id={auction.id}
-                      status={auction.status}
-                    />
+        <Box
+          width={"100%"}
+          height={"80%"}
+          display={"flex"}
+          justifyContent={"center"}>
+          <Box width={"80%"} height={"100%"}>
+            <Grid
+              container
+              spacing={2}
+              sx={{ height: "100%", margin: "0 0 0 20px" }}>
+              <Grid
+                item
+                xs={12}
+                sm={12}
+                md={6}
+                lg={6}
+                xl={6}
+                sx={{
+                  height: "100%",
+                  padding: "10px",
+                  boxShadow: 2,
+                  bgcolor: "white",
+                }}>
+                <Header title={"Các phiên đấu giá gần đây"} fontSize={"24px"} />
+                <Box
+                  // margin={"0 0 0 20px"}
+                  sx={{
+                    height: "70%",
+                    overflowY: "scroll",
+                  }}>
+                  {auctions &&
+                    auctions.map((auction) => (
+                      <Box key={auction.productId}>
+                        <AuctionCard
+                          title={auction.title}
+                          image={auction.imageUrl}
+                          startingPrice={auction.startingPrice}
+                          id={auction.id}
+                          status={auction.status}
+                        />
+                      </Box>
+                    ))}
+                </Box>
+              </Grid>
+              <Grid
+                item
+                xs={12}
+                sm={12}
+                md={6}
+                lg={6}
+                xl={6}
+                sx={{
+                  height: "100%",
+                  padding: "10px",
+                  boxShadow: 2,
+                  bgcolor: "white",
+                }}>
+                <Box>
+                  <Header
+                    title={"Doanh thu"}
+                    fontSize={"24px"}
+                    margin={"0 0 0 20px"}
+                  />
+                  <Box marginTop={"20px"}>
+                    <Box
+                      display={"flex"}
+                      justifyContent={"flex-start"}
+                      alignItems={"center"}
+                      gap={"10px"}>
+                      <Typography variant='h5' fontWeight={"bold"}>
+                        Số phiên đấu giá thành công:
+                      </Typography>
+                      <Typography variant='h5'>5</Typography>
+                    </Box>
+                    {/* filter box */}
+                    <Box
+                      display={"flex"}
+                      justifyContent={"flex-start"}
+                      gap={"10px"}
+                      alignItems={"center"}
+                      marginTop={"20px"}>
+                      <Box
+                        sx={
+                          {
+                            // display: "flex",
+                            // justifyContent: "flex-end",
+                            // alignItems: "center",
+                            // gap: "20px",
+                            // marginBottom: "20px",
+                          }
+                        }>
+                        <Button
+                          variant='contained'
+                          startIcon={<CalendarMonthOutlined />}
+                          onClick={handleClick}>
+                          {selectedFilter}
+                        </Button>
+                        <Menu
+                          sx={{
+                            padding: "10px",
+                            height: "300px",
+                          }}
+                          anchorEl={anchorEl}
+                          open={Boolean(anchorEl)}
+                          onClose={() => handleClose(null)} // Close the menu when clicking outside
+                        >
+                          <MenuItem onClick={() => handleClose("1", 1)}>
+                            1
+                          </MenuItem>
+                          <MenuItem onClick={() => handleClose("3", 3)}>
+                            3
+                          </MenuItem>
+                          <MenuItem onClick={() => handleClose("6", 6)}>
+                            6
+                          </MenuItem>
+                          <MenuItem onClick={() => handleClose("9", 9)}>
+                            9
+                          </MenuItem>
+                          <MenuItem onClick={() => handleClose("12", 12)}>
+                            12
+                          </MenuItem>
+                        </Menu>
+                      </Box>
+                      <Typography variant='h6'>tháng</Typography>
+                    </Box>
+                    {/* income box */}
+                    <Box
+                      display={"flex"}
+                      justifyContent={"center"}
+                      flexDirection={"column"}
+                      alignItems={"center"}>
+                      <Typography variant='h5' fontWeight={"bold"}>
+                        Tổng doanh thu
+                      </Typography>
+                      <Typography
+                        sx={{ fontSize: "180px" }}
+                        color={colors.greenAccent[500]}>
+                        5
+                      </Typography>
+                    </Box>
                   </Box>
-                ))}
-            </Box>
-          </Grid>
-          <Grid
-            item
-            xs={12}
-            sm={12}
-            md={6}
-            lg={6}
-            xl={6}
-            sx={{
-              height: "100%",
-              padding: "10px",
-              boxShadow: 2,
-              bgcolor: "white",
-            }}>
-            <Box>
-              <Header
-                title={"Doanh thu"}
-                fontSize={"24px"}
-                margin={"0 0 0 20px"}
-              />
-            </Box>
-          </Grid>
-        </Grid>
+                </Box>
+              </Grid>
+            </Grid>
+          </Box>
+        </Box>
         {/* <Statbox
           width={"100%"}
           height={"400px"}
