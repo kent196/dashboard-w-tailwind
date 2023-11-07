@@ -206,12 +206,24 @@ const Dashboard = () => {
           container
           spacing={2}
           sx={{ height: "100%", margin: "0 0 0 20px" }}>
-          <Grid item xs={12} sm={6} md={6} lg={6} xl={6} sx={{ height: "80%" }}>
+          <Grid
+            item
+            xs={12}
+            sm={12}
+            md={6}
+            lg={6}
+            xl={6}
+            sx={{
+              height: "100%",
+              padding: "10px",
+              boxShadow: 2,
+              bgcolor: "white",
+            }}>
             <Header title={"Các phiên đấu giá gần đây"} fontSize={"24px"} />
             <Box
-              margin={"0 0 0 20px"}
+              // margin={"0 0 0 20px"}
               sx={{
-                height: "100%",
+                height: "70%",
                 overflowY: "scroll",
               }}>
               {auctions &&
@@ -228,7 +240,19 @@ const Dashboard = () => {
                 ))}
             </Box>
           </Grid>
-          <Grid item xs={12} sm={6} md={6} lg={6} xl={6}>
+          <Grid
+            item
+            xs={12}
+            sm={12}
+            md={6}
+            lg={6}
+            xl={6}
+            sx={{
+              height: "100%",
+              padding: "10px",
+              boxShadow: 2,
+              bgcolor: "white",
+            }}>
             <Box>
               <Header
                 title={"Doanh thu"}

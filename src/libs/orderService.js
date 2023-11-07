@@ -14,8 +14,8 @@ const fetchOrderDetails = async (orderId) => {
   }
 };
 
-const fetchOrders = async (pageSize, page) => {
-  const path = `/order?PageSize=${pageSize}&PageNumber=${page}`;
+const fetchOrders = async (pageSize, page, status) => {
+  const path = `/order?PageSize=${pageSize}&PageNumber=${page}&Status=${status}`;
   try {
     const response = await aucthAxios.get(path);
     if (!response.data) {

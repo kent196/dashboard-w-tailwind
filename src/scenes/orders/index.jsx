@@ -8,6 +8,7 @@ import {
   DialogContent,
   DialogTitle,
   IconButton,
+  Menu,
   Select,
   TextField,
   Typography,
@@ -28,6 +29,7 @@ import { Helmet } from "react-helmet";
 import { useEffect } from "react";
 import { fetchOrders } from "../../libs/orderService";
 import { formatDateTime } from "../../libs/formaters";
+import { MenuItem } from "react-pro-sidebar";
 
 const Orders = () => {
   const [isOpenViewOrder, setIsOpenViewOrder] = useState(false);
@@ -50,6 +52,24 @@ const Orders = () => {
     page: 0,
     pageSize: 5,
   });
+  const [anchorEl, setAnchorEl] = useState(null);
+  const [selectedFilter, setSelectedFilter] = useState("All"); // Default selected filter
+  const [filterValue, setFilterValue] = useState(0); // Default selected filter
+
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = (filter, value) => {
+    setAnchorEl(null);
+    if (filter) {
+      setSelectedFilter(filter);
+      setFilterValue(value);
+      // You can perform some filtering action here based on the selected filter.
+      // For demonstration purposes, we're just updating the state.
+    }
+  };
+
   React.useEffect(() => {
     setRowCountState((prevRowCountState) =>
       ordersCount !== undefined ? ordersCount : prevRowCountState
@@ -68,7 +88,7 @@ const Orders = () => {
   useEffect(() => {
     window.scrollTo(0, 0);
 
-    fetchOrders(paginationModel.pageSize, paginationModel.page + 1)
+    fetchOrders(paginationModel.pageSize, paginationModel.page + 1, filterValue)
       .then((res) => {
         console.log(res.data);
         setOrdersCount(res.data.count);
@@ -81,7 +101,7 @@ const Orders = () => {
     return () => {
       setOrders([]);
     };
-  }, [paginationModel]);
+  }, [paginationModel, filterValue]);
 
   const handleViewOrder = (orderId) => {
     // setIsOpenViewOrder(true);
@@ -248,13 +268,73 @@ const Orders = () => {
               },
             },
           }}>
+          {/* filter button with dropdown selection */}
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "flex-end",
+              alignItems: "center",
+              gap: "20px",
+              marginBottom: "20px",
+            }}>
+            <Button
+              variant='contained'
+              startIcon={<ListOutlined />}
+              onClick={handleClick}>
+              {selectedFilter}
+            </Button>
+            <Menu
+              sx={{
+                zIndex: 9999,
+                padding: "10px",
+                height: "300px",
+                overflowY: "scroll",
+              }}
+              anchorEl={anchorEl}
+              open={Boolean(anchorEl)}
+              onClose={() => handleClose(null)} // Close the menu when clicking outside
+            >
+              <MenuItem onClick={() => handleClose("Tất cả", 0)}>
+                Tất cả
+              </MenuItem>
+              <MenuItem onClick={() => handleClose("Chờ thanh toán", 1)}>
+                Chờ thanh toán
+              </MenuItem>
+              <MenuItem onClick={() => handleClose("Chờ xác nhận", 5)}>
+                Chờ xác nhận
+              </MenuItem>
+              <MenuItem onClick={() => handleClose("Hủy bởi người bán", 12)}>
+                Hủy bởi người bán
+              </MenuItem>
+              <MenuItem onClick={() => handleClose("Hủy chờ duyệt", 10)}>
+                Hủy chờ duyệt
+              </MenuItem>
+              <MenuItem onClick={() => handleClose("Hủy bởi người mua", 11)}>
+                Hủy bởi người mua
+              </MenuItem>
+              <MenuItem onClick={() => handleClose("Chờ lấy hàng", 2)}>
+                Chờ lấy hàng
+              </MenuItem>
+              <MenuItem onClick={() => handleClose("Đang giao hàng", 3)}>
+                Đang giao hàng
+              </MenuItem>
+              <MenuItem onClick={() => handleClose("Đã giao", 4)}>
+                Đã giao
+              </MenuItem>
+              <MenuItem onClick={() => handleClose("Hoàn tất", 6)}>
+                Hoàn tất
+              </MenuItem>
+              {/* Add more filter options as needed */}
+            </Menu>
+          </Box>
+
           <DataGrid
             style={{
               fontSize: "18px",
             }}
             rows={orders}
             columns={columns}
-            components={{ Toolbar: GridToolbar }}
+            // components={{ Toolbar: GridToolbar }}
             rowCount={rowCountState}
             pageSizeOptions={[1, 3, 5]}
             paginationModel={paginationModel}
