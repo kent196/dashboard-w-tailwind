@@ -167,6 +167,31 @@ const endAuction = async (auctionId) => {
     throw error;
   }
 };
+const fetchStaffEndedAuctions = async (monthRange) => {
+  const path = `/auction/staff/ended/${monthRange}`;
+  try {
+    const response = await authAxios.get(path);
+    if (!response.data) {
+      console.log("No data");
+    }
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+const fetchAllEndedAuctions = async (monthRange) => {
+  const path = `/auction/manager/ended/${monthRange}`;
+  try {
+    const response = await authAxios.get(path);
+    if (!response.data) {
+      console.log("No data");
+    }
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
 
 export {
   endAuction,
@@ -181,4 +206,6 @@ export {
   managerReject,
   updateAuctionInfo,
   fetchAuctionRegisters,
+  fetchStaffEndedAuctions,
+  fetchAllEndedAuctions,
 };

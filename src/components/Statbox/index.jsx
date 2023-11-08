@@ -10,11 +10,12 @@ const Statbox = ({ title, subTitle, icon, children, width, height }) => {
   return (
     <Box
       width={"80%"}
-      m={"20px 30px"}
+      // m={"20px 30px"}
       sx={{
         bgcolor: "white",
         boxShadow: "0px 0px 10px 0px rgba(0,0,0,0.1)",
         padding: "10px 20px",
+        height: "100%",
       }}>
       {children ? (
         <Box width={width} height={height}>

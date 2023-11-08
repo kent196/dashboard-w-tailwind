@@ -89,14 +89,16 @@ const AuctionCard = ({ image, title, startingPrice, status, id }) => {
         </Box>
       </Box>
       {/* nav button */}
-      <Box>
-        <Button
-          variant='contained'
-          color='primary'
-          onClick={() => navigation(`/auction/${id}`)}>
-          Xem chi tiết
-        </Button>
-      </Box>
+      {id && (
+        <Box>
+          <Button
+            variant='contained'
+            color='primary'
+            onClick={() => navigation(`/auction/${id}`)}>
+            Xem chi tiết
+          </Button>
+        </Box>
+      )}
     </Box>
   );
 };
