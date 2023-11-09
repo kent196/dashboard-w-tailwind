@@ -444,59 +444,90 @@ const Dashboard = () => {
                       alignItems: "center",
                     }}>
                     {auctionDetail != null ? (
-                      <Box width={"80%"}>
-                        <Typography
-                          margin={"20px 0"}
-                          variant='h4'
-                          fontWeight={"bold"}>
-                          {auctionDetail.title}
-                        </Typography>
+                      <Box
+                        width={"90%"}
+                        display={"flex"}
+                        justifyContent={"space-between"}
+                        alignItems={"center"}
+                        gap={"20px"}>
                         <Box
-                          display={"flex"}
-                          justifyContent={"space-between"}
-                          alignItems={"center"}>
-                          <Typography variant='h5' fontWeight={"bold"}>
-                            Số người tham gia:
-                          </Typography>
-                          <Typography variant='h5'>
-                            {auctionDetail.numberOfBidders}
-                          </Typography>
+                          width={"300px"}
+                          height={"100%"}
+                          sx={{
+                            objectFit: "cover",
+                            overflow: "hidden",
+                          }}>
+                          <img
+                            width={"100%"}
+                            height={"100%"}
+                            src={auctionDetail.imageUrls}
+                          />
                         </Box>
-                        <Box
-                          display={"flex"}
-                          justifyContent={"space-between"}
-                          alignItems={"center"}>
-                          <Typography variant='h5' fontWeight={"bold"}>
-                            Giá khởi điểm:
+                        <Box width={"60%"}>
+                          <Typography
+                            margin={"20px 0"}
+                            variant='h4'
+                            fontWeight={"bold"}>
+                            {auctionDetail.title}
                           </Typography>
-                          <Typography variant='h5'>
-                            {formatPrice(auctionDetail.entryFee)}
-                          </Typography>
-                        </Box>
-                        <Box
-                          display={"flex"}
-                          justifyContent={"space-between"}
-                          alignItems={"center"}>
-                          <Typography variant='h5' fontWeight={"bold"}>
-                            Giá bán:
-                          </Typography>
-                          <Typography variant='h5'>
-                            {formatPrice(auctionDetail.currentPrice)}
-                          </Typography>
-                        </Box>
-                        <Box
-                          display={"flex"}
-                          justifyContent={"space-between"}
-                          alignItems={"center"}>
-                          <Typography variant='h5' fontWeight={"bold"}>
-                            Lợi nhuận:
-                          </Typography>
-                          <Typography variant='h5'>
-                            {formatPrice(
-                              auctionDetail.numberOfBidders *
-                                auctionDetail.entryFee
-                            )}
-                          </Typography>
+                          <Box
+                            display={"flex"}
+                            justifyContent={"space-between"}
+                            alignItems={"center"}>
+                            <Typography variant='h5' fontWeight={"bold"}>
+                              Số người tham gia:
+                            </Typography>
+                            <Typography variant='h5'>
+                              {auctionDetail.numberOfBidders}
+                            </Typography>
+                          </Box>
+                          <Box
+                            display={"flex"}
+                            justifyContent={"space-between"}
+                            alignItems={"center"}>
+                            <Typography variant='h5' fontWeight={"bold"}>
+                              Phí tham gia:
+                            </Typography>
+                            <Typography variant='h5'>
+                              {formatPrice(auctionDetail.entryFee)}
+                            </Typography>
+                          </Box>
+                          <Box
+                            display={"flex"}
+                            justifyContent={"space-between"}
+                            alignItems={"center"}>
+                            <Typography variant='h5' fontWeight={"bold"}>
+                              Giá khởi điểm:
+                            </Typography>
+                            <Typography variant='h5'>
+                              {formatPrice(auctionDetail.startingPrice)}
+                            </Typography>
+                          </Box>
+                          <Box
+                            display={"flex"}
+                            justifyContent={"space-between"}
+                            alignItems={"center"}>
+                            <Typography variant='h5' fontWeight={"bold"}>
+                              Giá bán:
+                            </Typography>
+                            <Typography variant='h5'>
+                              {formatPrice(auctionDetail.currentPrice)}
+                            </Typography>
+                          </Box>
+                          <Box
+                            display={"flex"}
+                            justifyContent={"space-between"}
+                            alignItems={"center"}>
+                            <Typography variant='h5' fontWeight={"bold"}>
+                              Lợi nhuận:
+                            </Typography>
+                            <Typography variant='h5'>
+                              {formatPrice(
+                                auctionDetail.numberOfBidders *
+                                  auctionDetail.entryFee
+                              )}
+                            </Typography>
+                          </Box>
                         </Box>
                       </Box>
                     ) : (

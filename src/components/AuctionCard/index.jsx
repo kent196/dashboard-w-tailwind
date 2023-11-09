@@ -41,51 +41,6 @@ const AuctionCard = ({ image, title, startingPrice, status, id }) => {
           display={"flex"}
           flexDirection={"column"}
           justifyContent={"space-evenly"}>
-          <Chip
-            sx={{
-              textTransform: "uppercase",
-              width: "200px",
-              fontSize: "0.8rem",
-            }}
-            label={
-              status === 1
-                ? "Chưa có nhân viên"
-                : status === 0
-                ? "Đang chờ duyệt"
-                : status === 2
-                ? "Cập nhật thông tin"
-                : status === 3
-                ? "Bị từ chối"
-                : status === 4
-                ? "Mở đăng ký"
-                : status === 5
-                ? "Đang diễn ra"
-                : status === 6
-                ? "Đã kết thúc"
-                : status === 7
-                ? "Không thành công"
-                : "Đang cập nhật"
-            }
-            color={
-              status === 1
-                ? "info"
-                : status === 0
-                ? "warning"
-                : status === 2
-                ? "warning"
-                : status === 3
-                ? "error"
-                : status === 4
-                ? "info"
-                : status === 5
-                ? "success"
-                : status === 6
-                ? "error"
-                : status === 7
-                ? "secondary"
-                : "warning"
-            }
-          />
           <Typography variant='h5' fontWeight={"bold"}>
             {title}
           </Typography>
@@ -103,6 +58,51 @@ const AuctionCard = ({ image, title, startingPrice, status, id }) => {
           </Button>
         </Box>
       )}
+      <Chip
+        sx={{
+          textTransform: "uppercase",
+          width: "200px",
+          fontSize: "0.8rem",
+        }}
+        label={
+          status === 1
+            ? "Chưa có nhân viên"
+            : status === 0
+            ? "Đang chờ duyệt"
+            : status === 2
+            ? "Cập nhật thông tin"
+            : status === 3
+            ? "Bị từ chối"
+            : status === 4
+            ? "Mở đăng ký"
+            : status === 5
+            ? "Đang diễn ra"
+            : status === 6
+            ? "Đã kết thúc"
+            : status === 7
+            ? "Không thành công"
+            : "Đang cập nhật"
+        }
+        color={
+          status === 1
+            ? "info"
+            : status === 0
+            ? "warning"
+            : status === 2
+            ? "warning"
+            : status === 3
+            ? "error"
+            : status === 4
+            ? "info"
+            : status === 5
+            ? "success"
+            : status === 6
+            ? "error"
+            : status === 7
+            ? "secondary"
+            : "warning"
+        }
+      />
     </Box>
   );
 };
