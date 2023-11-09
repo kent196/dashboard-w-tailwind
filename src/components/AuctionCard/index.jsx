@@ -20,6 +20,10 @@ const AuctionCard = ({ image, title, startingPrice, status, id }) => {
         padding: "10px 30px",
         margin: "10px 20px",
         borderRadius: "10px",
+        "&:hover": {
+          cursor: "pointer",
+          backgroundColor: "#fff7ec",
+        },
       }}>
       {/* auction info */}
       <Box display={"flex"} justifyContent={"flex-start"} alignItems={"center"}>

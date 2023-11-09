@@ -31,6 +31,7 @@ import {
 import Header from "../../components/Header";
 import {
   fetchAllEndedAuctions,
+  fetchAuctionDetail,
   fetchAuctions,
   fetchStaffAuctions,
   fetchStaffEndedAuctions,
@@ -41,6 +42,7 @@ import AuctionCard from "../../components/AuctionCard";
 import { token } from "../../theme";
 import { useTheme } from "@emotion/react";
 import { formatPrice } from "../../libs/formaters";
+import Error from "../../global/Error";
 
 const Dashboard = () => {
   const [customers, setCustomers] = useState([]);
@@ -48,7 +50,7 @@ const Dashboard = () => {
   const [auctionsCount, setAuctionsCount] = useState(0); // State to store auction details
   const [customerCount, setCustomerCount] = useState(0); // State to store auction details
   const [auctions, setAuctions] = useState([]); // State to store auction details
-  const [auctionDetail, setAuctionDetail] = useState({}); // State to store auction details
+  const [auctionDetail, setAuctionDetail] = useState(null); // State to store auction details
   const [products, setProducts] = useState({}); // State to store auction details
   const [orders, setOrders] = useState({}); // State to store auction details
   const [anchorEl, setAnchorEl] = useState(null);
@@ -96,6 +98,18 @@ const Dashboard = () => {
       // You can perform some filtering action here based on the selected filter.
       // For demonstration purposes, we're just updating the state.
     }
+  };
+
+  const handleViewAuctionDetail = (id) => {
+    fetchAuctionDetail(id)
+      .then((res) => {
+        console.log(res.data);
+        setAuctionDetail(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+        return <Error />;
+      });
   };
 
   const handleCalculateTotalRevenue = () => {
@@ -403,15 +417,17 @@ const Dashboard = () => {
                     <Box>
                       {auctions.map((auction) => {
                         return (
-                          <>
+                          <Box
+                            onClick={() => {
+                              handleViewAuctionDetail(auction.id);
+                            }}>
                             <AuctionCard
                               image={auction.imageUrl}
                               title={auction.title}
                               startingPrice={auction.startingPrice}
                               status={auction.status}
-                              id={auction.id}
                             />
-                          </>
+                          </Box>
                         );
                       })}
                     </Box>
@@ -427,8 +443,62 @@ const Dashboard = () => {
                       justifyContent: "center",
                       alignItems: "center",
                     }}>
-                    {auctionDetail ? (
-                      <Box>update khi co api</Box>
+                    {auctionDetail != null ? (
+                      <Box width={"80%"}>
+                        <Typography
+                          margin={"20px 0"}
+                          variant='h4'
+                          fontWeight={"bold"}>
+                          {auctionDetail.title}
+                        </Typography>
+                        <Box
+                          display={"flex"}
+                          justifyContent={"space-between"}
+                          alignItems={"center"}>
+                          <Typography variant='h5' fontWeight={"bold"}>
+                            Số người tham gia:
+                          </Typography>
+                          <Typography variant='h5'>
+                            {auctionDetail.numberOfBidders}
+                          </Typography>
+                        </Box>
+                        <Box
+                          display={"flex"}
+                          justifyContent={"space-between"}
+                          alignItems={"center"}>
+                          <Typography variant='h5' fontWeight={"bold"}>
+                            Giá khởi điểm:
+                          </Typography>
+                          <Typography variant='h5'>
+                            {formatPrice(auctionDetail.entryFee)}
+                          </Typography>
+                        </Box>
+                        <Box
+                          display={"flex"}
+                          justifyContent={"space-between"}
+                          alignItems={"center"}>
+                          <Typography variant='h5' fontWeight={"bold"}>
+                            Giá bán:
+                          </Typography>
+                          <Typography variant='h5'>
+                            {formatPrice(auctionDetail.currentPrice)}
+                          </Typography>
+                        </Box>
+                        <Box
+                          display={"flex"}
+                          justifyContent={"space-between"}
+                          alignItems={"center"}>
+                          <Typography variant='h5' fontWeight={"bold"}>
+                            Lợi nhuận:
+                          </Typography>
+                          <Typography variant='h5'>
+                            {formatPrice(
+                              auctionDetail.numberOfBidders *
+                                auctionDetail.entryFee
+                            )}
+                          </Typography>
+                        </Box>
+                      </Box>
                     ) : (
                       <Box>Chọn 1 cuộc đấu giá để xem</Box>
                     )}
