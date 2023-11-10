@@ -9,6 +9,7 @@ import {
   DialogTitle,
   IconButton,
   Menu,
+  MenuList,
   Select,
   TextField,
   Typography,
@@ -29,8 +30,7 @@ import { Helmet } from "react-helmet";
 import { useEffect } from "react";
 import { fetchOrders } from "../../libs/orderService";
 import { formatDateTime } from "../../libs/formaters";
-import { MenuItem } from "react-pro-sidebar";
-
+import MenuItem from "@mui/material/MenuItem";
 const Orders = () => {
   const [isOpenViewOrder, setIsOpenViewOrder] = useState(false);
   const [orders, setOrders] = useState([]); // State to store orders
@@ -53,7 +53,7 @@ const Orders = () => {
     pageSize: 5,
   });
   const [anchorEl, setAnchorEl] = useState(null);
-  const [selectedFilter, setSelectedFilter] = useState("All"); // Default selected filter
+  const [selectedFilter, setSelectedFilter] = useState("Tất cả"); // Default selected filter
   const [filterValue, setFilterValue] = useState(0); // Default selected filter
 
   const handleClick = (event) => {
@@ -228,6 +228,10 @@ const Orders = () => {
             "& .MuiDataGrid-root": {
               border: "none",
             },
+            "& .MuiMenu-list": {
+              height: "200px",
+              overflowY: "scroll",
+            },
             "& .MuiDataGrid-cell": {
               borderBottom: "none",
             },
@@ -254,6 +258,7 @@ const Orders = () => {
             "& .MuiDataGrid-toolbarContainer .MuiButton-text": {
               color: `${colors.gray[100]} !important `,
             },
+
             // Media queries for responsive column width
             "@media (max-width: 768px)": {
               "& .access-column": {
@@ -278,6 +283,7 @@ const Orders = () => {
               marginBottom: "20px",
             }}>
             <Button
+              sx={{ width: "200px" }}
               variant='contained'
               startIcon={<ListOutlined />}
               onClick={handleClick}>
@@ -287,41 +293,84 @@ const Orders = () => {
               sx={{
                 zIndex: 9999,
                 padding: "10px",
-                height: "300px",
+                // height: "300px",
                 overflowY: "scroll",
+                "& .MuiMenu-list": {
+                  height: "100px",
+                },
               }}
               anchorEl={anchorEl}
               open={Boolean(anchorEl)}
               onClose={() => handleClose(null)} // Close the menu when clicking outside
             >
-              <MenuItem onClick={() => handleClose("Tất cả", 0)}>
+              <MenuItem
+                style={{
+                  padding: "5px",
+                }}
+                onClick={() => handleClose("Tất cả", 0)}>
                 Tất cả
               </MenuItem>
-              <MenuItem onClick={() => handleClose("Chờ thanh toán", 1)}>
+              <MenuItem
+                style={{
+                  padding: "5px",
+                }}
+                onClick={() => handleClose("Chờ thanh toán", 1)}>
                 Chờ thanh toán
               </MenuItem>
-              <MenuItem onClick={() => handleClose("Chờ xác nhận", 5)}>
+              <MenuItem
+                style={{
+                  padding: "5px",
+                }}
+                onClick={() => handleClose("Chờ xác nhận", 5)}>
                 Chờ xác nhận
               </MenuItem>
-              <MenuItem onClick={() => handleClose("Hủy bởi người bán", 12)}>
+              <MenuItem
+                style={{
+                  padding: "5px",
+                }}
+                onClick={() => handleClose("Hủy bởi người bán", 12)}>
                 Hủy bởi người bán
               </MenuItem>
-              <MenuItem onClick={() => handleClose("Hủy chờ duyệt", 10)}>
+              <MenuItem
+                style={{
+                  padding: "5px",
+                }}
+                onClick={() => handleClose("Hủy chờ duyệt", 10)}>
                 Hủy chờ duyệt
               </MenuItem>
-              <MenuItem onClick={() => handleClose("Hủy bởi người mua", 11)}>
+              <MenuItem
+                style={{
+                  padding: "5px",
+                }}
+                onClick={() => handleClose("Hủy bởi người mua", 11)}>
                 Hủy bởi người mua
               </MenuItem>
-              <MenuItem onClick={() => handleClose("Chờ lấy hàng", 2)}>
+              <MenuItem
+                style={{
+                  padding: "5px",
+                }}
+                onClick={() => handleClose("Chờ lấy hàng", 2)}>
                 Chờ lấy hàng
               </MenuItem>
-              <MenuItem onClick={() => handleClose("Đang giao hàng", 3)}>
+              <MenuItem
+                style={{
+                  padding: "5px",
+                }}
+                onClick={() => handleClose("Đang giao hàng", 3)}>
                 Đang giao hàng
               </MenuItem>
-              <MenuItem onClick={() => handleClose("Đã giao", 4)}>
+              <MenuItem
+                style={{
+                  padding: "5px",
+                }}
+                onClick={() => handleClose("Đã giao", 4)}>
                 Đã giao
               </MenuItem>
-              <MenuItem onClick={() => handleClose("Hoàn tất", 6)}>
+              <MenuItem
+                style={{
+                  padding: "5px",
+                }}
+                onClick={() => handleClose("Hoàn tất", 6)}>
                 Hoàn tất
               </MenuItem>
               {/* Add more filter options as needed */}

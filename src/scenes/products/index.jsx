@@ -152,9 +152,9 @@ const Products = () => {
             <IconButton onClick={() => handleViewProduct(row.id)}>
               <Visibility />
             </IconButton>
-            <IconButton onClick={() => handleOpenConfirmDelete(row.id)}>
+            {/* <IconButton onClick={() => handleOpenConfirmDelete(row.id)}>
               <DeleteOutline color='error' />
-            </IconButton>
+            </IconButton> */}
           </Box>
         </>
       ),
