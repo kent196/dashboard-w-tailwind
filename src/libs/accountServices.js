@@ -26,15 +26,23 @@ const fetchUserData = async () => {
 
 const createAccount = async (data) => {
   try {
-    const response = await authAxios.post("/admin/staff", data);
-    if (response.status === 200) {
-      console.log("Account created successfully");
-      return response.data;
-    } else {
-      console.error("Failed to create account");
+    if (data === null || data === undefined) {
+      console.log("No data provided");
     }
+    const response = await authAxios.post("/admin/staff", data);
+    // if (response.status === 200) {
+    //   console.log("Account created successfully");
+    //   return response;
+    // } else {
+    //   console.error("Failed to create account");
+    //   return response;
+    // }
+    console.log("aaa");
+    console.log(response.data);
+    return response.data;
   } catch (error) {
-    console.error("An error occurred:", error);
+    console.error("An error occurred: as", error);
+    return error;
   }
 };
 

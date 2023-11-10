@@ -12,6 +12,7 @@ import { createAccount } from "../../libs/accountServices";
 import { toast } from "react-toastify";
 
 const Form = () => {
+  const [errMsg, setErrMsg] = React.useState("");
   const isNonMobile = useMediaQuery("(min-width:600px)");
   const initialValues = {
     name: "",
@@ -20,6 +21,7 @@ const Form = () => {
     phone: "",
     gender: "",
     dob: "",
+    role: "",
   };
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -28,11 +30,20 @@ const Form = () => {
     console.log(values);
     createAccount(values)
       .then((res) => {
-        console.log(res);
-        if (res.status === 400) {
-          toast.error(res.data.message);
+        // if (res.code === 200 || res.StatusCode === 200) {
+        //   toast.success("Create account successfully");
+        //   setErrMsg("");
+        // } else {
+        //   toast.error("Create account failed");
+        //   setErrMsg(res.message);
+        // }
+        if (res.code === "ERR_BAD_REQUEST") {
+          toast.error("Create account failed");
+          setErrMsg(res.response.data.message || res.response.data.Message);
+        } else if (res.code === 200) {
+          toast.success("Create account successfully");
+          setErrMsg("");
         }
-        toast.success("Create account successfully");
       })
       .catch((err) => {
         console.log(err);
@@ -156,17 +167,45 @@ const Form = () => {
                   name='gender'
                   label='Gender'
                   variant='filled'
-                  fullWidth
                   onBlur={handleBlur}
                   onChange={handleChange}
                   value={values.gender}
                   error={!!touched.gender && !!errors.gender}
                   helperText={touched.gender && errors.gender}
                   sx={{
+                    padding: "10px",
+
                     gridColumn: "span 4",
                   }}>
                   <option value={1}>Male</option>
                   <option value={0}>Female</option>
+                </Field>
+              </Box>
+              <Box
+                alignItems={"center"}
+                display={"flex"}
+                justifyContent={"flex-start"}
+                gap={"20px"}
+                sx={{
+                  gridColumn: "span 4",
+                }}>
+                <Typography>Role:</Typography>
+                <Field
+                  as='select'
+                  name='role'
+                  label='Role'
+                  variant='filled'
+                  onBlur={handleBlur}
+                  onChange={handleChange}
+                  value={values.role}
+                  error={!!touched.role && !!errors.role}
+                  helperText={touched.role && errors.role}
+                  sx={{
+                    padding: "10px",
+                    gridColumn: "span 4",
+                  }}>
+                  <option value={4}>Manager</option>
+                  <option value={5}>Staff</option>
                 </Field>
               </Box>
               <Box
@@ -194,15 +233,26 @@ const Form = () => {
                 />
               </Box>
             </Box>
-            <Box display={"flex"} justifyContent={"end"}>
+            <Box
+              display={"flex"}
+              justifyContent={"flex-end"}
+              gap={"20px"}
+              alignItems={"center"}
+              sx={{
+                marginTop: "20px",
+              }}>
+              <Typography
+                width={"40%"}
+                color={"red"}
+                variant='h6'
+                textAlign={"right"}>
+                {errMsg}
+              </Typography>
               <Button
                 variant='contained'
                 color='success'
                 type='submit'
-                onClick={handleSubmit}
-                sx={{
-                  marginTop: "20px",
-                }}>
+                onClick={handleSubmit}>
                 Create new user
               </Button>
             </Box>
