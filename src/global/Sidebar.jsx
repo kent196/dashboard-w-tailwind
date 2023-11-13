@@ -16,6 +16,7 @@ import {
   VpnKey,
   HowToRegOutlined,
   LockOutlined,
+  WalletOutlined,
 } from "@mui/icons-material";
 import { Box, IconButton, Tooltip, Typography, useTheme } from "@mui/material";
 import React, { useEffect, useState, useContext } from "react";
@@ -214,20 +215,7 @@ const Sidebar = ({ userRole, currentLocation }) => {
             selected={selected}
             setSelected={setSelected}
           />
-          <Item
-            title={"Biểu đồ cột"}
-            to={"/bar"}
-            icon={<BarChartOutlined />}
-            selected={selected}
-            setSelected={setSelected}
-          />
-          <Item
-            title={"Biểu đồ tròn"}
-            to={"/pie"}
-            icon={<PieChartOutlineOutlined />}
-            selected={selected}
-            setSelected={setSelected}
-          />
+
           <Box>
             {collapsed ? (
               // Dashline
@@ -352,6 +340,17 @@ const Sidebar = ({ userRole, currentLocation }) => {
                 title={"Sản phẩm"}
                 to={"/products"}
                 icon={<StoreOutlined />}
+                selected={selected}
+                setSelected={setSelected}
+              />
+            </Box>
+          </Tooltip>
+          <Tooltip title='Nạp rút' placement='right'>
+            <Box>
+              <Item
+                title={"Nạp rút"}
+                to={"/withdrawal"}
+                icon={<WalletOutlined />}
                 selected={selected}
                 setSelected={setSelected}
               />

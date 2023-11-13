@@ -19,9 +19,9 @@ const Form = () => {
     email: "",
     password: "",
     phone: "",
-    gender: "",
+    gender: "1",
     dob: "",
-    role: "",
+    role: "4",
   };
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -127,7 +127,7 @@ const Form = () => {
                 label='Password'
                 fullWidth
                 variant='filled'
-                type='text'
+                type='password'
                 onBlur={handleBlur}
                 onChange={handleChange}
                 value={values.password}

@@ -107,6 +107,34 @@ const updateUserPassword = async (data) => {
     throw error;
   }
 };
+const fetchAllWithdrawRequest = async (pageSize, pageNumber) => {
+  try {
+    const response = await authAxios.get(
+      `/wallet/manager/withdraw?PageSize=${pageSize}&PageNumber=${pageNumber}`
+    );
+    if (!response.data) {
+      console.log("No data");
+    }
+
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+const handleWithdrawRequest = async (id, status) => {
+  try {
+    const response = await authAxios.post(`/wallet/manager/withdraw`, {
+      withdrawalId: id,
+      status: status,
+    });
+    if (!response.data) {
+      console.log("No data");
+    }
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
 
 export {
   fetchUsers,
@@ -117,4 +145,6 @@ export {
   updateProfile,
   deactivateAccount,
   updateUserPassword,
+  fetchAllWithdrawRequest,
+  handleWithdrawRequest,
 };
