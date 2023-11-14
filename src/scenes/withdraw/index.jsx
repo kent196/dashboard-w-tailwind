@@ -202,7 +202,7 @@ const Withdraw = () => {
 
   return (
     <Container maxWidth='xl' sx={{ paddingTop: "20px" }}>
-      <Header title='Yêu cầu nạp rút ví' />
+      <Header title='Rút tiền về tài khoản' />
       <Box
         m={"20px 0"} // Reduced top margin
         sx={{

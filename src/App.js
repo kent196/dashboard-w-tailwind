@@ -44,6 +44,7 @@ function App() {
   const location = useLocation();
   const [theme, colorMode] = useMode();
   const [user, setUser] = useState(null); // State to store user role
+  const [currentPath, setCurrentPath] = useState(location.pathname);
 
   // Signal R context
   const signalRContext = useContext(SignalRContext);

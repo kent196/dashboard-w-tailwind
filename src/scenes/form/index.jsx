@@ -20,7 +20,7 @@ const Form = () => {
     password: "",
     phone: "",
     gender: "1",
-    dob: "",
+    dob: new Date(),
     role: "4",
   };
   useEffect(() => {
@@ -38,10 +38,10 @@ const Form = () => {
         //   setErrMsg(res.message);
         // }
         if (res.code === "ERR_BAD_REQUEST") {
-          toast.error("Create account failed");
+          toast.error("Tạo tài khoản không thành công");
           setErrMsg(res.response.data.message || res.response.data.Message);
         } else if (res.code === 200) {
-          toast.success("Create account successfully");
+          toast.success("Tạo tài khoản thành công");
           setErrMsg("");
         }
       })
@@ -71,7 +71,10 @@ const Form = () => {
       <Helmet>
         <title>Create User</title>
       </Helmet>
-      <Header title={"CREATE USER"} subTitle={"Create a new user profile"} />
+      <Header
+        title={"TẠO TÀI KHOẢN"}
+        subTitle={"Tạo tài khoản cho người dùng quản trị"}
+      />
       <Formik
         onSubmit={handleFormSubmit}
         initialValues={initialValues}
@@ -94,7 +97,7 @@ const Form = () => {
                 marginTop: "20px",
               }}>
               <TextField
-                label='Name'
+                label='Tên'
                 fullWidth
                 variant='filled'
                 type='text'
@@ -124,7 +127,7 @@ const Form = () => {
                 }}
               />
               <TextField
-                label='Password'
+                label='Mật khẩu'
                 fullWidth
                 variant='filled'
                 type='password'
@@ -139,7 +142,7 @@ const Form = () => {
                 }}
               />
               <TextField
-                label='Phone'
+                label='Số điện thoại'
                 fullWidth
                 variant='filled'
                 type='text'
@@ -161,7 +164,7 @@ const Form = () => {
                 sx={{
                   gridColumn: "span 4",
                 }}>
-                <Typography>Gender:</Typography>
+                <Typography>Giới tính:</Typography>
                 <Field
                   as='select'
                   name='gender'
@@ -169,6 +172,7 @@ const Form = () => {
                   variant='filled'
                   onBlur={handleBlur}
                   onChange={handleChange}
+                  defaultValue={1}
                   value={values.gender}
                   error={!!touched.gender && !!errors.gender}
                   helperText={touched.gender && errors.gender}
@@ -177,8 +181,8 @@ const Form = () => {
 
                     gridColumn: "span 4",
                   }}>
-                  <option value={1}>Male</option>
-                  <option value={0}>Female</option>
+                  <option value={1}>Nam</option>
+                  <option value={0}>Nữ</option>
                 </Field>
               </Box>
               <Box
@@ -189,7 +193,7 @@ const Form = () => {
                 sx={{
                   gridColumn: "span 4",
                 }}>
-                <Typography>Role:</Typography>
+                <Typography>Cấp bậc:</Typography>
                 <Field
                   as='select'
                   name='role'
@@ -204,8 +208,8 @@ const Form = () => {
                     padding: "10px",
                     gridColumn: "span 4",
                   }}>
-                  <option value={4}>Manager</option>
-                  <option value={5}>Staff</option>
+                  <option value={4}>Quản lí</option>
+                  <option value={5}>Nhân viên</option>
                 </Field>
               </Box>
               <Box
@@ -216,14 +220,15 @@ const Form = () => {
                 sx={{
                   gridColumn: "span 4",
                 }}>
-                <Typography>Date of birth:</Typography>
+                <Typography>Ngày sinh:</Typography>
                 <TextField
                   fullWidth
                   variant='filled'
                   type='datetime-local'
+                  // defaultValue={initialValues.dob}
                   onBlur={handleBlur}
                   onChange={handleChange}
-                  value={values.dob}
+                  value={new Date(values.dob).toISOString().substring(0, 16)}
                   name='dob'
                   error={!!touched.dob && !!errors.dob}
                   helperText={touched.dob && errors.dob}

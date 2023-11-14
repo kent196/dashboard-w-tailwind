@@ -124,13 +124,7 @@ const Team = () => {
       cellClassName: "name-column--cell",
     },
     { field: "email", headerName: "Email", flex: 1 },
-    {
-      field: "age",
-      headerName: "Tuổi",
-      type: "number",
-      headerAlign: "left",
-      align: "left",
-    },
+
     { field: "phone", headerName: "SDT", flex: 1 },
     {
       field: "status",

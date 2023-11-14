@@ -20,8 +20,10 @@ import Error from "../../global/Error";
 import { updateProfile as update } from "../../libs/userService";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { useNavigate } from "react-router-dom";
 
 const Profile = () => {
+  const navigate = useNavigate();
   const [currentUser, setCurrentUser] = useState({}); // State to store auction details
   const [isEditing, setIsEditing] = useState(false); // State to store auction details
   const [formData, setFormData] = useState({
@@ -116,6 +118,12 @@ const Profile = () => {
     fetchUserData()
       .then((res) => {
         setCurrentUser(res.data);
+        setFormData({
+          name: currentUser.name,
+          phone: currentUser.phone,
+          gender: currentUser.gender,
+          dob: currentUser.dob,
+        });
       })
       .catch((err) => {
         console.log(err);
@@ -227,7 +235,7 @@ const Profile = () => {
                 justifyContent={"space-between"}
                 width={"100%"}>
                 <Typography variant='h5' fontWeight={"bold"}>
-                  Name:
+                  Tên:
                 </Typography>
                 <TextField
                   sx={{
@@ -282,7 +290,7 @@ const Profile = () => {
                   id='dob'
                   type='datetime-local'
                   name='dob'
-                  defaultValue={formatDateTime(currentUser.dob) || new Date()}
+                  defaultValue={currentUser.dob || new Date()}
                   onChange={handleInputChange}
                 />
               </Box>
@@ -366,6 +374,22 @@ const Profile = () => {
                     ? "Nam"
                     : "Không muốn đề cập"}
                 </Typography>
+              </Box>
+              <Box
+                display={"flex"}
+                gap={"10px"}
+                alignItems={"center"}
+                justifyContent={"space-between"}
+                width={"100%"}>
+                <Typography variant='h5' fontWeight={"bold"}>
+                  Mật khẩu:
+                </Typography>
+                <Button
+                  variant='outlined'
+                  color='primary'
+                  onClick={() => navigate("/user/changePassword")}>
+                  Thay đổi
+                </Button>
               </Box>
             </>
           )}

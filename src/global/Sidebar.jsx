@@ -104,6 +104,7 @@ const Sidebar = ({ userRole, currentLocation }) => {
   const [user, setUser] = useState({}); // State to store user data
 
   useEffect(() => {
+    console.log(currentLocation);
     fetchUserData()
       .then((res) => {
         console.log(res);
@@ -523,17 +524,6 @@ const Sidebar = ({ userRole, currentLocation }) => {
             )}
           </Box>
 
-          <Tooltip title='Kích hoạt lại tài khoản' placement='right'>
-            <Box>
-              <Item
-                title={"Kích hoạt lại tài khoản"}
-                to={"/"}
-                icon={<VpnKey />}
-                selected={selected}
-                setSelected={setSelected}
-              />
-            </Box>
-          </Tooltip>
           <Tooltip title='Kích hoạt người bán' placement='right'>
             <Box>
               <Item
