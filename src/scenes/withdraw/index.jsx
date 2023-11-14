@@ -85,7 +85,7 @@ const Withdraw = () => {
           progress: undefined,
           theme: "light",
         });
-        fetchAllWithdrawRequest()
+        fetchAllWithdrawRequest(paginationModel.pageSize, paginationModel.page)
           .then((res) => {
             console.log(res.data);
             setRequest(res.data);
@@ -117,7 +117,7 @@ const Withdraw = () => {
           progress: undefined,
           theme: "light",
         });
-        fetchAllWithdrawRequest()
+        fetchAllWithdrawRequest(paginationModel.pageSize, paginationModel.page)
           .then((res) => {
             console.log(res.data);
             setRequest(res.data);
@@ -150,6 +150,8 @@ const Withdraw = () => {
     },
 
     { field: "bank", headerName: "Ngân hàng", flex: 1 },
+    { field: "bankNumber", headerName: "Số tài khoản", flex: 1 },
+
     {
       field: "status",
       headerName: "Trạng thái",
