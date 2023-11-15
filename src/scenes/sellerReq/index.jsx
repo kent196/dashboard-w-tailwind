@@ -22,18 +22,30 @@ const SellerRequest = () => {
   const theme = useTheme();
   const colors = token(theme.palette.mode);
   const [request, setRequest] = useState([]);
+  const [reqCount, setReqCount] = useState(0);
+  const [paginationModel, setPaginationModel] = React.useState({
+    page: 0,
+    pageSize: 5,
+  });
+  const [rowCountState, setRowCountState] = React.useState(reqCount || 0);
 
+  React.useEffect(() => {
+    setRowCountState((prevRowCountState) =>
+      reqCount !== undefined ? reqCount : prevRowCountState
+    );
+  }, [reqCount, setRowCountState]);
   useEffect(() => {
-    fetchSellerRequests()
+    fetchSellerRequests(paginationModel.pageSize, paginationModel.page + 1)
       .then((res) => {
         console.log(res.data);
-        setRequest(res.data);
+        setRequest(res.data.list);
+        setReqCount(res.data.count);
       })
       .catch((err) => {
         console.log(err);
         navigate("/error");
       });
-  }, []);
+  }, [paginationModel]);
 
   const handleApprove = (id) => {
     acceptSellerRequest(id)
@@ -49,10 +61,11 @@ const SellerRequest = () => {
           theme: "light",
         });
         console.log(res.data);
-        fetchSellerRequests()
+        fetchSellerRequests(paginationModel.pageSize, paginationModel.page + 1)
           .then((res) => {
             console.log(res.data);
-            setRequest(res.data);
+            setRequest(res.data.list);
+            setReqCount(res.data.count);
           })
           .catch((err) => {
             console.log(err);
@@ -79,10 +92,11 @@ const SellerRequest = () => {
           theme: "light",
         });
         console.log(res.data);
-        fetchSellerRequests()
+        fetchSellerRequests(paginationModel.pageSize, paginationModel.page + 1)
           .then((res) => {
             console.log(res.data);
-            setRequest(res.data);
+            setRequest(res.data.list);
+            setReqCount(res.data.count);
           })
           .catch((err) => {
             console.log(err);
@@ -202,6 +216,11 @@ const SellerRequest = () => {
           rows={request}
           columns={columns}
           components={{ Toolbar: GridToolbar }}
+          rowCount={rowCountState}
+          pageSizeOptions={[1, 3, 5]}
+          paginationModel={paginationModel}
+          paginationMode='server'
+          onPaginationModelChange={setPaginationModel}
         />
       </Box>
     </Container>

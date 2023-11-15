@@ -46,11 +46,11 @@ const Withdraw = () => {
   }, [requestCount, setRowCountState]);
 
   useEffect(() => {
-    fetchAllWithdrawRequest(paginationModel.pageSize, paginationModel.page)
+    fetchAllWithdrawRequest(paginationModel.pageSize, paginationModel.page + 1)
       .then((res) => {
         console.log(res.data);
-        setRequestCount(res.data.length);
-        setRequest(res.data);
+        setRequestCount(res.data.count);
+        setRequest(res.data.list);
       })
       .catch((err) => {
         console.log(err);
@@ -85,10 +85,14 @@ const Withdraw = () => {
           progress: undefined,
           theme: "light",
         });
-        fetchAllWithdrawRequest(paginationModel.pageSize, paginationModel.page)
+        fetchAllWithdrawRequest(
+          paginationModel.pageSize,
+          paginationModel.page + 1
+        )
           .then((res) => {
             console.log(res.data);
-            setRequest(res.data);
+            setRequest(res.data.list);
+            setRequestCount(res.data.count);
           })
           .catch((err) => {
             console.log(err);
@@ -117,10 +121,14 @@ const Withdraw = () => {
           progress: undefined,
           theme: "light",
         });
-        fetchAllWithdrawRequest(paginationModel.pageSize, paginationModel.page)
+        fetchAllWithdrawRequest(
+          paginationModel.pageSize,
+          paginationModel.page + 1
+        )
           .then((res) => {
             console.log(res.data);
-            setRequest(res.data);
+            setRequest(res.data.list);
+            setRequestCount(res.data.count);
           })
           .catch((err) => {
             console.log(err);

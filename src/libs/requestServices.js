@@ -1,8 +1,10 @@
 import authAxios from "../api/authAxios";
 import Error from "../global/Error";
 
-const fetchSellerRequests = async () => {
-  const rs = await authAxios.get("/seller/request");
+const fetchSellerRequests = async (pageSize, page) => {
+  const rs = await authAxios.get(
+    `/seller/request?PageSize=${pageSize}&PageNumber=${page}`
+  );
   if (!rs.data) {
     return <Error />;
   }
