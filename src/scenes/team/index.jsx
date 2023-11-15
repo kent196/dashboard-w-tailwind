@@ -71,6 +71,33 @@ const Team = () => {
       .catch((err) => {});
   }, []);
 
+  // rerender this component
+  const handleRerender = () => {
+    if (currentUser.role === 3) {
+      fetchUsers(paginationModel.pageSize, paginationModel.page + 1)
+        .then((res) => {
+          setCustomerCount(res.data.count);
+
+          setUsers(res.data.userList);
+        })
+        .catch((err) => {});
+    } else if (currentUser.role === 4) {
+      fetchAllStaffs(paginationModel.pageSize, paginationModel.page + 1)
+        .then((res) => {
+          setCustomerCount(res.data.count);
+          setUsers(res.data.staffList);
+        })
+        .catch((err) => {});
+    } else if (currentUser.role === 5) {
+      fetchCustomer(paginationModel.pageSize, paginationModel.page + 1)
+        .then((res) => {
+          setCustomerCount(res.data.count);
+          setCustomers(res.data.customerList);
+        })
+        .catch((err) => {});
+    }
+  };
+
   useEffect(() => {
     try {
       if (currentUser.role === 3) {
@@ -190,7 +217,9 @@ const Team = () => {
       field: "actions",
       headerName: "Thao tác",
       flex: 1,
-      renderCell: (params) => <ActionButtons row={params.row} />,
+      renderCell: (params) => (
+        <ActionButtons row={params.row} handleRerender={handleRerender} />
+      ),
     },
   ];
 
@@ -274,7 +303,7 @@ const Team = () => {
       return (
         <Container maxWidth='xl' sx={{ paddingTop: "20px" }}>
           <Helmet>
-            <title>User Management</title>
+            <title>Người dùng</title>
           </Helmet>
           <Header
             title={

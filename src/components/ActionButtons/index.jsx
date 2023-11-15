@@ -25,7 +25,7 @@ import Error from "../../global/Error";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-const ActionButtons = ({ row }) => {
+const ActionButtons = ({ row, handleRerender }) => {
   const theme = useTheme();
   const { id } = useParams();
   const colors = token(theme.palette.mode);
@@ -72,16 +72,11 @@ const ActionButtons = ({ row }) => {
       fetchUserDetails(userId)
         .then((res) => {
           setUserDetails(res.data);
-          console.log(res.data);
         })
-        .catch((err) => {
-          console.log(err);
-        });
+        .catch((err) => {});
 
       setOpenViewUser(true); // Open the "View User" dialog
-    } catch (error) {
-      console.error("Error fetching user details:", error);
-    }
+    } catch (error) {}
   };
 
   const handleOpenEditUser = (userId) => {
@@ -114,7 +109,6 @@ const ActionButtons = ({ row }) => {
         setUserDetails(res.data);
       })
       .catch((err) => {
-        console.log(err);
         return <Error />;
       });
     setDeletedId(userId);
@@ -124,7 +118,6 @@ const ActionButtons = ({ row }) => {
   const handleConfirmDelete = () => {
     deactivateAccount(deletedId)
       .then((res) => {
-        console.log(res.data);
         toast.success("Xóa thành công", {
           position: "top-right",
           autoClose: 2000,
@@ -132,15 +125,12 @@ const ActionButtons = ({ row }) => {
           closeOnClick: true,
           pauseOnHover: true,
         });
+        handleRerender();
       })
       .catch((err) => {
-        console.log(err);
         return <Error />;
       });
     setDeleteConfirmationOpen(false);
-    setTimeout(() => {
-      window.location.reload();
-    }, 3000);
   };
 
   const handleCancelDelete = () => {
@@ -227,7 +217,6 @@ const ActionButtons = ({ row }) => {
             <Typography variant='h5'>ID: {row.id}</Typography>
             <Typography variant='h5'>Tên: {userDetails.name}</Typography>
             <Typography variant='h5'>Email: {userDetails.email}</Typography>
-            <Typography variant='h5'>Tuổi: {userDetails.age}</Typography>
             <Typography variant='h5'>SDT: {userDetails.phone}</Typography>
             <Typography variant='h5'>
               Cấp bậc:{" "}
@@ -241,12 +230,6 @@ const ActionButtons = ({ row }) => {
           </Box>
         </DialogContent>
         <DialogActions>
-          <Button
-            variant='contained'
-            color='warning'
-            onClick={() => handleEditUser(row.id)}>
-            Chỉnh sửa
-          </Button>
           <Button
             variant='contained'
             color='error'

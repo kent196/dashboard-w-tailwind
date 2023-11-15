@@ -31,15 +31,11 @@ const StaffChooserModal = ({
   useEffect(() => {
     fetchStaffs()
       .then((res) => {
-        console.log(res.data);
         setStaffs(res.data);
       })
-      .catch((err) => {
-        console.log(err);
-      });
+      .catch((err) => {});
     return () => {
       setStaffs([]);
-      console.log("unmount staffs");
     };
   }, []);
 
