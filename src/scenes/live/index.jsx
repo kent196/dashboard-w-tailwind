@@ -44,7 +44,7 @@ const Live = () => {
   const [loading, setLoading] = useState(false); // State to store auction details
   const [connection, setConnection] = useState(); // State to store signal r connection
   const [winner, setWinner] = useState({
-    bidder: {}
+    bidder: {},
   }); // State to store signal r connection
   const [isOpenWinner, setIsOpenWinner] = useState(false); // State to store signal r connection
   const navigate = useNavigate();
@@ -67,49 +67,40 @@ const Live = () => {
     fetchAuctionDetail(id)
       .then((res) => {
         setLoading(false);
-        console.log(`Auction details: ${res.data}`);
         const date = new Date(res.data.endedAt);
-        console.log(date);
         const miliseconds = date.getTime();
-        console.log(miliseconds);
         setEndedAt(miliseconds);
         setAuctionDetails(res.data);
       })
-      .catch((err) => {
-        console.log(err);
-      });
+      .catch((err) => {});
     fetchBidders(id)
       .then((res) => {
         setLoading(false);
 
-        console.log(res.data);
         setBids(res.data);
       })
-      .catch((err) => {
-        console.log(err);
-      });
+      .catch((err) => {});
 
     // SignalR onreceive
     if (signalRContext?.connection) {
-      signalRContext?.connection.on("ReceiveNewBid", (userName, auctionTitle) => {
-        fetchBidders(id)
-          .then((res) => {
-            setBids(res.data);
-          })
-          .catch((err) => {
-            console.log(err);
-          });
+      signalRContext?.connection.on(
+        "ReceiveNewBid",
+        (userName, auctionTitle) => {
+          fetchBidders(id)
+            .then((res) => {
+              setBids(res.data);
+            })
+            .catch((err) => {});
 
-        fetchAuctionDetail(id)
-          .then((res) => {
-            const date = new Date(res.data.endedAt);
-            const miliseconds = date.getTime();
-            setEndedAt(miliseconds);
-          })
-          .catch((err) => {
-            console.log(err);
-          });
-      });
+          fetchAuctionDetail(id)
+            .then((res) => {
+              const date = new Date(res.data.endedAt);
+              const miliseconds = date.getTime();
+              setEndedAt(miliseconds);
+            })
+            .catch((err) => {});
+        }
+      );
 
       signalRContext?.connection.on("ReceiveAuctionEnd", (auctionTitle) => {
         setIsOpenWinner(true);
@@ -140,7 +131,6 @@ const Live = () => {
         setIsOpenWinner(true);
       })
       .catch((err) => {
-        console.log(err);
         return <Error />;
       });
   };
@@ -242,39 +232,39 @@ const Live = () => {
                   auctionDetails.status === 1
                     ? "Chưa có nhân viên"
                     : auctionDetails.status === 0
-                      ? "Đang chờ duyệt"
-                      : auctionDetails.status === 2
-                        ? "Cập nhật thông tin"
-                        : auctionDetails.status === 3
-                          ? "Bị từ chối"
-                          : auctionDetails.status === 4
-                            ? "Mở đăng ký"
-                            : auctionDetails.status === 5
-                              ? "Đang diễn ra"
-                              : auctionDetails.status === 6
-                                ? "Đã kết thúc"
-                                : auctionDetails.status === 7
-                                  ? "Không thành công"
-                                  : "Đang cập nhật"
+                    ? "Đang chờ duyệt"
+                    : auctionDetails.status === 2
+                    ? "Cập nhật thông tin"
+                    : auctionDetails.status === 3
+                    ? "Bị từ chối"
+                    : auctionDetails.status === 4
+                    ? "Mở đăng ký"
+                    : auctionDetails.status === 5
+                    ? "Đang diễn ra"
+                    : auctionDetails.status === 6
+                    ? "Đã kết thúc"
+                    : auctionDetails.status === 7
+                    ? "Không thành công"
+                    : "Đang cập nhật"
                 }
                 color={
                   auctionDetails.status === 1
                     ? "info"
                     : auctionDetails.status === 0
-                      ? "warning"
-                      : auctionDetails.status === 2
-                        ? "warning"
-                        : auctionDetails.status === 3
-                          ? "error"
-                          : auctionDetails.status === 4
-                            ? "info"
-                            : auctionDetails.status === 5
-                              ? "success"
-                              : auctionDetails.status === 6
-                                ? "error"
-                                : auctionDetails.status === 7
-                                  ? "secondary"
-                                  : "warning"
+                    ? "warning"
+                    : auctionDetails.status === 2
+                    ? "warning"
+                    : auctionDetails.status === 3
+                    ? "error"
+                    : auctionDetails.status === 4
+                    ? "info"
+                    : auctionDetails.status === 5
+                    ? "success"
+                    : auctionDetails.status === 6
+                    ? "error"
+                    : auctionDetails.status === 7
+                    ? "secondary"
+                    : "warning"
                 }
               />
             </Box>
@@ -350,8 +340,8 @@ const Live = () => {
                       index === 0
                         ? `${colors.blueAccent[800]} !important`
                         : bid.status === 1
-                          ? "transparent"
-                          : "#e7e9eb",
+                        ? "transparent"
+                        : "#e7e9eb",
                     textDecoration: bid.status === 2 ? "line-through" : "",
                   }}>
                   {/* <Typography variant='h6'>{bid.bidder.name}</Typography>

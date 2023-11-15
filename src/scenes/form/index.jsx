@@ -27,7 +27,6 @@ const Form = () => {
     window.scrollTo(0, 0);
   }, []);
   const handleFormSubmit = (values) => {
-    console.log(values);
     createAccount(values)
       .then((res) => {
         // if (res.code === 200 || res.StatusCode === 200) {
@@ -46,7 +45,6 @@ const Form = () => {
         }
       })
       .catch((err) => {
-        console.log(err);
         toast.error("Create account failed");
       });
   };

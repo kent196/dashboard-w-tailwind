@@ -55,20 +55,14 @@ function App() {
       signalRContext.connection
         .start()
         .then(() => {
-          console.log("Connection started!");
-          signalRContext.connection.on("ReceiveMessage", (user, message) => {
-            console.log(`'${message}' - ${user}`);
-          });
+          signalRContext.connection.on("ReceiveMessage", (user, message) => {});
 
           signalRContext.connection.on(
             "ReceiveNewBid",
-            (userName, auctionTitle) => {
-              console.log(`'${userName} just place a bid in '${auctionTitle}'`);
-            }
+            (userName, auctionTitle) => {}
           );
 
           signalRContext.connection.on("ReceiveAuctionOpen", (auctionTitle) => {
-            console.log(`${auctionTitle} da bat dau`);
             toast.success(`'${auctionTitle}' đã bắt đầu!`, {
               position: "top-right",
               autoClose: 2000,
@@ -82,7 +76,6 @@ function App() {
           });
 
           signalRContext.connection.on("ReceiveAuctionEnd", (auctionTitle) => {
-            console.log(`${auctionTitle} da ket thuc`);
             toast.success(`'${auctionTitle}' đã kết thúc!`, {
               position: "top-right",
               autoClose: 2000,
@@ -98,7 +91,6 @@ function App() {
           signalRContext.connection.on(
             "ReceiveAuctionAboutToEnd",
             (auctionTitle) => {
-              console.log(`${auctionTitle} sap ket thuc`);
               toast.success(`'${auctionTitle}' chuẩn bị kết thúc!`, {
                 position: "top-right",
                 autoClose: 2000,
@@ -115,7 +107,6 @@ function App() {
           signalRContext.connection.on(
             "ReceiveAuctionAssigned",
             (auctionId, auctionTitle) => {
-              console.log(`${auctionTitle} da duoc assign cho ban`);
               toast.success(`'${auctionTitle}' đã được giao cho bạn!`, {
                 position: "top-right",
                 autoClose: 2000,
@@ -134,22 +125,15 @@ function App() {
             }
           );
         })
-        .catch((error) => {
-          console.log("Error while establishing connection :(");
-          console.log(error);
-        });
+        .catch((error) => {});
     }
 
     return () => {
       if (signalRContext?.connection) {
         signalRContext.connection
           .stop()
-          .then(() => {
-            console.log("stop connection");
-          })
-          .catch((err) => {
-            console.log(err);
-          });
+          .then(() => {})
+          .catch((err) => {});
       }
     };
   }, [signalRContext?.connection]);
@@ -158,14 +142,11 @@ function App() {
     // Check if the user is logged in
     const accessToken = localStorage.getItem("accessToken");
     if (!accessToken) {
-      console.log("No access token found");
       return;
     }
 
     const userRole = localStorage.getItem("role");
-    console.log("User role:", userRole);
     if (!userRole) {
-      console.log("No user role found");
       return;
     }
     setUser(userRole);

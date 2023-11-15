@@ -7,7 +7,6 @@ const fetchUsers = async (pageSize, pageNumber) => {
       `/user?PageSize=${pageSize}&PageNumber=${pageNumber}`
     );
     if (!response.data) {
-      console.log("No data");
     }
 
     return response.data;
@@ -21,7 +20,6 @@ const fetchAllStaffs = async (pageSize, pageNumber) => {
       `/staff?PageSize=${pageSize}&PageNumber=${pageNumber}`
     );
     if (!response.data) {
-      console.log("No data");
     }
 
     return response.data;
@@ -34,7 +32,6 @@ const fetchStaffs = async () => {
   try {
     const response = await authAxios.get("/staff/available");
     if (!response.data) {
-      console.log("No data");
     }
 
     return response.data;
@@ -49,7 +46,6 @@ const fetchCustomer = async (pageSize, pageNumber) => {
       `/user/customer?PageSize=${pageSize}&PageNumber=${pageNumber}`
     );
     if (!response.data) {
-      console.log("No data");
     }
 
     return response.data;
@@ -113,7 +109,6 @@ const fetchAllWithdrawRequest = async (pageSize, pageNumber) => {
       `/wallet/manager/withdraw?PageSize=${pageSize}&PageNumber=${pageNumber}`
     );
     if (!response.data) {
-      console.log("No data");
     }
 
     return response.data;
@@ -128,7 +123,6 @@ const handleWithdrawRequest = async (id, status) => {
       status: status,
     });
     if (!response.data) {
-      console.log("No data");
     }
     return response.data;
   } catch (error) {

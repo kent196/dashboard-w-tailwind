@@ -103,11 +103,9 @@ const Dashboard = () => {
   const handleViewAuctionDetail = (id) => {
     fetchAuctionDetail(id)
       .then((res) => {
-        console.log(res.data);
         setAuctionDetail(res.data);
       })
       .catch((err) => {
-        console.log(err);
         return <Error />;
       });
   };
@@ -127,23 +125,17 @@ const Dashboard = () => {
 
     fetchOrders()
       .then((res) => {
-        console.log(res.data);
         setOrders(res.data.list);
       })
-      .catch((err) => {
-        console.log(err);
-      });
+      .catch((err) => {});
   }, []);
 
   useEffect(() => {
     fetchProducts()
       .then((res) => {
-        console.log(res.data);
         setProducts(res.data.productList);
       })
-      .catch((err) => {
-        console.log(err);
-      });
+      .catch((err) => {});
     return () => {
       setProducts({});
     };
@@ -153,26 +145,18 @@ const Dashboard = () => {
     if (currentUser.role === 5) {
       fetchStaffEndedAuctions(filterValue)
         .then((res) => {
-          console.log(res.data);
           setAuctionsCount(res.data);
           setAuctions(res.data);
-          console.log("auction list");
-          console.log(auctions);
         })
-        .catch((err) => {
-          console.log(err);
-        });
+        .catch((err) => {});
     } else if (currentUser.role === 4 || currentUser.role === 3) {
       // If currentUser.role is not 5, you can handle it as needed
       fetchAllEndedAuctions(filterValue)
         .then((res) => {
-          console.log(res.data);
           setAuctionsCount(res.data);
           setAuctions(res.data);
         })
-        .catch((err) => {
-          console.log(err);
-        });
+        .catch((err) => {});
     }
 
     return () => {
@@ -186,9 +170,7 @@ const Dashboard = () => {
       .then((res) => {
         setCurrentUser(res.data);
       })
-      .catch((err) => {
-        console.log(err);
-      });
+      .catch((err) => {});
 
     return () => {
       setCurrentUser({});
@@ -199,38 +181,24 @@ const Dashboard = () => {
     if (currentUser.role === 5) {
       fetchCustomer()
         .then((res) => {
-          console.log("Count as staff");
-          console.log(res.data);
           setCustomers(res.data.customerList);
           setCustomerCount(res.data.count);
-          console.log(customerCount);
         })
-        .catch((err) => {
-          console.log(err);
-        });
+        .catch((err) => {});
     } else if (currentUser.role === 4) {
       fetchAllStaffs()
         .then((res) => {
-          console.log(res.data);
           setCustomers(res.data.customerList);
           setCustomerCount(res.data.count);
-          console.log(customers);
         })
-        .catch((err) => {
-          console.log(err);
-        });
+        .catch((err) => {});
     } else if (currentUser.role === 3) {
       fetchUsers()
         .then((res) => {
-          console.log("Count as admin");
-
-          console.log(res.data);
           setCustomers(res.data.userList);
           setCustomerCount(res.data.count);
         })
-        .catch((err) => {
-          console.log(err);
-        });
+        .catch((err) => {});
     }
   }, [currentUser.role]);
 

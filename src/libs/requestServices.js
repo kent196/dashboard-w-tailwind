@@ -8,7 +8,6 @@ const fetchSellerRequests = async (pageSize, page) => {
   if (!rs.data) {
     return <Error />;
   }
-  console.log(rs.data);
   return rs.data;
 };
 
@@ -17,7 +16,6 @@ const rejectSellerRequest = async (id) => {
   if (!rs.data) {
     return <Error />;
   }
-  console.log(rs.data);
   return rs.data;
 };
 
@@ -26,7 +24,6 @@ const acceptSellerRequest = async (id) => {
   if (!rs.data) {
     return <Error />;
   }
-  console.log(rs.data);
   return rs.data;
 };
 export { fetchSellerRequests, rejectSellerRequest, acceptSellerRequest };

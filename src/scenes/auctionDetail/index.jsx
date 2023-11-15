@@ -77,7 +77,6 @@ const AuctionDetail = () => {
   const { id } = useParams();
 
   const handleAuctionApproval = (auctionId, formData) => {
-    console.log(auctionId, formData);
     updateAuctionInfo(auctionId, formData)
       .then((res) => {
         setAuction(res.data);
@@ -100,13 +99,11 @@ const AuctionDetail = () => {
             setAuction(res.data);
           })
           .catch((err) => {
-            console.log(err);
             return <Error />;
           });
         // navigate(`/auctions`);
       })
       .catch((err) => {
-        console.log(err);
         toast.error("Thông tin cập nhật chưa hợp lệ", {
           position: "top-right",
           autoClose: 2000,
@@ -130,9 +127,7 @@ const AuctionDetail = () => {
         setAuction(res.data);
         navigate(`/auctions`);
       })
-      .catch((err) => {
-        console.log(err);
-      });
+      .catch((err) => {});
   };
 
   const handleViewProduct = (productId) => {
@@ -141,13 +136,11 @@ const AuctionDetail = () => {
     // Fetch product details
     fetchProduct(productId)
       .then((res) => {
-        console.log(res.data);
         setProductDetails(res.data);
         // Set isLoadingProductDetails to false when loading is complete
         setIsLoadingProductDetails(false);
       })
       .catch((err) => {
-        console.log(err);
         // Set isLoadingProductDetails to false on error as well
         setIsLoadingProductDetails(false);
       });
@@ -157,26 +150,20 @@ const AuctionDetail = () => {
   const handleFetchBidders = (auctionId) => {
     fetchBidders(auctionId)
       .then((res) => {
-        console.log(`List of bidders: ${res.data}`);
         setBidders(res.data);
       })
-      .catch((err) => {
-        console.log(err);
-      });
+      .catch((err) => {});
   };
 
   // useEffect(() => {
   //   fetchBidders(id)
   //     .then((res) => {
-  //       console.log(res.data);
   //       setBidders(res.data);
   //     })
   //     .catch((err) => {
-  //       console.log(err);
   //     });
   //   return () => {
   //     setBidders([]);
-  //     console.log("unmount bidders");
   //   };
   // }, []);
 
@@ -184,7 +171,6 @@ const AuctionDetail = () => {
     setIsLoadingAuctionDetail(true);
     fetchAuctionDetail(id)
       .then((res) => {
-        console.log(`Auction details: ${res.data}`);
         setAuction(res.data);
         setSelectedStartDate(res.data.startedAt);
         setSelectedEndDate(res.data.endedAt);
@@ -196,11 +182,8 @@ const AuctionDetail = () => {
           registrationStart: res.data.registrationStart,
           registrationEnd: res.data.registrationEnd,
         });
-
-        console.log(`Form data ${formData}`);
       })
       .catch((err) => {
-        console.log(err);
         return <Error />;
       })
       .finally(() => {
@@ -211,13 +194,9 @@ const AuctionDetail = () => {
   function openRegistrationList() {
     fetchAuctionRegisters(id)
       .then((res) => {
-        console.log(`List of registers: ${res.data}`);
         setRegisList(res.data);
-        console.log(`Regis list: ${regisList}`);
       })
-      .catch((err) => {
-        console.log(err);
-      });
+      .catch((err) => {});
     setIsOpenRegisList(true);
   }
 
@@ -241,7 +220,6 @@ const AuctionDetail = () => {
       setSelectedEndDate(null);
       setSelectedRegisStart(null);
       setSelectedRegisEnd(null);
-      console.log("unmount auction details");
     };
   }, []);
   if (auction === null) {

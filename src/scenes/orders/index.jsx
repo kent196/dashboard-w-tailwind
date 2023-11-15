@@ -90,13 +90,10 @@ const Orders = () => {
 
     fetchOrders(paginationModel.pageSize, paginationModel.page + 1, filterValue)
       .then((res) => {
-        console.log(res.data);
         setOrdersCount(res.data.count);
         setOrders(res.data.list);
       })
-      .catch((err) => {
-        console.log(err);
-      });
+      .catch((err) => {});
 
     return () => {
       setOrders([]);
@@ -109,7 +106,6 @@ const Orders = () => {
     // if (!res) {
     //   return <Box>Order not found</Box>;
     // }
-    // console.log(res);
     // setOrderDetails(res);
     navigate(`/orders/${orderId}`);
   };

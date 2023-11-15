@@ -9,9 +9,7 @@ const fetchOrderDetails = async (orderId) => {
       throw new Error("No data found");
     }
     return response.data;
-  } catch (error) {
-    console.log(error);
-  }
+  } catch (error) {}
 };
 
 const fetchOrders = async (pageSize, page, status) => {
@@ -22,9 +20,7 @@ const fetchOrders = async (pageSize, page, status) => {
       throw new Error("No data found");
     }
     return response.data;
-  } catch (error) {
-    console.log(error);
-  }
+  } catch (error) {}
 };
 const fetchPageAmmount = async () => {
   const path = `/order`;
@@ -34,9 +30,7 @@ const fetchPageAmmount = async () => {
       throw new Error("No data found");
     }
     return response.data;
-  } catch (error) {
-    console.log(error);
-  }
+  } catch (error) {}
 };
 
 export { fetchOrderDetails, fetchOrders, fetchPageAmmount };

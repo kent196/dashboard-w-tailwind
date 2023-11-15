@@ -54,10 +54,6 @@ const Profile = () => {
       ...formData,
       [name]: value,
     });
-    console.log({
-      ...formData,
-      [name]: value,
-    });
   };
 
   async function handleUpload() {
@@ -72,7 +68,6 @@ const Profile = () => {
     const url = await ref.getDownloadURL();
     setImageAsUrl(url);
     setFile(null);
-    console.log(`Image url: ${url}`);
     return url;
   }
 
@@ -91,7 +86,6 @@ const Profile = () => {
 
     update(newFormdata)
       .then((res) => {
-        console.log(res);
         toast.success("Cập nhật thông tin thành công", {
           position: "top-right",
           autoClose: 2000,
@@ -105,7 +99,6 @@ const Profile = () => {
         setIsEditing(false);
       })
       .catch((err) => {
-        console.log(err);
         return <Error />;
       });
 
@@ -125,9 +118,7 @@ const Profile = () => {
           dob: currentUser.dob,
         });
       })
-      .catch((err) => {
-        console.log(err);
-      });
+      .catch((err) => {});
   }, [isEditing]);
   return (
     <Container maxWidth='xl' sx={{ paddingTop: "20px" }}>
@@ -428,7 +419,6 @@ const Profile = () => {
                   onClick={() => {
                     setImageAsUrl(currentUser.profilePicture);
                     setIsEditing(true);
-                    console.log(currentUser);
                   }}>
                   Cập nhật
                 </Button>

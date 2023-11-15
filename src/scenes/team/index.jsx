@@ -66,12 +66,9 @@ const Team = () => {
 
     fetchUserData()
       .then((res) => {
-        console.log(res.data.role);
         setCurrentUser(res.data);
       })
-      .catch((err) => {
-        console.log(err);
-      });
+      .catch((err) => {});
   }, []);
 
   useEffect(() => {
@@ -82,35 +79,24 @@ const Team = () => {
             setCustomerCount(res.data.count);
 
             setUsers(res.data.userList);
-            console.log(res.data);
-            console.log(users);
           })
-          .catch((err) => {
-            console.log(err);
-          });
+          .catch((err) => {});
       } else if (currentUser.role === 4) {
         fetchAllStaffs(paginationModel.pageSize, paginationModel.page + 1)
           .then((res) => {
             setCustomerCount(res.data.count);
             setUsers(res.data.staffList);
-            console.log(res.data);
           })
-          .catch((err) => {
-            console.log(err);
-          });
+          .catch((err) => {});
       } else if (currentUser.role === 5) {
         fetchCustomer(paginationModel.pageSize, paginationModel.page + 1)
           .then((res) => {
-            console.log(res.data);
             setCustomerCount(res.data.count);
             setCustomers(res.data.customerList);
           })
-          .catch((err) => {
-            console.log(err);
-          });
+          .catch((err) => {});
       }
     } catch (err) {
-      console.log(err);
       return <Error />;
     }
   }, [paginationModel, currentUser.role]);

@@ -42,13 +42,11 @@ const OrderDetail = () => {
     // Fetch product details
     fetchProduct(productId)
       .then((res) => {
-        console.log(res.data);
         setProductDetails(res.data);
         // Set isLoadingProductDetails to false when loading is complete
         setIsLoading(false);
       })
       .catch((err) => {
-        console.log(err);
         // Set isLoadingProductDetails to false on error as well
         setIsLoading(false);
       });
@@ -60,13 +58,9 @@ const OrderDetail = () => {
 
     fetchOrderDetails(id)
       .then((res) => {
-        console.log(`Response: ${res}`);
         setOrderDetail(res.data);
-        console.log(`Order details: ${orderDetail}`);
       })
-      .catch((err) => {
-        console.log(err);
-      });
+      .catch((err) => {});
     // cleanup
     return () => {
       setOrderDetail({ totalAmount: 0, shippingCost: 0, orderItems: [] });
@@ -228,7 +222,6 @@ const OrderDetail = () => {
                   }}
                   key={item.productId}
                   onClick={() => {
-                    console.log(item.id);
                     handleViewProduct(item.productId);
                   }}
                   display={"flex"}

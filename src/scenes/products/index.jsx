@@ -52,9 +52,7 @@ const Products = () => {
 
     fetchProducts(paginationModel.pageSize, paginationModel.page)
       .then((res) => {
-        console.log(paginationModel);
         setproductsCount(res.data.count);
-        console.log(res.data.productList);
         setProducts(res.data.productList);
       })
       .catch((err) => {
@@ -62,7 +60,6 @@ const Products = () => {
       });
     return () => {
       setProducts([]);
-      console.log("unmount products");
     };
   }, [paginationModel]);
 
@@ -84,12 +81,9 @@ const Products = () => {
     setIsOpenConfirmDelete(true);
     fetchProduct(productId)
       .then((res) => {
-        console.log(res.data);
         setProductDetails(res.data);
       })
-      .catch((err) => {
-        console.log(err);
-      });
+      .catch((err) => {});
   };
 
   const handleViewProduct = (productId) => {
@@ -99,13 +93,11 @@ const Products = () => {
     // Fetch product details
     fetchProduct(productId)
       .then((res) => {
-        console.log(res.data);
         setProductDetails(res.data);
         // Set isLoadingProductDetails to false when loading is complete
         setIsLoadingProductDetails(false);
       })
       .catch((err) => {
-        console.log(err);
         // Set isLoadingProductDetails to false on error as well
         setIsLoadingProductDetails(false);
       });

@@ -37,12 +37,10 @@ const SellerRequest = () => {
   useEffect(() => {
     fetchSellerRequests(paginationModel.pageSize, paginationModel.page + 1)
       .then((res) => {
-        console.log(res.data);
         setRequest(res.data.list);
         setReqCount(res.data.count);
       })
       .catch((err) => {
-        console.log(err);
         navigate("/error");
       });
   }, [paginationModel]);
@@ -60,20 +58,16 @@ const SellerRequest = () => {
           progress: undefined,
           theme: "light",
         });
-        console.log(res.data);
         fetchSellerRequests(paginationModel.pageSize, paginationModel.page + 1)
           .then((res) => {
-            console.log(res.data);
             setRequest(res.data.list);
             setReqCount(res.data.count);
           })
           .catch((err) => {
-            console.log(err);
             navigate("/error");
           });
       })
       .catch((err) => {
-        console.log(err);
         return <Error />;
       });
   };
@@ -91,20 +85,16 @@ const SellerRequest = () => {
           progress: undefined,
           theme: "light",
         });
-        console.log(res.data);
         fetchSellerRequests(paginationModel.pageSize, paginationModel.page + 1)
           .then((res) => {
-            console.log(res.data);
             setRequest(res.data.list);
             setReqCount(res.data.count);
           })
           .catch((err) => {
-            console.log(err);
             navigate("/error");
           });
       })
       .catch((err) => {
-        console.log(err);
         return <Error />;
       });
   };

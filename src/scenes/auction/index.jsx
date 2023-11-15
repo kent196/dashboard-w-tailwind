@@ -1,4 +1,4 @@
-import React, {useContext} from "react";
+import React, { useContext } from "react";
 import {
   Box,
   Button,
@@ -67,9 +67,7 @@ const Auction = ({ userId }) => {
       .then((res) => {
         setCurrentUser(res.data);
       })
-      .catch((err) => {
-        console.log(err);
-      });
+      .catch((err) => {});
 
     if (signalRContext?.connection) {
       signalRContext.connection.on("ReceiveAuctionOpen", (auctionTitle) => {
@@ -80,23 +78,23 @@ const Auction = ({ userId }) => {
         getAuctionByStaff();
       });
 
-      signalRContext.connection.on("ReceiveAuctionAssigned", (auctionId, auctionTitle) => {
-        getAuctionByStaff();
-      });
+      signalRContext.connection.on(
+        "ReceiveAuctionAssigned",
+        (auctionId, auctionTitle) => {
+          getAuctionByStaff();
+        }
+      );
     }
   }, []);
 
   function getAuctionByStaff() {
     fetchStaffAuctions(paginationModel.pageSize, paginationModel.page)
       .then((res) => {
-        console.log(paginationModel);
         setAuctionCount(res.data.count);
         setAuctions(res.data.auctionList);
         setIsLoading(false); // Set isLoading to false when data is loaded
-        console.log(res.data);
       })
       .catch((err) => {
-        console.log(err);
         setIsLoading(false); // Set isLoading to false on error as well
       });
   }
@@ -105,7 +103,6 @@ const Auction = ({ userId }) => {
     getAuctionByStaff();
     return () => {
       setAuctions([]);
-      console.log("unmount");
     };
   }, [paginationModel]);
 
@@ -181,39 +178,39 @@ const Auction = ({ userId }) => {
             params.row.status === 1
               ? "Chưa có nhân viên"
               : params.row.status === 2
-                ? "Cập nhật thông tin"
-                : params.row.status === 0
-                  ? "Đang chờ duyệt"
-                  : params.row.status === 3
-                    ? "Bị từ chối"
-                    : params.row.status === 4
-                      ? "Mở đăng ký"
-                      : params.row.status === 5
-                        ? "Đang diễn ra"
-                        : params.row.status === 6
-                          ? "Đã kết thúc"
-                          : params.row.status === 7
-                            ? "Bán không thành công"
-                            : "Đang cập nhật"
+              ? "Cập nhật thông tin"
+              : params.row.status === 0
+              ? "Đang chờ duyệt"
+              : params.row.status === 3
+              ? "Bị từ chối"
+              : params.row.status === 4
+              ? "Mở đăng ký"
+              : params.row.status === 5
+              ? "Đang diễn ra"
+              : params.row.status === 6
+              ? "Đã kết thúc"
+              : params.row.status === 7
+              ? "Bán không thành công"
+              : "Đang cập nhật"
           }
           color={
             params.row.status === 1
               ? "info"
               : params.row.status === 2
-                ? "warning"
-                : params.row.status === 0
-                  ? "warning"
-                  : params.row.status === 3
-                    ? "error"
-                    : params.row.status === 4
-                      ? "info"
-                      : params.row.status === 5
-                        ? "success"
-                        : params.row.status === 6
-                          ? "error"
-                          : params.row.status === 7
-                            ? "secondary"
-                            : "warning"
+              ? "warning"
+              : params.row.status === 0
+              ? "warning"
+              : params.row.status === 3
+              ? "error"
+              : params.row.status === 4
+              ? "info"
+              : params.row.status === 5
+              ? "success"
+              : params.row.status === 6
+              ? "error"
+              : params.row.status === 7
+              ? "secondary"
+              : "warning"
           }
         />
       ),

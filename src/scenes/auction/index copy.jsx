@@ -72,35 +72,27 @@ const AuctionManager = () => {
   }, [auctionsCount, setRowCountState]);
 
   const handleRerender = () => {
-    console.log("handleRerender called");
     setRerender(!rerender);
   };
 
   const handleOpenRegisList = (auctionId) => {
     fetchAuctionRegisters(auctionId)
       .then((res) => {
-        console.log(`List of registers: ${res.data}`);
-
         setRegisList(res.data);
         setIsOpenRegisList(true);
       })
-      .catch((err) => {
-        console.log(err);
-      });
+      .catch((err) => {});
   };
 
   // useEffect(() => {
   //   fetchAuctionRegisters(auctionDetails.id)
   //     .then((res) => {
-  //       console.log(`List of registers: ${res.data}`);
   //       setRegisList(res.data);
   //     })
   //     .catch((err) => {
-  //       console.log(err);
   //     });
   //   return () => {
   //     setRegisList([]);
-  //     console.log("unmount regis list");
   //   };
   // }, []);
 
@@ -115,7 +107,6 @@ const AuctionManager = () => {
         });
       })
       .catch((err) => {
-        console.log(err);
         navigate("/error");
       });
   };
@@ -131,7 +122,6 @@ const AuctionManager = () => {
         });
       })
       .catch((err) => {
-        console.log(err);
         navigate("/error");
       });
   };
@@ -142,13 +132,11 @@ const AuctionManager = () => {
     // Fetch product details
     fetchProduct(productId)
       .then((res) => {
-        console.log(res.data);
         setProductDetails(res.data);
         // Set isLoadingProductDetails to false when loading is complete
         setIsLoading(false);
       })
       .catch((err) => {
-        console.log(err);
         // Set isLoadingProductDetails to false on error as well
         setIsLoading(false);
       });
@@ -160,31 +148,23 @@ const AuctionManager = () => {
 
     fetchBidders(id)
       .then((res) => {
-        console.log(res.data);
         setBidders(res.data);
       })
-      .catch((err) => {
-        console.log(err);
-      });
+      .catch((err) => {});
     return () => {
       setBidders([]);
-      console.log("unmount bidders");
     };
   }, []);
 
   useEffect(() => {
     fetchUserData()
       .then((res) => {
-        console.log(res.data.role);
         setUser(res.data);
       })
-      .catch((err) => {
-        console.log(err);
-      });
+      .catch((err) => {});
   }, []);
 
   const handleAssignStaff = (auctionId, staffId) => {
-    console.log(auctionId, staffId);
     addStaffToHost(auctionId, staffId)
       .then((res) => {
         fetchAuctionDetail(auctionId).then((res) => {
@@ -193,24 +173,18 @@ const AuctionManager = () => {
         fetchAuctions().then((res) => {
           setAuctions(res.data.auctionList);
         });
-        console.log(res.data);
       })
-      .catch((err) => {
-        console.log(err);
-      });
+      .catch((err) => {});
   };
 
   useEffect(() => {
     fetchAuctions(paginationModel.pageSize, paginationModel.page)
       .then((res) => {
-        console.log(paginationModel);
-        console.log(res.data);
         setAuctionsCount(res.data.count);
         setAuctions(res.data.auctionList);
         setIsLoading(false); // Set isLoading to false when data is loaded
       })
       .catch((err) => {
-        console.log(err);
         setIsLoading(false); // Set isLoading to false on error as well
       });
     return () => {
@@ -246,23 +220,17 @@ const AuctionManager = () => {
   const handleFetchBidders = (auctionId) => {
     fetchBidders(auctionId)
       .then((res) => {
-        console.log(res.data);
         setBidders(res.data);
       })
-      .catch((err) => {
-        console.log(err);
-      });
+      .catch((err) => {});
   };
 
   const handleFetchRegisters = (auctionId) => {
     fetchAuctionRegisters(auctionId)
       .then((res) => {
-        console.log(`List of registers: ${res.data}`);
         setRegisList(res.data);
       })
-      .catch((err) => {
-        console.log(err);
-      });
+      .catch((err) => {});
   };
 
   const handleViewAuction = (auctionId) => {
@@ -271,9 +239,7 @@ const AuctionManager = () => {
         setAuctionDetails(res.data);
         setIsOpenViewAuction(true);
       })
-      .catch((err) => {
-        console.log(err);
-      });
+      .catch((err) => {});
   };
   const columns = [
     { field: "id", headerName: "ID" },

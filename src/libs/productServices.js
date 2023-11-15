@@ -13,9 +13,7 @@ const fetchProducts = async (pageSize, pageNumber) => {
       throw new Error("Error");
     }
     return response.data;
-  } catch (error) {
-    console.log(error);
-  }
+  } catch (error) {}
 };
 const fetchAuctionProducts = async () => {
   const path = "/product?type=2";
@@ -27,9 +25,7 @@ const fetchAuctionProducts = async () => {
       throw new Error("Error");
     }
     return response.data;
-  } catch (error) {
-    console.log(error);
-  }
+  } catch (error) {}
 };
 
 const fetchProduct = async (id) => {
@@ -40,9 +36,7 @@ const fetchProduct = async (id) => {
       throw new Error("Error");
     }
     return response.data;
-  } catch (error) {
-    console.log(error);
-  }
+  } catch (error) {}
 };
 
 export { fetchProducts, fetchProduct, fetchAuctionProducts };

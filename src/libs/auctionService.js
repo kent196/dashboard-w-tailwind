@@ -9,7 +9,6 @@ const fetchAuctions = async (pageSize, pageNumber) => {
       `/auction/manager?PageSize=${pageSize}&PageNumber=${pageNumber + 1}`
     );
     if (!response.data) {
-      console.log("No data");
     }
 
     return response.data;
@@ -25,7 +24,6 @@ const fetchStaffAuctions = async (pageSize, pageNumber) => {
     );
 
     if (!response.data) {
-      console.log("No data");
     }
 
     return response.data;
@@ -37,7 +35,6 @@ const fetchAuctionDetail = async (id) => {
   try {
     const response = await publicAxios.get(`/auction/${id}`);
     if (!response.data) {
-      console.log("No data");
     }
 
     return response.data;
@@ -50,7 +47,6 @@ const fetchBidders = async (id) => {
   try {
     const response = await publicAxios.get(`/bid/auction/${id}?status=1`);
     if (!response.data) {
-      console.log("No data");
     }
 
     return response.data;
@@ -64,7 +60,6 @@ const addStaffToHost = async (auctionId, staffId) => {
   try {
     const response = await authAxios.get(path);
     if (!response.data) {
-      console.log("No data");
     }
 
     return response.data;
@@ -78,7 +73,6 @@ const auctionApproval = async (auctionId, startedDate, endedDate) => {
   try {
     const response = await authAxios.get(path);
     if (!response.data) {
-      console.log("No data");
     }
 
     return response.data;
@@ -91,7 +85,6 @@ const auctionReject = async (auctionId) => {
   try {
     const response = await authAxios.get(path);
     if (!response.data) {
-      console.log("No data");
     }
 
     return response.data;
@@ -105,7 +98,6 @@ const managerApproval = async (auctionId) => {
   try {
     const response = await authAxios.get(path);
     if (!response.data) {
-      console.log("No data");
     }
 
     return response.data;
@@ -119,7 +111,6 @@ const managerReject = async (auctionId) => {
   try {
     const response = await authAxios.get(path);
     if (!response.data) {
-      console.log("No data");
     }
 
     return response.data;
@@ -133,7 +124,6 @@ const updateAuctionInfo = async (auctionId, formData) => {
   try {
     const response = await authAxios.post(path, formData);
     if (!response.data) {
-      console.log("No data");
     }
 
     return response.data;
@@ -147,7 +137,6 @@ const fetchAuctionRegisters = async (auctionId) => {
   try {
     const response = await authAxios.get(path);
     if (!response.data) {
-      console.log("No data");
     }
     return response.data;
   } catch (error) {
@@ -160,7 +149,6 @@ const endAuction = async (auctionId) => {
   try {
     const response = await authAxios.get(path);
     if (!response.data) {
-      console.log("No data");
     }
     return response.data;
   } catch (error) {
@@ -172,7 +160,6 @@ const fetchStaffEndedAuctions = async (monthRange) => {
   try {
     const response = await authAxios.get(path);
     if (!response.data) {
-      console.log("No data");
     }
     return response.data;
   } catch (error) {
@@ -185,7 +172,6 @@ const fetchAllEndedAuctions = async (monthRange) => {
   try {
     const response = await authAxios.get(path);
     if (!response.data) {
-      console.log("No data");
     }
     return response.data;
   } catch (error) {

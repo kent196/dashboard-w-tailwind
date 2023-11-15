@@ -14,7 +14,6 @@ const ChangePassword = () => {
   // Effect to reset the form when resetForm state changes
   useEffect(() => {
     if (resetForm) {
-      console.log("reset form");
       setFormData({});
       setResetForm(false);
     }
@@ -31,7 +30,6 @@ const ChangePassword = () => {
   const handleUpdatePassword = (formData) => {
     updateUserPassword(formData)
       .then((res) => {
-        console.log(res.data);
         toast.success("Đổi mật khẩu thành công", {
           position: toast.POSITION.TOP_RIGHT,
           autoClose: 2000,
@@ -40,7 +38,6 @@ const ChangePassword = () => {
         setErrorMsg(null);
       })
       .catch((err) => {
-        console.log(err.response.data.Message);
         setErrorMsg(err.response.data.message || err.response.data.Message);
       });
   };

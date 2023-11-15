@@ -28,7 +28,6 @@ const Login = () => {
   // Effect to reset the form when resetForm state changes
   useEffect(() => {
     if (resetForm) {
-      console.log("reset form");
       setFormData({});
       setResetForm(false);
     }
@@ -71,11 +70,8 @@ const Login = () => {
   const handleLogin = async () => {
     try {
       setLoading(true);
-      console.log("Sending login request...");
 
       const response = await axios.post("/staff/login", formData);
-
-      console.log("Response received:", response.data);
 
       setFormData({}); // Clear the form
       if (response.status === 200) {
@@ -93,14 +89,11 @@ const Login = () => {
         const refreshToken = response.data.data.refreshToken;
         localStorage.setItem("accessToken", accessToken);
         localStorage.setItem("refreshToken", refreshToken);
-        console.log(localStorage.accessToken);
-        console.log(localStorage.refreshToken);
         buildConnection();
         setFormData({});
         setError(null);
         navigate("/dashboard"); // Navigate to the auctions page
       } else if (response.status === 401) {
-        console.log(response.data.message);
         setError(response.data.message);
         // Handle the login failure
       }

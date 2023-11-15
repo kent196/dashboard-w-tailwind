@@ -48,33 +48,24 @@ const Withdraw = () => {
   useEffect(() => {
     fetchAllWithdrawRequest(paginationModel.pageSize, paginationModel.page + 1)
       .then((res) => {
-        console.log(res.data);
         setRequestCount(res.data.count);
         setRequest(res.data.list);
       })
       .catch((err) => {
-        console.log(err);
         navigate("/error");
       });
     fetchUserData()
       .then((res) => {
-        console.log(res.data);
         setCurrentUser(res.data);
       })
       .catch((err) => {
-        console.log(err);
         navigate("/error");
       });
   }, [paginationModel]);
 
   const handleApprove = (id, status) => {
-    console.log("ID");
-    console.log(id);
     handleWithdrawRequest(id, status)
       .then((res) => {
-        console.log("ID");
-        console.log(id);
-        console.log(res.data);
         toast.success("Đã xác nhận", {
           position: "top-right",
           autoClose: 2000,
@@ -90,17 +81,14 @@ const Withdraw = () => {
           paginationModel.page + 1
         )
           .then((res) => {
-            console.log(res.data);
             setRequest(res.data.list);
             setRequestCount(res.data.count);
           })
           .catch((err) => {
-            console.log(err);
             navigate("/error");
           });
       })
       .catch((err) => {
-        console.log(err);
         return <Error />;
       });
   };
@@ -108,9 +96,6 @@ const Withdraw = () => {
   const handleReject = (id, status) => {
     handleWithdrawRequest(id, status)
       .then((res) => {
-        console.log("ID");
-        console.log(id);
-        console.log(res.data);
         toast.error("Đã từ chối", {
           position: "top-right",
           autoClose: 2000,
@@ -126,17 +111,14 @@ const Withdraw = () => {
           paginationModel.page + 1
         )
           .then((res) => {
-            console.log(res.data);
             setRequest(res.data.list);
             setRequestCount(res.data.count);
           })
           .catch((err) => {
-            console.log(err);
             navigate("/error");
           });
       })
       .catch((err) => {
-        console.log(err);
         return <Error />;
       });
   };

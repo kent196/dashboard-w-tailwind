@@ -34,7 +34,6 @@ const AuctionProducts = () => {
 
     fetchAuctionProducts()
       .then((res) => {
-        console.log(res.data.productList);
         setProducts(res.data.productList);
       })
       .catch((err) => {
@@ -63,24 +62,18 @@ const AuctionProducts = () => {
     setIsOpenConfirmDelete(true);
     fetchProduct(productId)
       .then((res) => {
-        console.log(res.data);
         setProductDetails(res.data);
       })
-      .catch((err) => {
-        console.log(err);
-      });
+      .catch((err) => {});
   };
 
   const handleViewProduct = (productId) => {
     // Navigate to the user detail page with the user's ID
     fetchProduct(productId)
       .then((res) => {
-        console.log(res.data);
         setProductDetails(res.data);
       })
-      .catch((err) => {
-        console.log(err);
-      });
+      .catch((err) => {});
     setIsOpenProductDetail(true);
   };
   const column = [
