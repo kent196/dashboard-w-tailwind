@@ -228,7 +228,7 @@ const Team = () => {
       return (
         <Container maxWidth='xl' sx={{ paddingTop: "20px" }}>
           <Helmet>
-            <title>User Management</title>
+            <title>Người dùng</title>
           </Helmet>
           <Header
             title={

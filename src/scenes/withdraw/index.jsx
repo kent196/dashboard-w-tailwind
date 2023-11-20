@@ -22,6 +22,7 @@ import {
 } from "../../libs/userService";
 import { formatPrice } from "../../libs/formaters";
 import { fetchUserData } from "../../libs/accountServices";
+import { Helmet } from "react-helmet";
 
 const Withdraw = () => {
   const navigate = useNavigate();
@@ -194,6 +195,9 @@ const Withdraw = () => {
 
   return (
     <Container maxWidth='xl' sx={{ paddingTop: "20px" }}>
+      <Helmet>
+        <title>Nạp rút</title>
+      </Helmet>
       <Header title='Rút tiền về tài khoản' />
       <Box
         m={"20px 0"} // Reduced top margin
@@ -236,19 +240,37 @@ const Withdraw = () => {
             },
           },
         }}>
-        <DataGrid
-          style={{
-            fontSize: "18px",
-          }}
-          rows={request}
-          columns={columns}
-          components={{ Toolbar: GridToolbar }}
-          rowCount={rowCountState}
-          pageSizeOptions={[1, 3, 5]}
-          paginationModel={paginationModel}
-          paginationMode='server'
-          onPaginationModelChange={setPaginationModel}
-        />
+        {requestCount === 0 ? (
+          <Box
+            display={"flex"}
+            justifyContent={"flex-start"}
+            gap={"20px"}
+            alignItems={"center"}>
+            <Typography variant='h4' fontWeight={"bold"}>
+              Không có yêu cầu nào
+            </Typography>
+            <Button
+              variant='contained'
+              color='primary'
+              onClick={() => navigate("/dashboard")}>
+              Trở về trang chủ
+            </Button>
+          </Box>
+        ) : (
+          <DataGrid
+            style={{
+              fontSize: "18px",
+            }}
+            rows={request}
+            columns={columns}
+            components={{ Toolbar: GridToolbar }}
+            rowCount={rowCountState}
+            pageSizeOptions={[1, 3, 5]}
+            paginationModel={paginationModel}
+            paginationMode='server'
+            onPaginationModelChange={setPaginationModel}
+          />
+        )}
       </Box>
     </Container>
   );

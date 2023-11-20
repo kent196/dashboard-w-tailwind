@@ -67,7 +67,7 @@ const Form = () => {
   return (
     <Box m={"20px"}>
       <Helmet>
-        <title>Create User</title>
+        <title>Tạo tài khoản</title>
       </Helmet>
       <Header
         title={"TẠO TÀI KHOẢN"}

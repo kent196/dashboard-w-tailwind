@@ -18,6 +18,7 @@ import { useEffect } from "react";
 import { fetchOrderDetails } from "../../libs/orderService";
 import { fetchProduct } from "../../libs/productServices";
 import ProductDetailModal from "../../components/ProductDetailModal";
+import { Helmet } from "react-helmet";
 
 const OrderDetail = () => {
   const theme = useTheme();
@@ -85,6 +86,9 @@ const OrderDetail = () => {
 
   return (
     <Container maxWidth='xl' sx={{ paddingTop: "20px" }}>
+      <Helmet>
+        <title>Chi tiết đơn hàng</title>
+      </Helmet>
       {/* Nav */}
       <Box
         p={"10px"}

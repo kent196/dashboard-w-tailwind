@@ -5,6 +5,7 @@ import { useState } from "react";
 import { updateUserPassword } from "../../libs/userService";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { Helmet } from "react-helmet";
 
 const ChangePassword = () => {
   const [formData, setFormData] = useState({});
@@ -43,6 +44,9 @@ const ChangePassword = () => {
   };
   return (
     <Container maxWidth='xl' sx={{ paddingTop: "20px" }}>
+      <Helmet>
+        <title>Cập nhật mật khẩu</title>
+      </Helmet>
       <Box
         display={"flex"}
         flexDirection={"column"}

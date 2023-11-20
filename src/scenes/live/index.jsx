@@ -33,6 +33,7 @@ import Error from "../../global/Error";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { SignalRContext } from "../../context/SignalRContext";
+import { Helmet } from "react-helmet";
 
 const Live = () => {
   const theme = useTheme();
@@ -144,6 +145,9 @@ const Live = () => {
   }
   return (
     <Container maxWidth='xl' sx={{ paddingTop: "20px", maxHeight: "100vh" }}>
+      <Helmet>
+        <title>Đang diễn ra</title>
+      </Helmet>
       <Box
         p={"10px"}
         borderRadius={"5px"}

@@ -4,6 +4,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { mockDataProducts } from "../../data/mockData";
 import Header from "../../components/Header";
 import { ArrowBack } from "@mui/icons-material";
+import { Helmet } from "react-helmet";
 
 const ProductDetail = () => {
   const navigate = useNavigate();
@@ -29,6 +30,9 @@ const ProductDetail = () => {
 
   return (
     <Container maxWidth='xl' sx={{ paddingTop: "20px" }}>
+      <Helmet>
+        <title>Chi tiết sản phẩm</title>
+      </Helmet>
       <Box>
         <Box
           display={"flex"}

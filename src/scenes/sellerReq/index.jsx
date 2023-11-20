@@ -16,6 +16,7 @@ import Error from "../../global/Error";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Header from "../../components/Header";
+import { Helmet } from "react-helmet";
 
 const SellerRequest = () => {
   const navigate = useNavigate();
@@ -157,6 +158,9 @@ const SellerRequest = () => {
 
   return (
     <Container maxWidth='xl' sx={{ paddingTop: "20px" }}>
+      <Helmet>
+        <title>Yêu cầu</title>
+      </Helmet>
       <Header title='Yêu cầu trở thành người bán' />
       <Box
         m={"20px 0"} // Reduced top margin
@@ -199,19 +203,37 @@ const SellerRequest = () => {
             },
           },
         }}>
-        <DataGrid
-          style={{
-            fontSize: "18px",
-          }}
-          rows={request}
-          columns={columns}
-          components={{ Toolbar: GridToolbar }}
-          rowCount={rowCountState}
-          pageSizeOptions={[1, 3, 5]}
-          paginationModel={paginationModel}
-          paginationMode='server'
-          onPaginationModelChange={setPaginationModel}
-        />
+        {reqCount === 0 ? (
+          <Box
+            display={"flex"}
+            justifyContent={"flex-start"}
+            gap={"20px"}
+            alignItems={"center"}>
+            <Typography variant='h4' fontWeight={"bold"}>
+              Không có yêu cầu nào
+            </Typography>
+            <Button
+              variant='contained'
+              color='primary'
+              onClick={() => navigate("/dashboard")}>
+              Trở về trang chủ
+            </Button>
+          </Box>
+        ) : (
+          <DataGrid
+            style={{
+              fontSize: "18px",
+            }}
+            rows={request}
+            columns={columns}
+            components={{ Toolbar: GridToolbar }}
+            rowCount={rowCountState}
+            pageSizeOptions={[1, 3, 5]}
+            paginationModel={paginationModel}
+            paginationMode='server'
+            onPaginationModelChange={setPaginationModel}
+          />
+        )}
       </Box>
     </Container>
   );

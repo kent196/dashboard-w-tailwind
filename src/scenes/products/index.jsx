@@ -155,7 +155,7 @@ const Products = () => {
   return (
     <Container maxWidth='xl' sx={{ paddingTop: "20px" }}>
       <Helmet>
-        <title>Products</title>
+        <title>Sản phẩm</title>
       </Helmet>
       <Box>
         <Box>

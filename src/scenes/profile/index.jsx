@@ -21,6 +21,7 @@ import { updateProfile as update } from "../../libs/userService";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useNavigate } from "react-router-dom";
+import { Helmet } from "react-helmet";
 
 const Profile = () => {
   const navigate = useNavigate();
@@ -122,6 +123,9 @@ const Profile = () => {
   }, [isEditing]);
   return (
     <Container maxWidth='xl' sx={{ paddingTop: "20px" }}>
+      <Helmet>
+        <title>Thông tin cá nhân</title>
+      </Helmet>
       <Box display={"flex"} justifyContent={"space-between"} gap={"20px"}>
         {/* left */}
         <Box

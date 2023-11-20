@@ -35,6 +35,7 @@ import { token } from "../../theme";
 import RegistrationList from "../../components/AuctionRegisList";
 import { ToastContainer } from "react-toastify";
 import { SignalRContext } from "../../context/SignalRContext";
+import { Helmet } from "react-helmet";
 
 const AuctionDetail = () => {
   const theme = useTheme();
@@ -248,6 +249,9 @@ const AuctionDetail = () => {
       <Container
         maxWidth='xl'
         sx={{ padding: "0 !important", paddingTop: "20px" }}>
+        <Helmet>
+          <title>Chi tiết đấu giá</title>
+        </Helmet>
         {auction && (
           <>
             {/* <Box
@@ -796,6 +800,9 @@ const AuctionDetail = () => {
   } else {
     return (
       <Container maxWidth='xl' sx={{ paddingTop: "20px" }}>
+        <Helmet>
+          <title>Chi tiết đấu giá</title>
+        </Helmet>
         {auction && (
           <>
             <Box

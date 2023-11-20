@@ -34,6 +34,7 @@ import { formatPrice, formatDateTime } from "../../libs/formaters";
 import { fetchUserData } from "../../libs/accountServices";
 import Error from "../../global/Error";
 import { SignalRContext } from "../../context/SignalRContext";
+import { Helmet } from "react-helmet";
 
 const Auction = ({ userId }) => {
   const navigate = useNavigate();
@@ -255,6 +256,9 @@ const Auction = ({ userId }) => {
 
   return (
     <Container maxWidth='xl' sx={{ paddingTop: "20px" }}>
+      <Helmet>
+        <title>Đấu giá</title>
+      </Helmet>
       <Box position={"relative"}>
         {isOpenChooser && (
           <StaffChooserModal

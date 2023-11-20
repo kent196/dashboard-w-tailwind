@@ -35,6 +35,7 @@ import { formatDateTime, formatPrice } from "../../libs/formaters";
 import { fetchProduct } from "../../libs/productServices";
 import { token } from "../../theme";
 import RegistrationList from "../../components/AuctionRegisList";
+import { Helmet } from "react-helmet";
 
 const AuctionManager = () => {
   const navigate = useNavigate();
@@ -361,6 +362,9 @@ const AuctionManager = () => {
     if (user.role === 4) {
       return (
         <Container maxWidth='xl' sx={{ paddingTop: "20px" }}>
+          <Helmet>
+            <title>Đấu giá</title>
+          </Helmet>
           <Box position={"relative"}>
             {isOpenChooser && (
               <StaffChooserModal
@@ -429,6 +433,7 @@ const AuctionManager = () => {
                 />
               ) : (
                 // Display the DataGrid when data is available
+
                 <DataGrid
                   style={{
                     fontSize: "18px",

@@ -205,7 +205,7 @@ const Dashboard = () => {
   return (
     <div>
       <Helmet>
-        <title>Dashboard</title>
+        <title>Bảng điều khiển</title>
       </Helmet>
       <Box
         height={"100vh"}
@@ -215,7 +215,7 @@ const Dashboard = () => {
         justifyContent={"flex-start"}>
         {/* Top section */}
 
-        <Header title={"Thống kê"} margin={"0 0 0 20px"} />
+        <Header title={"Bảng điều khiển"} margin={"0 0 0 20px"} />
         <Grid
           container
           // spacing={2}
