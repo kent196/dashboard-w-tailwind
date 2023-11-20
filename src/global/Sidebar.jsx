@@ -640,6 +640,7 @@ const Sidebar = ({ userRole, currentLocation }) => {
                 justifyContent={"space-between"}
                 alignItems={"center"}>
                 <Typography
+                  color={colors.primary[100]}
                   variant='h6'
                   sx={{
                     textTransform: "uppercase",
