@@ -36,6 +36,7 @@ const Profile = () => {
   const [file, setFile] = useState(null);
   const [loading, setLoading] = useState(false);
   const [imageAsUrl, setImageAsUrl] = useState("");
+  const [errorMsg, setErrorMsg] = useState(""); // State to store error msg
 
   const handleImageAsFile = (e) => {
     const file = e.target.files[0];
@@ -100,7 +101,7 @@ const Profile = () => {
         setIsEditing(false);
       })
       .catch((err) => {
-        return <Error />;
+        setErrorMsg(err.response.data.message);
       });
 
     setLoading(false);
@@ -391,30 +392,35 @@ const Profile = () => {
 
           <Box display={"flex"} justifyContent={"flex-end"} width={"100%"}>
             {isEditing ? (
-              <Box
-                display={"flex"}
-                justifyContent={"space-between"}
-                gap={"10px"}>
-                <Button
-                  sx={{ display: `${loading ? "none" : "block"}` }}
-                  variant='contained'
-                  color='error'
-                  onClick={() => {
-                    setIsEditing(false);
-                  }}>
-                  Hủy
-                </Button>
-                <Button
-                  disabled={loading}
-                  startIcon={loading && <CircularProgress size={20} />}
-                  variant='contained'
-                  color='success'
-                  onClick={() => {
-                    updateProfile(formData);
-                  }}>
-                  {loading ? "Đang cập nhật" : "Lưu"}
-                </Button>
-              </Box>
+              <>
+                <Typography marginRight={"10px"} variant='h6' color={"red"}>
+                  {errorMsg}
+                </Typography>
+                <Box
+                  display={"flex"}
+                  justifyContent={"space-between"}
+                  gap={"10px"}>
+                  <Button
+                    sx={{ display: `${loading ? "none" : "block"}` }}
+                    variant='contained'
+                    color='error'
+                    onClick={() => {
+                      setIsEditing(false);
+                    }}>
+                    Hủy
+                  </Button>
+                  <Button
+                    disabled={loading}
+                    startIcon={loading && <CircularProgress size={20} />}
+                    variant='contained'
+                    color='success'
+                    onClick={() => {
+                      updateProfile(formData);
+                    }}>
+                    {loading ? "Đang cập nhật" : "Lưu"}
+                  </Button>
+                </Box>
+              </>
             ) : (
               <Box>
                 <Button

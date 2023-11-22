@@ -62,6 +62,7 @@ const AuctionDetail = () => {
     // registrationStart: "",
     // registrationEnd: "",
   });
+  const [errorMsg, setErrorMsg] = useState("");
 
   // Signal R context
   const signalRContext = useContext(SignalRContext);
@@ -100,7 +101,8 @@ const AuctionDetail = () => {
             setAuction(res.data);
           })
           .catch((err) => {
-            return <Error />;
+            setErrorMsg(err.response.data.message);
+            console.log(errorMsg);
           });
         // navigate(`/auctions`);
       })
@@ -115,6 +117,8 @@ const AuctionDetail = () => {
           progress: undefined,
           theme: "light",
         });
+        setErrorMsg(err.response.data.message);
+        console.log(errorMsg);
       });
   };
 
@@ -622,21 +626,31 @@ const AuctionDetail = () => {
                     </Box>
                   </Box>
                   {auction.status === 2 || auction.status === 4 ? (
-                    <Box
-                      display={"flex"}
-                      justifyContent={"flex-end"}
-                      gap={"20px"}
-                      m={"10px 0"}>
+                    <Box>
                       {localStorage.getItem("role") == 5 ? (
-                        <Button
-                          sx={{ width: "100px" }}
-                          variant='contained'
-                          color='success'
-                          onClick={() =>
-                            handleAuctionApproval(auction.id, formData)
-                          }>
-                          Lưu
-                        </Button>
+                        <Box
+                          display={"flex"}
+                          justifyContent={"flex-end"}
+                          alignItems={"center"}
+                          gap={"20px"}
+                          m={"10px 0"}>
+                          <Box width={"50%"}>
+                            <Typography
+                              variant={"h6"}
+                              color={colors.redAccent[400]}>
+                              {errorMsg}
+                            </Typography>
+                          </Box>
+                          <Button
+                            sx={{ width: "100px", height: "50px", p: "5px" }}
+                            variant='contained'
+                            color='success'
+                            onClick={() =>
+                              handleAuctionApproval(auction.id, formData)
+                            }>
+                            Lưu
+                          </Button>
+                        </Box>
                       ) : null}
                     </Box>
                   ) : (
