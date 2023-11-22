@@ -52,16 +52,16 @@ const Form = () => {
   const phoneRegExp = /^((\+84-?)|0)?[0-9]{10}$/;
 
   const validationSchema = yup.object().shape({
-    name: yup.string().required("Name is required"),
+    name: yup.string().required("Tên không được để trống"),
     email: yup
       .string()
-      .email("Invalid email address")
-      .required("Email is required"),
-    password: yup.string().required("Password is required"),
+      .email("Địa chỉ email không hợp lệ")
+      .required("Email không được để trống"),
+    password: yup.string().required("Mật khẩu không được để trống"),
     phone: yup
       .string()
-      .matches(phoneRegExp, "Phone number is not valid")
-      .required("Phone is required"),
+      .matches(phoneRegExp, "Số điện thoại không hợp lệ")
+      .required("Số điện thoại không được để trống"),
   });
 
   return (

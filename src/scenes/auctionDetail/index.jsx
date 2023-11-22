@@ -82,7 +82,7 @@ const AuctionDetail = () => {
     updateAuctionInfo(auctionId, formData)
       .then((res) => {
         setAuction(res.data);
-
+        setErrorMsg("");
         // Display a success toast
         toast.success("Cập nhật thông tin thành công", {
           position: "top-right",
