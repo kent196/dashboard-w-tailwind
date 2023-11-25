@@ -43,7 +43,7 @@ const AuctionManager = () => {
   const [isOpenViewAuction, setIsOpenViewAuction] = useState(false);
   const [bidders, setBidders] = useState([]);
   const [isStaffChooserOpen, setIsStaffChooserOpen] = useState(false);
-
+  const registerPageSize = 100;
   const [isOpenViewBidders, setIsOpenViewBidders] = useState(false);
   const [auctionDetails, setAuctionDetails] = useState({}); // State to store auction details
   const [auctions, setAuctions] = useState([]); // State to store auction details
@@ -78,7 +78,7 @@ const AuctionManager = () => {
   };
 
   const handleOpenRegisList = (auctionId) => {
-    fetchAuctionRegisters(auctionId)
+    fetchAuctionRegisters(auctionId, registerPageSize)
       .then((res) => {
         setRegisList(res.data);
         setIsOpenRegisList(true);
@@ -228,7 +228,7 @@ const AuctionManager = () => {
   };
 
   const handleFetchRegisters = (auctionId) => {
-    fetchAuctionRegisters(auctionId)
+    fetchAuctionRegisters(auctionId, registerPageSize)
       .then((res) => {
         setRegisList(res.data);
       })

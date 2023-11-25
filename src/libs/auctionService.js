@@ -134,8 +134,8 @@ const updateAuctionInfo = async (auctionId, formData) => {
   }
 };
 
-const fetchAuctionRegisters = async (auctionId) => {
-  const path = `/bid/auction/${auctionId}?status=3`;
+const fetchAuctionRegisters = async (auctionId, pageSize) => {
+  const path = `/bid/auction/${auctionId}?status=3&PageSize=${pageSize}`;
   try {
     const response = await authAxios.get(path);
     if (!response.data) {

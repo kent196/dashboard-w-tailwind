@@ -40,7 +40,7 @@ import { Helmet } from "react-helmet";
 const AuctionDetail = () => {
   const theme = useTheme();
   const colors = token(theme.palette.mode);
-
+  const registerPageSize = 100;
   const [auction, setAuction] = useState(null); // State to store auction details
   const [isOpenProductDetail, setIsOpenProductDetail] = useState(false);
   const [isLoadingProductDetails, setIsLoadingProductDetails] = useState(false);
@@ -198,7 +198,7 @@ const AuctionDetail = () => {
   }
 
   function openRegistrationList() {
-    fetchAuctionRegisters(id)
+    fetchAuctionRegisters(id, registerPageSize)
       .then((res) => {
         setRegisList(res.data);
       })
