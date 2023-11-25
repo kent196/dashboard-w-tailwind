@@ -27,7 +27,15 @@ const AuctionCard = ({ image, title, startingPrice, status, id }) => {
       }}>
       {/* auction info */}
       <Box display={"flex"} justifyContent={"flex-start"} alignItems={"center"}>
-        <Box width={"50px"} height={"50px"}>
+        <Box
+          width={"50px"}
+          height={"50px"}
+          sx={{
+            border: `1px solid ${colors.primary.main}`,
+            borderRadius: "10px",
+            overflow: "hidden",
+            objectFit: "cover",
+          }}>
           <img
             style={{ borderRadius: "10px" }}
             width={"100%"}
