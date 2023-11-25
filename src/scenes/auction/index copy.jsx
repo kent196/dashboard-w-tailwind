@@ -59,6 +59,7 @@ const AuctionManager = () => {
     pageSize: 10,
   });
   const [rowCountState, setRowCountState] = React.useState(auctionsCount || 0);
+  const bidderPageSize = 100;
 
   const { id } = useParams();
 
@@ -147,7 +148,7 @@ const AuctionManager = () => {
   useEffect(() => {
     window.scrollTo(0, 0);
 
-    fetchBidders(id)
+    fetchBidders(id, bidderPageSize)
       .then((res) => {
         setBidders(res.data);
       })
@@ -219,7 +220,7 @@ const AuctionManager = () => {
   };
 
   const handleFetchBidders = (auctionId) => {
-    fetchBidders(auctionId)
+    fetchBidders(auctionId, bidderPageSize)
       .then((res) => {
         setBidders(res.data);
       })

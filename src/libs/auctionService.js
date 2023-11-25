@@ -43,9 +43,11 @@ const fetchAuctionDetail = async (id) => {
   }
 };
 
-const fetchBidders = async (id) => {
+const fetchBidders = async (id, pageSize) => {
   try {
-    const response = await publicAxios.get(`/bid/auction/${id}?status=1`);
+    const response = await publicAxios.get(
+      `/bid/auction/${id}?status=1&PageSize=${pageSize}`
+    );
     if (!response.data) {
     }
 

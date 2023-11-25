@@ -63,6 +63,7 @@ const AuctionDetail = () => {
     // registrationEnd: "",
   });
   const [errorMsg, setErrorMsg] = useState("");
+  const bidderPageSize = 100;
 
   // Signal R context
   const signalRContext = useContext(SignalRContext);
@@ -153,7 +154,7 @@ const AuctionDetail = () => {
   };
 
   const handleFetchBidders = (auctionId) => {
-    fetchBidders(auctionId)
+    fetchBidders(auctionId, bidderPageSize)
       .then((res) => {
         setBidders(res.data);
       })

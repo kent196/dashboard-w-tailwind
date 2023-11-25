@@ -48,6 +48,7 @@ const Live = () => {
     bidder: {},
   }); // State to store signal r connection
   const [isOpenWinner, setIsOpenWinner] = useState(false); // State to store signal r connection
+  const pageSize = 100;
   const navigate = useNavigate();
   const styles = {
     gradientBox: {
@@ -74,7 +75,7 @@ const Live = () => {
         setAuctionDetails(res.data);
       })
       .catch((err) => {});
-    fetchBidders(id)
+    fetchBidders(id, pageSize)
       .then((res) => {
         setLoading(false);
 
@@ -87,7 +88,7 @@ const Live = () => {
       signalRContext?.connection.on(
         "ReceiveNewBid",
         (userName, auctionTitle) => {
-          fetchBidders(id)
+          fetchBidders(id, pageSize)
             .then((res) => {
               setBids(res.data);
             })

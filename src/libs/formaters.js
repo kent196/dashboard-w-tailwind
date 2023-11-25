@@ -14,6 +14,7 @@ function formatPrice(price) {
 
 // Function to format date-time
 const formatDateTime = (dateTimeString) => {
+  if (dateTimeString == null) return "Đang cập nhật";
   const options = {
     year: "numeric",
     month: "numeric",
