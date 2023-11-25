@@ -576,7 +576,8 @@ const AuctionManager = () => {
                       {auctionDetails.status != 1 &&
                         auctionDetails.status != 2 &&
                         auctionDetails.status != 3 &&
-                        auctionDetails.status != 4 && (
+                        auctionDetails.status != 4 &&
+                        auctionDetails.status != 0 && (
                           <Box
                             display={"flex"}
                             justifyContent={"space-between"}
