@@ -39,6 +39,10 @@ const ChangePassword = () => {
         setErrorMsg(null);
       })
       .catch((err) => {
+        toast.error("Cập nhật mật khẩu chưa thành công", {
+          position: toast.POSITION.TOP_RIGHT,
+          autoClose: 2000,
+        });
         setErrorMsg(err.response.data.message || err.response.data.Message);
       });
   };
