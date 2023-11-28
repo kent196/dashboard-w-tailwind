@@ -859,9 +859,11 @@ const AuctionManager = () => {
       );
     } else
       return (
-        <Box>
-          <Unauthorize />
-        </Box>
+        !isLoading && (
+          <Box>
+            <Unauthorize />
+          </Box>
+        )
       );
   }
 };
