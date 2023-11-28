@@ -145,7 +145,7 @@ const Dashboard = () => {
     if (currentUser.role === 5) {
       fetchStaffEndedAuctions(filterValue)
         .then((res) => {
-          setAuctionsCount(res.data);
+          setAuctionsCount(res.data.count);
           setAuctions(res.data.auctionList);
         })
         .catch((err) => {});
@@ -153,7 +153,7 @@ const Dashboard = () => {
       // If currentUser.role is not 5, you can handle it as needed
       fetchAllEndedAuctions(filterValue)
         .then((res) => {
-          setAuctionsCount(res.data);
+          setAuctionsCount(res.data.count);
           setAuctions(res.data.auctionList);
         })
         .catch((err) => {});
