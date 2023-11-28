@@ -253,7 +253,7 @@ const Profile = () => {
                     interactive: `${loading ? "false" : "true"}`,
                   }}
                   id='name'
-                  type='name'
+                  type='text'
                   name='name'
                   defaultValue={currentUser.name}
                   onChange={handleInputChange}
@@ -275,7 +275,7 @@ const Profile = () => {
                     interactive: `${loading ? "false" : "true"}`,
                   }}
                   id='phone'
-                  type='number'
+                  type='text'
                   name='phone'
                   defaultValue={currentUser.phone}
                   onChange={handleInputChange}
