@@ -123,7 +123,7 @@ const Profile = () => {
       .catch((err) => {});
   }, [isEditing]);
   if (localStorage.getItem("accessToken") === null) {
-    navigate("/error");
+    return <Error />;
   }
   return (
     <Container maxWidth='xl' sx={{ paddingTop: "20px" }}>
