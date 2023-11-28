@@ -146,15 +146,16 @@ const Dashboard = () => {
       fetchStaffEndedAuctions(filterValue)
         .then((res) => {
           setAuctionsCount(res.data.count);
-          setAuctions(res.data.auctionList);
+          setAuctions(res.data);
         })
         .catch((err) => {});
     } else if (currentUser.role === 4 || currentUser.role === 3) {
       // If currentUser.role is not 5, you can handle it as needed
       fetchAllEndedAuctions(filterValue)
         .then((res) => {
+          console.log(res);
           setAuctionsCount(res.data.count);
-          setAuctions(res.data.auctionList);
+          setAuctions(res.data);
         })
         .catch((err) => {});
     }
@@ -241,13 +242,13 @@ const Dashboard = () => {
             {currentUser.role === 5 ? (
               <Statbox
                 title={"Đấu giá"}
-                subTitle={`Đang quản lí ${auctions.length} phiên`}
+                subTitle={`Đang quản lí ${auctions.length || 0} phiên`}
                 icon={<ListOutlined />}
               />
             ) : (
               <Statbox
                 title={"Đấu giá"}
-                subTitle={`${auctions.length} phiên đấu giá`}
+                subTitle={`${auctions.length || 0} phiên đấu giá`}
                 icon={<ListOutlined />}
               />
             )}
@@ -356,7 +357,7 @@ const Dashboard = () => {
                           Số phiên đấu giá thành công
                         </Typography>
                         <Typography margin={"20px 0"} variant='h4'>
-                          {auctions.length}
+                          {auctions.length || 0}
                         </Typography>
                       </Box>
                       <Box
