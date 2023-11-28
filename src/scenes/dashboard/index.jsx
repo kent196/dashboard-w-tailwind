@@ -56,6 +56,7 @@ const Dashboard = () => {
   const [anchorEl, setAnchorEl] = useState(null);
   const [selectedFilter, setSelectedFilter] = useState(1); // Default selected filter
   const [filterValue, setFilterValue] = useState(1); // Default selected filter
+  const [totalAuctions, setTotalAuctions] = useState(0); // Default selected filter
   const [totalRevenue, setTotalRevenue] = useState(0);
   const theme = useTheme();
   const colors = token(theme.palette.mode);
@@ -85,6 +86,22 @@ const Dashboard = () => {
       clearInterval(interval);
     };
   }, [finalPrice]);
+
+  useEffect(() => {
+    if (currentUser.role === 3 || currentUser.role === 4) {
+      fetchAuctions()
+        .then((res) => {
+          setTotalAuctions(res.data.count);
+        })
+        .catch((err) => {});
+    } else if (currentUser.role === 5) {
+      fetchStaffAuctions()
+        .then((res) => {
+          setTotalAuctions(res.data.count);
+        })
+        .catch((err) => {});
+    }
+  }, [currentUser.role]);
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -242,13 +259,13 @@ const Dashboard = () => {
             {currentUser.role === 5 ? (
               <Statbox
                 title={"Đấu giá"}
-                subTitle={`Đang quản lí ${auctions.length || 0} phiên`}
+                subTitle={`Đang quản lí ${totalAuctions || 0} phiên`}
                 icon={<ListOutlined />}
               />
             ) : (
               <Statbox
                 title={"Đấu giá"}
-                subTitle={`${auctions.length || 0} phiên đấu giá`}
+                subTitle={`${totalAuctions || 0} phiên đấu giá`}
                 icon={<ListOutlined />}
               />
             )}
