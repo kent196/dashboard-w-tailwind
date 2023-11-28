@@ -101,6 +101,16 @@ const Profile = () => {
         setIsEditing(false);
       })
       .catch((err) => {
+        toast.error("Cập nhật thông tin không thành công", {
+          position: "top-right",
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
         setErrorMsg(err.response.data.message);
       });
 
