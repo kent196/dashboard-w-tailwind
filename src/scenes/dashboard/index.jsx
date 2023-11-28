@@ -146,7 +146,7 @@ const Dashboard = () => {
       fetchStaffEndedAuctions(filterValue)
         .then((res) => {
           setAuctionsCount(res.data);
-          setAuctions(res.data);
+          setAuctions(res.data.auctionList);
         })
         .catch((err) => {});
     } else if (currentUser.role === 4 || currentUser.role === 3) {
@@ -154,7 +154,7 @@ const Dashboard = () => {
       fetchAllEndedAuctions(filterValue)
         .then((res) => {
           setAuctionsCount(res.data);
-          setAuctions(res.data);
+          setAuctions(res.data.auctionList);
         })
         .catch((err) => {});
     }
