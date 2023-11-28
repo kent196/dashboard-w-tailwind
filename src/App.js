@@ -162,9 +162,11 @@ function App() {
         <div className='App'>
           {/* Check if user is logged in to print out sidebar */}
           {/* Pass the current location to Sidebar */}
-          {location.pathname !== "/login" && location.pathname !== "/" && (
-            <Sidebar user={user} currentLocation={location.pathname} />
-          )}
+          {location.pathname !== "/login" &&
+            location.pathname !== "/" &&
+            location.pathname !== "/error" && (
+              <Sidebar user={user} currentLocation={location.pathname} />
+            )}
 
           <main className='content'>
             {/* Check if user is logged in */}
