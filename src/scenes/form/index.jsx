@@ -1,5 +1,12 @@
 // Libraries import
-import { Box, Button, Select, TextField, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  CircularProgress,
+  Select,
+  TextField,
+  Typography,
+} from "@mui/material";
 import React from "react";
 import { Field, Formik } from "formik";
 import * as yup from "yup";
@@ -13,6 +20,8 @@ import { toast } from "react-toastify";
 
 const Form = () => {
   const [errMsg, setErrMsg] = React.useState("");
+  const [successMsg, setSuccessMsg] = React.useState("");
+  const [isLoading, setIsLoading] = React.useState(false);
   const isNonMobile = useMediaQuery("(min-width:600px)");
   const initialValues = {
     name: "",
@@ -27,6 +36,9 @@ const Form = () => {
     window.scrollTo(0, 0);
   }, []);
   const handleFormSubmit = (values) => {
+    setIsLoading(true);
+    setErrMsg("");
+    setSuccessMsg("");
     createAccount(values)
       .then((res) => {
         // if (res.code === 200 || res.StatusCode === 200) {
@@ -37,10 +49,13 @@ const Form = () => {
         //   setErrMsg(res.message);
         // }
         if (res.code === "ERR_BAD_REQUEST") {
+          setIsLoading(false);
           toast.error("Tạo tài khoản không thành công");
           setErrMsg(res.response.data.message || res.response.data.Message);
         } else if (res.code === 200) {
+          setIsLoading(false);
           toast.success("Tạo tài khoản thành công");
+          setSuccessMsg(res.message);
           setErrMsg("");
         }
       })
@@ -244,19 +259,31 @@ const Form = () => {
               sx={{
                 marginTop: "20px",
               }}>
-              <Typography
-                width={"40%"}
-                color={"red"}
-                variant='h6'
-                textAlign={"right"}>
-                {errMsg}
-              </Typography>
+              {errMsg ? (
+                <Typography
+                  width={"40%"}
+                  color={"red"}
+                  variant='h6'
+                  textAlign={"right"}>
+                  {errMsg}
+                </Typography>
+              ) : (
+                <Typography
+                  width={"40%"}
+                  color={"green"}
+                  variant='h6'
+                  textAlign={"right"}>
+                  {successMsg}
+                </Typography>
+              )}
               <Button
+                startIcon={isLoading ? <CircularProgress size={15} /> : null}
                 variant='contained'
                 color='success'
                 type='submit'
-                onClick={handleSubmit}>
-                Create new user
+                onClick={handleSubmit}
+                disabled={isLoading}>
+                Tạo tài khoản
               </Button>
             </Box>
           </form>
