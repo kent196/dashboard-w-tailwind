@@ -54,8 +54,8 @@ const Dashboard = () => {
   const [products, setProducts] = useState({}); // State to store auction details
   const [orders, setOrders] = useState({}); // State to store auction details
   const [anchorEl, setAnchorEl] = useState(null);
-  const [selectedFilter, setSelectedFilter] = useState(1); // Default selected filter
-  const [filterValue, setFilterValue] = useState(1); // Default selected filter
+  const [selectedFilter, setSelectedFilter] = useState(2020); // Default selected filter
+  const [filterValue, setFilterValue] = useState(2020); // Default selected filter
   const [totalAuctions, setTotalAuctions] = useState(0); // Default selected filter
   const [totalRevenue, setTotalRevenue] = useState(0);
   const theme = useTheme();
@@ -121,6 +121,7 @@ const Dashboard = () => {
     fetchAuctionDetail(id)
       .then((res) => {
         setAuctionDetail(res.data);
+        console.log(res.data);
       })
       .catch((err) => {
         return <Error />;
@@ -297,21 +298,17 @@ const Dashboard = () => {
               justifyContent={"flex-start"}
               gap={"20px"}
               flexDirection={"column"}>
-              <Grid container spacing={2} height={"30%"}>
+              <Grid container spacing={2} height={"70%"}>
                 <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
-                  <Paper elevation={3} sx={{ padding: "20px" }}>
+                  <Paper elevation={3} sx={{ padding: "20px", height: "100%" }}>
                     <Header title={"Doanh thu"} />
                     <Box
                       display={"flex"}
-                      justifyContent={"space-between"}
+                      // justifyContent={"space-between"}
                       alignItems={"center"}>
-                      <Box
-                        display={"flex"}
-                        flexDirection={"column"}
-                        justifyContent={"center"}
-                        alignItems={"center"}>
+                      <Box display={"flex"} alignItems={"center"} gap={"20px"}>
                         <Typography variant='h4' fontWeight={"bold"}>
-                          Doanh thu theo
+                          Năm
                         </Typography>
                         {/* filter box */}
                         <Box
@@ -345,27 +342,32 @@ const Dashboard = () => {
                               open={Boolean(anchorEl)}
                               onClose={() => handleClose(null)} // Close the menu when clicking outside
                             >
-                              <MenuItem onClick={() => handleClose("1", 1)}>
-                                1
+                              <MenuItem
+                                onClick={() => handleClose("2020", 2020)}>
+                                2020
                               </MenuItem>
-                              <MenuItem onClick={() => handleClose("3", 3)}>
-                                3
+                              <MenuItem
+                                onClick={() => handleClose("2021", 2021)}>
+                                2021
                               </MenuItem>
-                              <MenuItem onClick={() => handleClose("6", 6)}>
-                                6
+                              <MenuItem
+                                onClick={() => handleClose("2022", 2022)}>
+                                2022
                               </MenuItem>
-                              <MenuItem onClick={() => handleClose("9", 9)}>
-                                9
+                              <MenuItem
+                                onClick={() => handleClose("2023", 2023)}>
+                                2023
                               </MenuItem>
-                              <MenuItem onClick={() => handleClose("12", 12)}>
-                                12
+                              <MenuItem
+                                onClick={() => handleClose("2024", 2024)}>
+                                2024
                               </MenuItem>
                             </Menu>
                           </Box>
-                          <Typography variant='h6'>tháng</Typography>
                         </Box>
                       </Box>
-                      <Box
+
+                      {/* <Box
                         display={"flex"}
                         flexDirection={"column"}
                         justifyContent={"center"}
@@ -388,14 +390,22 @@ const Dashboard = () => {
                         <Typography variant='h4' margin={"20px 0"}>
                           {handleCalculateTotalRevenue()}
                         </Typography>
-                      </Box>
+                      </Box> */}
+                    </Box>
+                    <Box height={"70%"} width={"100%"}>
+                      <BarChart isDashboard={true} filterValue={filterValue} />
                     </Box>
                   </Paper>
                 </Grid>
               </Grid>
-              <Grid container spacing={3} height={"50%"}>
+              <Grid container spacing={3} height={"30%"} sx={{}}>
                 <Grid item xs={12} sm={12} md={6} lg={6} xl={6}>
-                  <Paper elevation={3} sx={{ padding: "20px", height: "100%" }}>
+                  <Paper
+                    elevation={3}
+                    sx={{
+                      padding: "20px",
+                      height: "100%",
+                    }}>
                     <Header
                       title={"Các phiên đấu giá thành công"}
                       fontSize={"24px"}

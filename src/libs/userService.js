@@ -130,6 +130,19 @@ const handleWithdrawRequest = async (id, status) => {
   }
 };
 
+const fetchRevenue = async (year) => {
+  try {
+    const response = await authAxios.get(`/user/revenue/${year}`);
+    if (!response.data) {
+      console.log("No data");
+    }
+
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
 export {
   fetchUsers,
   fetchStaffs,
@@ -141,4 +154,5 @@ export {
   updateUserPassword,
   fetchAllWithdrawRequest,
   handleWithdrawRequest,
+  fetchRevenue,
 };

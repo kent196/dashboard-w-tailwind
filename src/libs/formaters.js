@@ -25,6 +25,14 @@ const formatDateTime = (dateTimeString) => {
   return new Date(dateTimeString).toLocaleDateString(undefined, options);
 };
 
+function formatDataArray(responseArray) {
+  return responseArray.map((item) => ({
+    Tháng: item.month,
+    Bán: item.orderRevenue,
+    "Đấu giá": item.auctionRevenue,
+  }));
+}
+
 const formatWeight = (weight) => {
   return `${weight} grams`;
 };
@@ -32,4 +40,10 @@ const formatDimensions = (dimensions) => {
   return `${dimensions} (cm)`;
 };
 
-export { formatPrice, formatDateTime, formatWeight, formatDimensions };
+export {
+  formatPrice,
+  formatDateTime,
+  formatWeight,
+  formatDimensions,
+  formatDataArray,
+};

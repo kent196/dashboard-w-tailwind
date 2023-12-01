@@ -1,16 +1,28 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { ResponsiveBar } from "@nivo/bar";
 import { useTheme } from "@mui/material";
 import { token } from "../../theme";
 
 import { mockBarData as data } from "../../data/mockData";
+import { fetchRevenue } from "../../libs/userService";
 
-const BarChart = ({ isDashboard = false }) => {
+const BarChart = ({ isDashboard = false, filterValue }) => {
   const theme = useTheme();
   const colors = token(theme.palette.mode);
+  const [yearlyRevenue, setYearlyRevenue] = React.useState([]);
+
+  useEffect(() => {
+    fetchRevenue(filterValue)
+      .then((res) => {
+        setYearlyRevenue(res.data);
+        console.log(res.data);
+      })
+      .catch((err) => {});
+  }, [filterValue]);
+
   return (
     <ResponsiveBar
-      data={data}
+      data={yearlyRevenue}
       theme={{
         axis: {
           domain: {
@@ -45,8 +57,8 @@ const BarChart = ({ isDashboard = false }) => {
           },
         },
       }}
-      keys={["hot dog", "burger", "sandwich", "kebab", "fries", "donut"]}
-      indexBy='country'
+      keys={["orderRevenue", "auctionRevenue"]}
+      indexBy='month'
       margin={{ top: 50, right: 130, bottom: 50, left: 60 }}
       padding={0.3}
       valueScale={{ type: "linear" }}
@@ -96,16 +108,16 @@ const BarChart = ({ isDashboard = false }) => {
         tickSize: 5,
         tickPadding: 5,
         tickRotation: 0,
-        legend: isDashboard ? undefined : "country",
-        legendPosition: "middle",
+        legend: isDashboard ? undefined : "tháng",
+        legendPosition: "end",
         legendOffset: 32,
       }}
       axisLeft={{
         tickSize: 5,
         tickPadding: 5,
         tickRotation: 0,
-        legend: isDashboard ? undefined : "food",
-        legendPosition: "middle",
+        legend: isDashboard ? undefined : "VND",
+        legendPosition: "end",
         legendOffset: -40,
       }}
       enableLabel={false}

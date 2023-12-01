@@ -527,7 +527,7 @@ export const mockTransactions = [
 export const mockBarData = [
   {
     country: "AD",
-    "hot dog": 137,
+    "hot dog": 20,
     "hot dogColor": "hsl(229, 70%, 50%)",
     burger: 96,
     burgerColor: "hsl(296, 70%, 50%)",
@@ -584,7 +584,7 @@ export const mockBarData = [
     country: "AL",
     "hot dog": 66,
     "hot dogColor": "hsl(208, 70%, 50%)",
-    burger: 111,
+    burger: 20,
     burgerColor: "hsl(334, 70%, 50%)",
     kebab: 167,
     kebabColor: "hsl(182, 70%, 50%)",
