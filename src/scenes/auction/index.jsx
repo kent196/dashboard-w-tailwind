@@ -35,6 +35,7 @@ import { fetchUserData } from "../../libs/accountServices";
 import Error from "../../global/Error";
 import { SignalRContext } from "../../context/SignalRContext";
 import { Helmet } from "react-helmet";
+import NullBox from "../../components/NullBox";
 
 const Auction = ({ userId }) => {
   const navigate = useNavigate();
@@ -254,7 +255,7 @@ const Auction = ({ userId }) => {
     },
   ];
 
-  return (
+  return auctions.length > 0 ? (
     <Container maxWidth='xl' sx={{ paddingTop: "20px" }}>
       <Helmet>
         <title>Đấu giá</title>
@@ -344,6 +345,12 @@ const Auction = ({ userId }) => {
         </Box>
       </Box>
     </Container>
+  ) : (
+    <NullBox
+      header={"Bạn chưa được phân công đấu giá"}
+      navTo={"dashboard"}
+      buttonText={"bảng điều khiển"}
+    />
   );
 };
 

@@ -23,6 +23,7 @@ import { useGridStrategyProcessing } from "@mui/x-data-grid/hooks/core/strategyP
 import axios from "../../api/publicAxios";
 import { fetchProducts, fetchProduct } from "../../libs/productServices";
 import { formatDimensions, formatWeight } from "../../libs/formaters";
+import NullBox from "../../components/NullBox";
 
 const Products = () => {
   const [isOpenProductDetail, setIsOpenProductDetail] = useState(false);
@@ -152,7 +153,7 @@ const Products = () => {
       ),
     },
   ];
-  return (
+  return products.length > 0 ? (
     <Container maxWidth='xl' sx={{ paddingTop: "20px" }}>
       <Helmet>
         <title>Sản phẩm</title>
@@ -442,6 +443,12 @@ const Products = () => {
         </DialogActions>
       </Dialog>
     </Container>
+  ) : (
+    <NullBox
+      header={"Không có sản phẩm nào để hiển thị"}
+      navTo={"dashboard"}
+      buttonText={"bảng điều khiển"}
+    />
   );
 };
 

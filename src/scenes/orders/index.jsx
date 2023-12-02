@@ -31,6 +31,7 @@ import { useEffect } from "react";
 import { fetchOrders } from "../../libs/orderService";
 import { formatDateTime } from "../../libs/formaters";
 import MenuItem from "@mui/material/MenuItem";
+import NullBox from "../../components/NullBox";
 const Orders = () => {
   const [isOpenViewOrder, setIsOpenViewOrder] = useState(false);
   const [orders, setOrders] = useState([]); // State to store orders
@@ -207,7 +208,7 @@ const Orders = () => {
     },
   ];
 
-  return (
+  return orders.length > 0 ? (
     <Container maxWidth='xl' sx={{ paddingTop: "20px" }}>
       <Helmet>
         <title>Đơn hàng</title>
@@ -515,6 +516,12 @@ const Orders = () => {
         </DialogContent>
       </Dialog>
     </Container>
+  ) : (
+    <NullBox
+      header={"Chưa có đơn hàng nào để hiển thị"}
+      navTo={"dashboard"}
+      buttonText={"bảng điều khiển"}
+    />
   );
 };
 

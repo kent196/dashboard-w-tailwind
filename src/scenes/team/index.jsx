@@ -8,6 +8,7 @@ import {
 import {
   Box,
   Container,
+  Skeleton,
   Typography,
   useMediaQuery,
   useTheme,
@@ -29,6 +30,7 @@ import {
 import { fetchUserData } from "../../libs/accountServices";
 import Unauthorize from "../../global/Unauthorize";
 import Error from "../../global/Error";
+import NullBox from "../../components/NullBox";
 
 const Team = () => {
   const isSmallScreen = useMediaQuery((theme) => theme.breakpoints.down("md"));
@@ -37,6 +39,7 @@ const Team = () => {
   const [currentUser, setCurrentUser] = useState({}); // State to store auction details
   const colors = token(theme.palette.mode);
   const [customers, setCustomers] = useState([]);
+  const [loading, setLoading] = useState(false); // State to store loading status
   const [paginationModel, setPaginationModel] = React.useState({
     page: 0,
     pageSize: 5,
@@ -99,10 +102,12 @@ const Team = () => {
   };
 
   useEffect(() => {
+    setLoading(true);
     try {
       if (currentUser.role === 3) {
         fetchUsers(paginationModel.pageSize, paginationModel.page + 1)
           .then((res) => {
+            setLoading(false);
             setCustomerCount(res.data.count);
 
             setUsers(res.data.userList);
@@ -111,6 +116,7 @@ const Team = () => {
       } else if (currentUser.role === 4) {
         fetchAllStaffs(paginationModel.pageSize, paginationModel.page + 1)
           .then((res) => {
+            setLoading(false);
             setCustomerCount(res.data.count);
             setUsers(res.data.staffList);
           })
@@ -118,6 +124,8 @@ const Team = () => {
       } else if (currentUser.role === 5) {
         fetchCustomer(paginationModel.pageSize, paginationModel.page + 1)
           .then((res) => {
+            setLoading(false);
+
             setCustomerCount(res.data.count);
             setCustomers(res.data.customerList);
           })
@@ -224,8 +232,15 @@ const Team = () => {
   ];
 
   {
-    if (currentUser.role === 3 || currentUser.role === 4) {
+    if (loading) {
       return (
+        <Box>
+          <Skeleton variant='rectangular' width={"100%"} height={50} />
+        </Box>
+      );
+    }
+    if (currentUser.role === 3 || currentUser.role === 4) {
+      return users.length !== 0 ? (
         <Container maxWidth='xl' sx={{ paddingTop: "20px" }}>
           <Helmet>
             <title>Người dùng</title>
@@ -298,9 +313,15 @@ const Team = () => {
             />
           </Box>
         </Container>
+      ) : (
+        <NullBox
+          header={"Không có người dùng để hiển thị"}
+          navTo={"dashboard"}
+          buttonText={"Bảng điều khiển"}
+        />
       );
     } else if (currentUser.role === 5) {
-      return (
+      return users.length !== 0 ? (
         <Container maxWidth='xl' sx={{ paddingTop: "20px" }}>
           <Helmet>
             <title>Người dùng</title>
@@ -373,6 +394,12 @@ const Team = () => {
             />
           </Box>
         </Container>
+      ) : (
+        <NullBox
+          header={"Không có người dùng để hiển thị"}
+          navTo={"dashboard"}
+          buttonText={"Bảng điều khiển"}
+        />
       );
     }
   }

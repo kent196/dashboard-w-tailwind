@@ -36,6 +36,7 @@ import { fetchProduct } from "../../libs/productServices";
 import { token } from "../../theme";
 import RegistrationList from "../../components/AuctionRegisList";
 import { Helmet } from "react-helmet";
+import NullBox from "../../components/NullBox";
 
 const AuctionManager = () => {
   const navigate = useNavigate();
@@ -361,7 +362,7 @@ const AuctionManager = () => {
 
   {
     if (user.role === 4) {
-      return (
+      return auctions.length > 0 ? (
         <Container maxWidth='xl' sx={{ paddingTop: "20px" }}>
           <Helmet>
             <title>Đấu giá</title>
@@ -856,6 +857,12 @@ const AuctionManager = () => {
             setIsOpenProductDetail={setIsOpenProductDetail}
           />
         </Container>
+      ) : (
+        <NullBox
+          header={"Không có buổi đấu giá nào được tạo"}
+          navTo={"dashboard"}
+          buttonText={"bảng diều khiển"}
+        />
       );
     } else
       return (
