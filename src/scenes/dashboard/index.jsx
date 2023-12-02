@@ -441,7 +441,11 @@ const Dashboard = () => {
                       title={"Các phiên đấu giá thành công"}
                       fontSize={"24px"}
                     />
-                    <Box>
+                    <Box
+                      sx={{
+                        overflowY: "scroll",
+                        height: "80%",
+                      }}>
                       {auctions.map((auction) => {
                         return (
                           <Box
