@@ -55,8 +55,8 @@ const Dashboard = () => {
   const [products, setProducts] = useState({}); // State to store auction details
   const [orders, setOrders] = useState({}); // State to store auction details
   const [anchorEl, setAnchorEl] = useState(null);
-  const [selectedFilter, setSelectedFilter] = useState(2020); // Default selected filter
-  const [filterValue, setFilterValue] = useState(2020); // Default selected filter
+  const [selectedFilter, setSelectedFilter] = useState(2023); // Default selected filter
+  const [filterValue, setFilterValue] = useState(2023); // Default selected filter
   const endedFilterValue = 12;
   const [totalAuctions, setTotalAuctions] = useState(0); // Default selected filter
   const [totalRevenue, setTotalRevenue] = useState(0);
@@ -373,7 +373,7 @@ const Dashboard = () => {
                               open={Boolean(anchorEl)}
                               onClose={() => handleClose(null)} // Close the menu when clicking outside
                             >
-                              <MenuItem
+                              {/* <MenuItem
                                 onClick={() => handleClose("2020", 2020)}>
                                 2020
                               </MenuItem>
@@ -384,15 +384,15 @@ const Dashboard = () => {
                               <MenuItem
                                 onClick={() => handleClose("2022", 2022)}>
                                 2022
-                              </MenuItem>
+                              </MenuItem> */}
                               <MenuItem
                                 onClick={() => handleClose("2023", 2023)}>
                                 2023
                               </MenuItem>
-                              <MenuItem
+                              {/* <MenuItem
                                 onClick={() => handleClose("2024", 2024)}>
                                 2024
-                              </MenuItem>
+                              </MenuItem> */}
                             </Menu>
                           </Box>
                         </Box>
