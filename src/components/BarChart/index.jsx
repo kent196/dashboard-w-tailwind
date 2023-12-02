@@ -3,7 +3,6 @@ import { ResponsiveBar } from "@nivo/bar";
 import { useTheme } from "@mui/material";
 import { token } from "../../theme";
 
-import { mockBarData as data } from "../../data/mockData";
 import { fetchRevenue } from "../../libs/userService";
 
 const BarChart = ({ isDashboard = false, filterValue }) => {
@@ -22,7 +21,11 @@ const BarChart = ({ isDashboard = false, filterValue }) => {
 
   return (
     <ResponsiveBar
-      data={yearlyRevenue}
+      data={yearlyRevenue.map((item) => ({
+        Tháng: item.month,
+        Bán: item.orderRevenue,
+        "Đấu giá": item.auctionRevenue,
+      }))}
       theme={{
         axis: {
           domain: {
@@ -57,8 +60,8 @@ const BarChart = ({ isDashboard = false, filterValue }) => {
           },
         },
       }}
-      keys={["orderRevenue", "auctionRevenue"]}
-      indexBy='month'
+      keys={["Bán", "Đấu giá"]}
+      indexBy='Tháng'
       margin={{ top: 50, right: 130, bottom: 50, left: 60 }}
       padding={0.3}
       valueScale={{ type: "linear" }}

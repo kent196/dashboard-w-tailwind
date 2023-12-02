@@ -248,7 +248,8 @@ const AuctionDetail = () => {
     auction.status === 1 ||
     auction.status === 2 ||
     auction.status === 3 ||
-    auction.status === 4
+    auction.status === 4 ||
+    auction.status === 7
   ) {
     return (
       <Container
@@ -370,7 +371,9 @@ const AuctionDetail = () => {
                           Mở đăng kí:
                         </Typography>
 
-                        {auction.status === 2 || auction.status === 4 ? (
+                        {auction.status === 2 ||
+                        auction.status === 4 ||
+                        auction.status === 7 ? (
                           <TextField
                             sx={{
                               maxWidth: "200px",
@@ -407,7 +410,9 @@ const AuctionDetail = () => {
                           Đóng đăng kí:
                         </Typography>
 
-                        {auction.status === 2 || auction.status === 4 ? (
+                        {auction.status === 2 ||
+                        auction.status === 4 ||
+                        auction.status === 7 ? (
                           <TextField
                             sx={{
                               maxWidth: "200px",
@@ -442,7 +447,9 @@ const AuctionDetail = () => {
                           Bắt đầu:
                         </Typography>
 
-                        {auction.status === 2 || auction.status === 4 ? (
+                        {auction.status === 2 ||
+                        auction.status === 4 ||
+                        auction.status === 7 ? (
                           <TextField
                             sx={{
                               maxWidth: "200px",
@@ -474,7 +481,9 @@ const AuctionDetail = () => {
                           variant={"h5"}>
                           Kết thúc:
                         </Typography>
-                        {auction.status === 2 || auction.status === 4 ? (
+                        {auction.status === 2 ||
+                        auction.status === 4 ||
+                        auction.status === 7 ? (
                           <TextField
                             sx={{
                               maxWidth: "200px",
@@ -551,7 +560,9 @@ const AuctionDetail = () => {
                         <Typography fontWeight={"bold"} variant={"h5"}>
                           Bước giá:
                         </Typography>
-                        {auction.status === 4 || auction.status == 2 ? (
+                        {auction.status === 4 ||
+                        auction.status == 2 ||
+                        auction.status === 7 ? (
                           <Box
                             display={"flex"}
                             justifyContent={"flex-end"}
@@ -626,7 +637,9 @@ const AuctionDetail = () => {
                       </Typography>
                     </Box>
                   </Box>
-                  {auction.status === 2 || auction.status === 4 ? (
+                  {auction.status === 2 ||
+                  auction.status === 4 ||
+                  auction.status === 7 ? (
                     <Box>
                       {localStorage.getItem("role") == 5 ? (
                         <Box

@@ -37,12 +37,13 @@ import {
   fetchStaffEndedAuctions,
 } from "../../libs/auctionService";
 import { fetchProducts } from "../../libs/productServices";
-import { fetchOrders } from "../../libs/orderService";
+import { fetchFrequentUsers, fetchOrders } from "../../libs/orderService";
 import AuctionCard from "../../components/AuctionCard";
 import { token } from "../../theme";
 import { useTheme } from "@emotion/react";
 import { formatPrice } from "../../libs/formaters";
 import Error from "../../global/Error";
+import UserCard from "../../components/UserCard";
 
 const Dashboard = () => {
   const [customers, setCustomers] = useState([]);
@@ -58,6 +59,8 @@ const Dashboard = () => {
   const [filterValue, setFilterValue] = useState(2020); // Default selected filter
   const [totalAuctions, setTotalAuctions] = useState(0); // Default selected filter
   const [totalRevenue, setTotalRevenue] = useState(0);
+  const frequentUsersPageSize = 5;
+  const [frequentUsers, setFrequentUsers] = useState([]);
   const theme = useTheme();
   const colors = token(theme.palette.mode);
   const finalPrice = 1000000;
@@ -102,6 +105,14 @@ const Dashboard = () => {
         .catch((err) => {});
     }
   }, [currentUser.role]);
+  useEffect(() => {
+    fetchFrequentUsers(frequentUsersPageSize)
+      .then((res) => {
+        console.log(res.data);
+        setFrequentUsers(res.data);
+      })
+      .catch((err) => {});
+  }, []);
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -299,9 +310,28 @@ const Dashboard = () => {
               gap={"20px"}
               flexDirection={"column"}>
               <Grid container spacing={2} height={"70%"}>
-                <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
+                <Grid item xs={12} sm={12} md={4} lg={4} xl={4}>
+                  <Paper elevation={3} sx={{ padding: "20px", height: "100%" }}>
+                    <Header title={"Khách hàng thân thiết"} />
+                    <Box
+                      sx={{
+                        height: "80%",
+                        overflowY: "scroll",
+                      }}>
+                      {frequentUsers.map((user) => (
+                        <UserCard
+                          bidderName={user.name}
+                          avatar={user.profilePicture}
+                          numberOfDoneOrders={user.numberOfDoneOrders}
+                        />
+                      ))}
+                    </Box>
+                  </Paper>
+                </Grid>
+                <Grid item xs={12} sm={12} md={8} lg={8} xl={8}>
                   <Paper elevation={3} sx={{ padding: "20px", height: "100%" }}>
                     <Header title={"Doanh thu"} />
+
                     <Box
                       display={"flex"}
                       // justifyContent={"space-between"}

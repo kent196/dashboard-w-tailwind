@@ -33,4 +33,15 @@ const fetchPageAmmount = async () => {
   } catch (error) {}
 };
 
-export { fetchOrderDetails, fetchOrders, fetchPageAmmount };
+const fetchFrequentUsers = async (pageSize) => {
+  const path = `/user/buyer?PageSize=${pageSize}`;
+  try {
+    const response = await aucthAxios.get(path);
+    if (!response.data) {
+      throw new Error("No data found");
+    }
+    return response.data;
+  } catch (error) {}
+};
+
+export { fetchOrderDetails, fetchOrders, fetchPageAmmount, fetchFrequentUsers };
