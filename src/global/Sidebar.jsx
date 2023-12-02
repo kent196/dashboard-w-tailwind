@@ -210,7 +210,7 @@ const Sidebar = ({ userRole, currentLocation }) => {
             )}
           </Box>
           <Item
-            title={"Tạo tài khoản hệ thống"}
+            title={"Tạo tài khoản"}
             to={"/form"}
             icon={<ListOutlined />}
             selected={selected}
@@ -524,10 +524,10 @@ const Sidebar = ({ userRole, currentLocation }) => {
             )}
           </Box>
 
-          <Tooltip title='Kích hoạt người bán' placement='right'>
+          <Tooltip title='Người bán' placement='right'>
             <Box>
               <Item
-                title={"Kích hoạt người bán"}
+                title={"Người bán"}
                 to={"/sellerRequest"}
                 icon={<HowToRegOutlined />}
                 selected={selected}
@@ -646,11 +646,11 @@ const Sidebar = ({ userRole, currentLocation }) => {
                     textTransform: "uppercase",
                   }}>
                   {user.role === 3
-                    ? "Admin"
+                    ? "Quản trị viên"
                     : user.role === 4
-                    ? "Manager"
+                    ? "Quản lí"
                     : user.role === 5
-                    ? "Staff"
+                    ? "Nhân viên"
                     : ""}
                 </Typography>
                 <IconButton color={colors.primary[100]}>
@@ -688,13 +688,13 @@ const Sidebar = ({ userRole, currentLocation }) => {
                   }}>
                   {user.name}
                 </Typography>
-                <Typography variant='subtitle2'>
+                <Typography variant='subtitle2' color='primary'>
                   {user.role === 3
-                    ? "Admin"
+                    ? "Quản trị viên"
                     : user.role === 4
-                    ? "Manager"
+                    ? "Quản lí"
                     : user.role === 5
-                    ? "Staff"
+                    ? "Nhân viên"
                     : ""}
                 </Typography>
               </Box>

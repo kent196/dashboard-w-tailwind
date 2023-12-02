@@ -57,6 +57,7 @@ const Dashboard = () => {
   const [anchorEl, setAnchorEl] = useState(null);
   const [selectedFilter, setSelectedFilter] = useState(2020); // Default selected filter
   const [filterValue, setFilterValue] = useState(2020); // Default selected filter
+  const endedFilterValue = 12;
   const [totalAuctions, setTotalAuctions] = useState(0); // Default selected filter
   const [totalRevenue, setTotalRevenue] = useState(0);
   const frequentUsersPageSize = 5;
@@ -172,7 +173,7 @@ const Dashboard = () => {
 
   useEffect(() => {
     if (currentUser.role === 5) {
-      fetchStaffEndedAuctions(filterValue)
+      fetchStaffEndedAuctions(endedFilterValue)
         .then((res) => {
           setAuctionsCount(res.data.count);
           setAuctions(res.data);
@@ -180,7 +181,7 @@ const Dashboard = () => {
         .catch((err) => {});
     } else if (currentUser.role === 4 || currentUser.role === 3) {
       // If currentUser.role is not 5, you can handle it as needed
-      fetchAllEndedAuctions(filterValue)
+      fetchAllEndedAuctions(endedFilterValue)
         .then((res) => {
           console.log(res);
           setAuctionsCount(res.data.count);
