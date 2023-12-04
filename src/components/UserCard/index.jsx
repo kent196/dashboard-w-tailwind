@@ -54,7 +54,7 @@ const UserCard = ({
           <Typography variant='h6'>{bidDate}</Typography>
           <Typography variant='h6'>{email}</Typography>
           <Typography variant='h6'>
-            Số đơn hàng đã đặt: {numberOfDoneOrders}
+            {numberOfDoneOrders && `Số đơn hàng đã đặt: ${numberOfDoneOrders}`}
           </Typography>
         </Box>
       </Box>
