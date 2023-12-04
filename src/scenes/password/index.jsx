@@ -6,11 +6,14 @@ import { updateUserPassword } from "../../libs/userService";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Helmet } from "react-helmet";
+import { ArrowBack } from "@mui/icons-material";
+import { useNavigate, useNavigation } from "react-router-dom";
 
 const ChangePassword = () => {
   const [formData, setFormData] = useState({});
   const [errorMsg, setErrorMsg] = useState(null);
   const [resetForm, setResetForm] = useState(false); // State variable to trigger re-render
+  const navigation = useNavigate();
 
   // Effect to reset the form when resetForm state changes
   useEffect(() => {
@@ -51,6 +54,25 @@ const ChangePassword = () => {
       <Helmet>
         <title>Cập nhật mật khẩu</title>
       </Helmet>
+      <Box
+        p={"10px"}
+        borderRadius={"5px"}
+        display={"flex"}
+        gap={"20px"}
+        justifyContent={"flex-start"}
+        alignItems={"center"}>
+        <Box>
+          <Button
+            variant='outlined'
+            onClick={() => {
+              navigation("/profile");
+            }}
+            size='large'
+            startIcon={<ArrowBack />}>
+            Thông tin cá nhân
+          </Button>
+        </Box>
+      </Box>
       <Box
         display={"flex"}
         flexDirection={"column"}

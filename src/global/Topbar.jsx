@@ -6,6 +6,7 @@ import {
   InputBase,
   Popper,
   MenuItem,
+  ClickAwayListener,
 } from "@mui/material";
 import {
   DarkModeOutlined,
@@ -21,6 +22,8 @@ import React, { useContext } from "react";
 // Local  import
 import { ColorModeContext, token } from "../theme";
 import { Navigate, useNavigate } from "react-router-dom";
+import { useEffect } from "react";
+import { fetchUserData } from "../libs/accountServices";
 
 const Topbar = () => {
   const theme = useTheme();
@@ -28,13 +31,22 @@ const Topbar = () => {
   const colorMode = useContext(ColorModeContext);
   const navigation = useNavigate();
   const [anchorEl, setAnchorEl] = React.useState(null);
+  const [userData, setUserData] = React.useState({});
 
   const handleClick = (event) => {
     setAnchorEl(anchorEl ? null : event.currentTarget);
   };
+  const handleClickAway = () => {
+    setAnchorEl(null);
+  };
 
   const open = Boolean(anchorEl);
   const id = open ? "simple-popper" : undefined;
+  useEffect(() => {
+    fetchUserData().then((res) => {
+      setUserData(res.data);
+    });
+  }, []);
 
   return (
     <Box
@@ -86,29 +98,41 @@ const Topbar = () => {
         <IconButton type='button' sx={{ p: 1 }}>
           <Settings />
         </IconButton> */}
-        <IconButton
+        <Box
+          width={"30px"}
+          height={"30px"}
           aria-describedby={id}
           type='button'
-          sx={{ p: 1 }}
+          sx={{
+            // p: 1,
+            margin: "10px",
+            objectFit: "cover",
+            borderRadius: "50%",
+            overflow: "hidden",
+            cursor: "pointer",
+          }}
           onClick={handleClick}>
-          <Person />
-        </IconButton>{" "}
+          {/* <Person /> */}
+          <img width={"100%"} height={"100%"} src={userData.profilePicture} />
+        </Box>{" "}
         <Popper id={id} open={open} anchorEl={anchorEl}>
-          <Box sx={{ border: 1, p: 1, bgcolor: "background.paper" }}>
-            <MenuItem onClick={() => navigation("/profile")}>
-              Tài khoản
-            </MenuItem>
-            <MenuItem onClick={() => navigation("/user/changePassword")}>
-              Đổi mật khẩu
-            </MenuItem>
-            <MenuItem
-              onClick={() => {
-                localStorage.clear();
-                navigation("/login");
-              }}>
-              Đăng xuất
-            </MenuItem>
-          </Box>
+          <ClickAwayListener onClickAway={handleClickAway}>
+            <Box sx={{ border: 1, p: 1, bgcolor: "background.paper" }}>
+              <MenuItem onClick={() => navigation("/profile")}>
+                Tài khoản
+              </MenuItem>
+              <MenuItem onClick={() => navigation("/user/changePassword")}>
+                Đổi mật khẩu
+              </MenuItem>
+              <MenuItem
+                onClick={() => {
+                  localStorage.clear();
+                  navigation("/login");
+                }}>
+                Đăng xuất
+              </MenuItem>
+            </Box>
+          </ClickAwayListener>
         </Popper>
       </Box>
     </Box>

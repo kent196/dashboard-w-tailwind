@@ -241,7 +241,19 @@ const Form = () => {
                   // defaultValue={initialValues.dob}
                   onBlur={handleBlur}
                   onChange={handleChange}
-                  value={new Date(values.dob).toISOString().substring(0, 16)}
+                  // value={
+                  //   values.dob &&
+                  //   new Date(values.dob).toLocaleString("vi-VN", {
+                  //     timeZone: "Asia/Ho_Chi_Minh",
+                  //   })
+                  // }
+                  value={new Date(
+                    values.dob.toLocaleString("vi-VN", {
+                      timeZone: "Asia/Ho_Chi_Minh",
+                    })
+                  )
+                    .toISOString()
+                    .substring(0, 16)}
                   name='dob'
                   error={!!touched.dob && !!errors.dob}
                   helperText={touched.dob && errors.dob}
