@@ -153,7 +153,7 @@ const Products = () => {
       ),
     },
   ];
-  return products.length > 0 ? (
+  return products != null ? (
     <Container maxWidth='xl' sx={{ paddingTop: "20px" }}>
       <Helmet>
         <title>Sản phẩm</title>

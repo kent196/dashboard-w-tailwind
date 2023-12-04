@@ -255,7 +255,7 @@ const Auction = ({ userId }) => {
     },
   ];
 
-  return auctions.length > 0 ? (
+  return auctions != null ? (
     <Container maxWidth='xl' sx={{ paddingTop: "20px" }}>
       <Helmet>
         <title>Đấu giá</title>

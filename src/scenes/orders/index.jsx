@@ -208,7 +208,7 @@ const Orders = () => {
     },
   ];
 
-  return orders.length > 0 ? (
+  return orders != null ? (
     <Container maxWidth='xl' sx={{ paddingTop: "20px" }}>
       <Helmet>
         <title>Đơn hàng</title>

@@ -26,6 +26,12 @@ const BarChart = ({ isDashboard = false, filterValue }) => {
         Bán: item.orderRevenue,
         "Đấu giá": item.auctionRevenue,
       }))}
+      valueFormat={(value) =>
+        new Intl.NumberFormat("vi-VN", {
+          style: "currency",
+          currency: "VND",
+        }).format(value)
+      }
       theme={{
         axis: {
           domain: {
@@ -122,6 +128,11 @@ const BarChart = ({ isDashboard = false, filterValue }) => {
         legend: isDashboard ? undefined : "VND",
         legendPosition: "end",
         legendOffset: -40,
+        format: (value) =>
+          new Intl.NumberFormat("vi-VN", {
+            style: "currency",
+            currency: "VND",
+          }).format(value),
       }}
       enableLabel={false}
       labelSkipWidth={12}
@@ -155,6 +166,12 @@ const BarChart = ({ isDashboard = false, filterValue }) => {
         },
       ]}
       role='application'
+      label={(e) =>
+        `${new Intl.NumberFormat("vi-VN", {
+          style: "currency",
+          currency: "VND",
+        }).format(e.value)}`
+      }
       ariaLabel='Nivo bar chart demo'
       barAriaLabel={(e) =>
         e.id + ": " + e.formattedValue + " in country: " + e.indexValue
