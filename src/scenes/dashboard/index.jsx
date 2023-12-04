@@ -55,6 +55,8 @@ const Dashboard = () => {
   const [products, setProducts] = useState({}); // State to store auction details
   const [orders, setOrders] = useState({}); // State to store auction details
   const [anchorEl, setAnchorEl] = useState(null);
+  const [ordersCount, setOrdersCount] = useState(0); // State to store auction details
+  const [productsCount, setProductsCount] = useState(0); // State to store auction details
   const [selectedFilter, setSelectedFilter] = useState(2023); // Default selected filter
   const [filterValue, setFilterValue] = useState(2023); // Default selected filter
   const endedFilterValue = 12;
@@ -155,7 +157,8 @@ const Dashboard = () => {
 
     fetchOrders()
       .then((res) => {
-        setOrders(res.data.list);
+        // setOrders(res.data.list);
+        setOrdersCount(res.data.count);
       })
       .catch((err) => {});
   }, []);
@@ -163,7 +166,8 @@ const Dashboard = () => {
   useEffect(() => {
     fetchProducts()
       .then((res) => {
-        setProducts(res.data.productList);
+        // setProducts(res.data.productList);
+        setProductsCount(res.data.count);
       })
       .catch((err) => {});
     return () => {
@@ -286,14 +290,14 @@ const Dashboard = () => {
           <Grid item xs={12} sm={6} md={3} lg={3} xl={3}>
             <Statbox
               title={"Sản phẩm"}
-              subTitle={`${products.length} sản phẩm`}
+              subTitle={`${productsCount} sản phẩm`}
               icon={<StoreOutlined />}
             />
           </Grid>
           <Grid item xs={12} sm={6} md={3} lg={3} xl={3}>
             <Statbox
               title={"Đơn hàng"}
-              subTitle={`${orders.length} đơn hàng`}
+              subTitle={`${ordersCount} đơn hàng`}
               icon={<Checklist />}
             />
           </Grid>

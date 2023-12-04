@@ -321,7 +321,7 @@ const Team = () => {
         />
       );
     } else if (currentUser.role === 5) {
-      return users.length !== 0 ? (
+      return users !== null ? (
         <Container maxWidth='xl' sx={{ paddingTop: "20px" }}>
           <Helmet>
             <title>Người dùng</title>
