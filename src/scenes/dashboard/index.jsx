@@ -311,7 +311,7 @@ const Dashboard = () => {
               gap={"20px"}
               flexDirection={"column"}>
               <Grid container spacing={2} height={"70%"}>
-                <Grid item xs={12} sm={12} md={4} lg={4} xl={4}>
+                <Grid item xs={12} sm={12} md={4} lg={4} xl={4} height={"100%"}>
                   <Paper elevation={3} sx={{ padding: "20px", height: "100%" }}>
                     <Header title={"Khách hàng thân thiết"} />
                     <Box
@@ -329,7 +329,7 @@ const Dashboard = () => {
                     </Box>
                   </Paper>
                 </Grid>
-                <Grid item xs={12} sm={12} md={8} lg={8} xl={8}>
+                <Grid item xs={12} sm={12} md={8} lg={8} xl={8} height={"100%"}>
                   <Paper elevation={3} sx={{ padding: "20px", height: "100%" }}>
                     <Header title={"Doanh thu"} />
 
