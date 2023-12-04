@@ -1,4 +1,11 @@
-import { Box, Button, Container, TextField, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  CircularProgress,
+  Container,
+  TextField,
+  Typography,
+} from "@mui/material";
 import React, { useEffect } from "react";
 import Header from "../../components/Header";
 import { useState } from "react";
@@ -14,6 +21,7 @@ const ChangePassword = () => {
   const [errorMsg, setErrorMsg] = useState(null);
   const [resetForm, setResetForm] = useState(false); // State variable to trigger re-render
   const navigation = useNavigate();
+  const [loading, setLoading] = useState(false);
 
   // Effect to reset the form when resetForm state changes
   useEffect(() => {
@@ -32,8 +40,10 @@ const ChangePassword = () => {
   };
 
   const handleUpdatePassword = (formData) => {
+    setLoading(true);
     updateUserPassword(formData)
       .then((res) => {
+        setLoading(false);
         toast.success("Đổi mật khẩu thành công", {
           position: toast.POSITION.TOP_RIGHT,
           autoClose: 2000,
@@ -42,6 +52,7 @@ const ChangePassword = () => {
         setErrorMsg(null);
       })
       .catch((err) => {
+        setLoading(false);
         toast.error("Cập nhật mật khẩu chưa thành công", {
           position: toast.POSITION.TOP_RIGHT,
           autoClose: 2000,
@@ -122,10 +133,12 @@ const ChangePassword = () => {
             sx={{ width: "20%" }}
             variant='contained'
             color='success'
+            startIcon={loading && <CircularProgress size={15} />}
+            disabled={loading}
             onClick={() => {
               handleUpdatePassword(formData);
             }}>
-            Lưu
+            {loading ? "Đang cập nhật" : "Lưu"}
           </Button>
         </Box>
       </Box>
