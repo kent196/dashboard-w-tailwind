@@ -276,7 +276,7 @@ const Dashboard = () => {
             {currentUser.role === 5 ? (
               <Statbox
                 title={"Đấu giá"}
-                subTitle={`Đang quản lí ${totalAuctions || 0} phiên`}
+                subTitle={`Đã được giao ${totalAuctions || 0} phiên`}
                 icon={<ListOutlined />}
               />
             ) : (
