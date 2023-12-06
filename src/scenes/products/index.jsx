@@ -32,6 +32,7 @@ const Products = () => {
   const [isOpenConfirmDelete, setIsOpenConfirmDelete] = useState(false);
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [isLoadingProductDetails, setIsLoadingProductDetails] = useState(false);
+  const [loadingProducts, setLoadingProducts] = useState(false);
   const [productsCount, setproductsCount] = useState(); // State to store auction details
   const [paginationModel, setPaginationModel] = React.useState({
     page: 0,
@@ -49,10 +50,12 @@ const Products = () => {
   }, [productsCount, setRowCountState]);
 
   useEffect(() => {
+    setLoadingProducts(true);
     window.scrollTo(0, 0);
 
     fetchProducts(paginationModel.pageSize, paginationModel.page)
       .then((res) => {
+        setLoadingProducts(false);
         setproductsCount(res.data.count);
         setProducts(res.data.productList);
       })
@@ -153,6 +156,19 @@ const Products = () => {
       ),
     },
   ];
+
+  if (loadingProducts) {
+    <Container maxWidth='xl' sx={{ paddingTop: "20px" }}>
+      {" "}
+      <Skeleton
+        variant='rectangular'
+        width={"100%"}
+        height={500}
+        animation='wave'
+      />
+    </Container>;
+  }
+
   return products != null ? (
     <Container maxWidth='xl' sx={{ paddingTop: "20px" }}>
       <Helmet>
@@ -209,7 +225,6 @@ const Products = () => {
             columns={column}
             components={{ Toolbar: GridToolbar }}
             rowCount={rowCountState}
-            // loading={isLoad}
             pageSizeOptions={[1, 2, 3, 10]}
             paginationModel={paginationModel}
             paginationMode='server'

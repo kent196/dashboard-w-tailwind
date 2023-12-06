@@ -234,9 +234,15 @@ const Team = () => {
   {
     if (loading) {
       return (
-        <Box>
-          <Skeleton variant='rectangular' width={"100%"} height={50} />
-        </Box>
+        <Container maxWidth='xl' sx={{ paddingTop: "20px" }}>
+          {" "}
+          <Skeleton
+            variant='rectangular'
+            width={"100%"}
+            height={500}
+            animation='wave'
+          />
+        </Container>
       );
     }
     if (currentUser.role === 3 || currentUser.role === 4) {

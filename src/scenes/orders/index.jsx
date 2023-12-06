@@ -11,6 +11,7 @@ import {
   Menu,
   MenuList,
   Select,
+  Skeleton,
   TextField,
   Typography,
 } from "@mui/material";
@@ -45,6 +46,7 @@ const Orders = () => {
   const navigate = useNavigate();
   const theme = useTheme();
   const [page, setPage] = useState(1);
+  const [loading, setLoading] = useState(false);
   // const [pageSize, setPageSize] = useState(3);
 
   const [pageInput, setPageInput] = useState(1); // State for page input
@@ -87,10 +89,12 @@ const Orders = () => {
   }
 
   useEffect(() => {
+    setLoading(true);
     window.scrollTo(0, 0);
 
     fetchOrders(paginationModel.pageSize, paginationModel.page + 1, filterValue)
       .then((res) => {
+        setLoading(false);
         setOrdersCount(res.data.count);
         setOrders(res.data.list);
       })
@@ -207,6 +211,19 @@ const Orders = () => {
       ),
     },
   ];
+  if (loading) {
+    return (
+      <Container maxWidth='xl' sx={{ paddingTop: "20px" }}>
+        {" "}
+        <Skeleton
+          variant='rectangular'
+          width={"100%"}
+          height={500}
+          animation='wave'
+        />
+      </Container>
+    );
+  }
 
   return orders != null ? (
     <Container maxWidth='xl' sx={{ paddingTop: "20px" }}>

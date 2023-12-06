@@ -426,13 +426,15 @@ const AuctionManager = () => {
                 },
               }}>
               {isLoading ? (
-                // Display a loading skeleton while data is being fetched
-                <Skeleton
-                  variant='rectangular'
-                  animation='wave'
-                  width='100%'
-                  height={"70vh"} // Adjust the height according to your needs
-                />
+                <Container maxWidth='xl' sx={{ paddingTop: "20px" }}>
+                  {" "}
+                  <Skeleton
+                    variant='rectangular'
+                    width={"100%"}
+                    height={500}
+                    animation='wave'
+                  />
+                </Container>
               ) : (
                 // Display the DataGrid when data is available
 
