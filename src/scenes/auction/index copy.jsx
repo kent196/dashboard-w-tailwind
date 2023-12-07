@@ -688,15 +688,18 @@ const AuctionManager = () => {
                               ? "Chưa có nhân viên"
                               : auctionDetails.staffName}
                           </Typography>
-                          {auctionDetails.status === 1 && (
-                            <Button
-                              sx={{ minWidth: "100px", height: "50px" }}
-                              variant='contained'
-                              color='primary'
-                              onClick={() => setIsOpenChooser(!isOpenChooser)}>
-                              Chọn nhân viên
-                            </Button>
-                          )}
+                          {auctionDetails.status === 1 ||
+                            (auctionDetails.status === 2 && (
+                              <Button
+                                sx={{ minWidth: "100px", height: "50px" }}
+                                variant='contained'
+                                color='primary'
+                                onClick={() =>
+                                  setIsOpenChooser(!isOpenChooser)
+                                }>
+                                Chọn nhân viên
+                              </Button>
+                            ))}
                         </Box>
                       </Box>
                     </Box>
