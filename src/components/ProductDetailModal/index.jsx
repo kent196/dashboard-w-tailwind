@@ -188,14 +188,14 @@ const ProductDetailModal = ({
 
                   <Typography variant='h5'>
                     {productDetails.condition === 0
-                      ? "Mới"
+                      ? "Mới tinh"
                       : productDetails.condition === 1
-                      ? "Gần như mới"
+                      ? "Mới"
                       : productDetails.condition === 2
-                      ? "Tốt"
+                      ? "Đã qua sử dụng"
                       : productDetails.condition === 2
-                      ? "Khá ổn"
-                      : "Cũ"}
+                      ? "Cũ"
+                      : "Cổ"}
                   </Typography>
                 </Box>
                 <Box>
