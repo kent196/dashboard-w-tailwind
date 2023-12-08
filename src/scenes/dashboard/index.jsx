@@ -496,10 +496,12 @@ const Dashboard = () => {
                         alignItems={"center"}
                         gap={"20px"}>
                         <Box
+                          display={"flex"}
+                          justifyContent={"center"}
                           width={"300px"}
                           height={"400px"}
                           sx={{
-                            objectFit: "cover",
+                            objectFit: "contain",
                             overflow: "hidden",
                           }}>
                           <img
