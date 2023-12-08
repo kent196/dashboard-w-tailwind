@@ -337,29 +337,30 @@ const Live = () => {
                   display={"flex"}
                   justifyContent={"space-between"}
                   alignItems={"center"}
-                  gap={"10px"}
-                  sx={{
-                    // padding: "10px",
-                    margin: "10px",
-                    backgroundColor:
-                      index === 0
-                        ? `${colors.blueAccent[800]} !important`
-                        : bid.status === 1
-                        ? "transparent"
-                        : "#e7e9eb",
-                    textDecoration: bid.status === 2 ? "line-through" : "",
-                  }}>
+                  gap={"10px"}>
                   {/* <Typography variant='h6'>{bid.bidder.name}</Typography>
                   <Typography variant='h6'>
                     {formatPrice(bid.bidAmount)}
                   </Typography> */}
-                  <UserCard
-                    avatar={bid.bidder.profilePicture}
-                    bidderName={bid.bidder.name}
-                    bidDate={formatDateTime(bid.bidDate)}
-                    bidAmmount={formatPrice(bid.bidAmount)}
-                    email={bid.bidder.email}
-                  />
+                  {index === 0 ? (
+                    <UserCard
+                      color={`${colors.blueAccent[800]} !important`}
+                      avatar={bid.bidder.profilePicture}
+                      bidderName={bid.bidder.name}
+                      bidDate={formatDateTime(bid.bidDate)}
+                      bidAmmount={formatPrice(bid.bidAmount)}
+                      email={bid.bidder.email}
+                    />
+                  ) : (
+                    <UserCard
+                      color={"transparent"}
+                      avatar={bid.bidder.profilePicture}
+                      bidderName={bid.bidder.name}
+                      bidDate={formatDateTime(bid.bidDate)}
+                      bidAmmount={formatPrice(bid.bidAmount)}
+                      email={bid.bidder.email}
+                    />
+                  )}
                 </Box>
               ))
             ) : (

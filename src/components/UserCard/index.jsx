@@ -10,15 +10,18 @@ const UserCard = ({
   email,
   icon,
   numberOfDoneOrders,
+  color,
 }) => {
   return (
     <Box
+      bgcolor={color}
       display={"flex"}
       justifyContent={"space-between"}
       width={"100%"}
       p={"10px"}
-      margin={"10px 0"}
-      boxShadow={2}>
+      margin={"10px"}
+      boxShadow={3}
+      borderRadius={"15px"}>
       {/* left */}
       <Box
         display={"flex"}

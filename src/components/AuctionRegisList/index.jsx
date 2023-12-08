@@ -28,7 +28,7 @@ const RegistrationList = ({
       <DialogContent>
         <Box height={"500px"} sx={{ overflowY: "scroll" }}>
           {regisList.map((item) => (
-            <Box key={item.bidder.bidAmount}>
+            <Box key={item.bidder.bidAmount} pr={"30px"}>
               <UserCard
                 avatar={item.bidder.profilePicture}
                 bidderName={item.bidder.name}

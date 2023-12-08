@@ -36,6 +36,7 @@ import RegistrationList from "../../components/AuctionRegisList";
 import { ToastContainer } from "react-toastify";
 import { SignalRContext } from "../../context/SignalRContext";
 import { Helmet } from "react-helmet";
+import { ArrowBack } from "@mui/icons-material";
 
 const AuctionDetail = () => {
   const theme = useTheme();
@@ -267,12 +268,33 @@ const AuctionDetail = () => {
               flex={"1"}
               alignItems={"center"}
               mb={"30px"}></Box> */}
+            <Box
+              p={"10px"}
+              borderRadius={"5px"}
+              display={"flex"}
+              gap={"20px"}
+              justifyContent={"flex-start"}
+              alignItems={"center"}>
+              <Box>
+                <Button
+                  variant='outlined'
+                  onClick={() => navigate(`/auctions`)}
+                  size='large'
+                  startIcon={<ArrowBack />}>
+                  Trở lại
+                </Button>
+              </Box>
+              <Box>
+                <Typography variant='h5'>Đấu giá số: {auction.id}</Typography>
+              </Box>
+            </Box>
             <Box display={"flex"} justifyContent={"center"}>
               <Box
                 // maxHeight={"100vh"}
                 display={"flex"}
                 justifyContent={"space-evenly"}
                 width={"80%"}
+                margin={"20px"}
                 gap={"20px"}>
                 {isStaffChooserOpen && (
                   <StaffChooser
@@ -600,8 +622,12 @@ const AuctionDetail = () => {
                             variant={"outlined"}
                             color={"primary"}
                             onClick={() => {
-                              setIsOpenViewBidders(true);
-                              handleFetchBidders(id);
+                              if (auction.status === 4) {
+                                openRegistrationList();
+                              } else {
+                                setIsOpenViewBidders(true);
+                                handleFetchBidders(id);
+                              }
                             }}>
                             Xem chi tiết
                           </Button>
@@ -720,7 +746,7 @@ const AuctionDetail = () => {
                       <Button
                         variant='outlined'
                         onClick={() => handleViewProduct(auction.product.id)}>
-                        Xem chi tiết
+                        Xem sản phẩm
                       </Button>
                     </Box>
                     {auction.status === 4 && (
@@ -776,11 +802,77 @@ const AuctionDetail = () => {
               aria-labelledby='alert-dialog-title'
               aria-describedby='alert-dialog-description'>
               <DialogTitle>
-                Số người tham gia: {auction.numberOfBidders} <br /> Số lượt bid:{" "}
-                {auction.numberOfBids}
+                Số người tham gia: {auction.numberOfBidders} <br /> Số lượt đặt
+                giá: {auction.numberOfBids}
               </DialogTitle>
               <DialogContent>
-                {bidders.map((bidder, index) => (
+                {auction.status === 4
+                  ? () => {
+                      regisList.map((bidder, index) => (
+                        <Box
+                          key={bidder.bidder.bidAmount || bidder.bidder.name}
+                          m='10px 0'
+                          style={{
+                            padding: "10px",
+                            color:
+                              bidder.bidder.status === 1 ? "black" : "gray",
+                          }}>
+                          <Box display='flex' justifyContent='space-between'>
+                            <Typography variant='h5'>
+                              {bidder.bidder.name}
+                            </Typography>
+                            {/* <Typography variant='h5'>
+                              {formatPrice(bidder.bidder.bidAmount) || ""}
+                            </Typography> */}
+                          </Box>
+                          <Box display='flex' justifyContent='space-between'>
+                            <Typography variant='h5'>
+                              {new Date(bidder.bidder.bidDate).toLocaleString()}
+                            </Typography>
+                            <Typography variant='h5'>
+                              {bidder.bidder.status === 1 ? "Hợp lệ" : "Đã rút"}
+                            </Typography>
+                          </Box>
+                        </Box>
+                      ));
+                    }
+                  : () => {
+                      bidders.map((bidder, index) => (
+                        <Box
+                          key={bidder.bidAmount || bidder.bidderName}
+                          m='10px 0'
+                          style={{
+                            backgroundColor:
+                              index === 0
+                                ? "yellow"
+                                : bidder.status === 1
+                                ? "transparent"
+                                : "#e7e9eb", // Highlight the first bidder
+                            padding: "10px",
+                            color:
+                              bidder.bidder.status === 1 ? "black" : "gray",
+                          }}>
+                          <Box display='flex' justifyContent='space-between'>
+                            <Typography variant='h5'>
+                              {bidder.bidder.name}
+                            </Typography>
+                            <Typography variant='h5'>
+                              {formatPrice(bidder.bidder.bidAmount) || ""}
+                            </Typography>
+                          </Box>
+                          <Box display='flex' justifyContent='space-between'>
+                            <Typography variant='h5'>
+                              {new Date(bidder.bidder.bidDate).toLocaleString()}
+                            </Typography>
+                            <Typography variant='h5'>
+                              {bidder.bidder.status === 1 ? "Hợp lệ" : "Đã rút"}
+                            </Typography>
+                          </Box>
+                        </Box>
+                      ));
+                    }}
+                {/* {bidders.map((bidder, index) => (
+                  
                   <Box
                     key={bidder.bidAmount || bidder.bidderName}
                     m='10px 0'
@@ -809,7 +901,7 @@ const AuctionDetail = () => {
                       </Typography>
                     </Box>
                   </Box>
-                ))}
+                ))} */}
               </DialogContent>
             </Dialog>
 
@@ -834,6 +926,26 @@ const AuctionDetail = () => {
         {auction && (
           <>
             <Box
+              p={"10px"}
+              borderRadius={"5px"}
+              display={"flex"}
+              gap={"20px"}
+              justifyContent={"flex-start"}
+              alignItems={"center"}>
+              <Box>
+                <Button
+                  variant='outlined'
+                  onClick={() => navigate(`/auctions`)}
+                  size='large'
+                  startIcon={<ArrowBack />}>
+                  Trở lại
+                </Button>
+              </Box>
+              <Box>
+                <Typography variant='h5'>Đấu giá số: {auction.id}</Typography>
+              </Box>
+            </Box>
+            <Box
               display={"flex"}
               justifyContent={"flex-start"}
               gap={"20px"}
@@ -845,6 +957,7 @@ const AuctionDetail = () => {
                 display={"flex"}
                 justifyContent={"space-between"}
                 gap={"20px"}
+                margin={"20px"}
                 width={"80%"}>
                 {isStaffChooserOpen && (
                   <StaffChooser
@@ -1107,8 +1220,12 @@ const AuctionDetail = () => {
                               variant={"outlined"}
                               color={"primary"}
                               onClick={() => {
-                                setIsOpenViewBidders(true);
-                                handleFetchBidders(id);
+                                if (auction.status === 4) {
+                                  openRegistrationList();
+                                } else {
+                                  setIsOpenViewBidders(true);
+                                  handleFetchBidders(id);
+                                }
                               }}>
                               Xem chi tiết
                             </Button>
@@ -1192,7 +1309,7 @@ const AuctionDetail = () => {
                       <Button
                         variant='outlined'
                         onClick={() => handleViewProduct(auction.product.id)}>
-                        Xem chi tiết
+                        Xem sản phẩm
                       </Button>
                     </Box>
                     {auction.status === 4 && (
@@ -1247,8 +1364,8 @@ const AuctionDetail = () => {
               aria-labelledby='alert-dialog-title'
               aria-describedby='alert-dialog-description'>
               <DialogTitle>
-                Số người tham gia: {auction.numberOfBidders} <br /> Số lượt bid:{" "}
-                {auction.numberOfBids}
+                Số người tham gia: {auction.numberOfBidders} <br /> Số lượt đặt
+                giá: {auction.numberOfBids}
               </DialogTitle>
               <DialogContent>
                 {bidders.map((bidder, index) => (
