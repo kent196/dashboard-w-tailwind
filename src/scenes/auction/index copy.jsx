@@ -688,8 +688,8 @@ const AuctionManager = () => {
                               ? "Chưa có nhân viên"
                               : auctionDetails.staffName}
                           </Typography>
-                          {auctionDetails.status === 1 ||
-                            (auctionDetails.status === 2 && (
+                          {(auctionDetails.status === 1 ||
+                            auctionDetails.status === 2) && (
                               <Button
                                 sx={{ minWidth: "100px", height: "50px" }}
                                 variant='contained'
@@ -699,7 +699,7 @@ const AuctionManager = () => {
                                 }>
                                 Chọn nhân viên
                               </Button>
-                            ))}
+                            )}
                         </Box>
                       </Box>
                     </Box>
