@@ -261,6 +261,7 @@ const Dashboard = () => {
           }}>
           <Grid item xs={12} sm={6} md={3} lg={3} xl={3}>
             <Statbox
+              to={"/team"}
               title={`${
                 currentUser.role === 5
                   ? "Khách hàng"
@@ -275,12 +276,14 @@ const Dashboard = () => {
           <Grid item xs={12} sm={6} md={3} lg={3} xl={3}>
             {currentUser.role === 5 ? (
               <Statbox
+                to={"/auctions"}
                 title={"Đấu giá"}
                 subTitle={`Đã được giao ${totalAuctions || 0} phiên`}
                 icon={<ListOutlined />}
               />
             ) : (
               <Statbox
+                to={"/auctions/manager"}
                 title={"Đấu giá"}
                 subTitle={`${totalAuctions || 0} phiên đấu giá`}
                 icon={<ListOutlined />}
@@ -289,6 +292,7 @@ const Dashboard = () => {
           </Grid>
           <Grid item xs={12} sm={6} md={3} lg={3} xl={3}>
             <Statbox
+              to={"/products"}
               title={"Sản phẩm"}
               subTitle={`${productsCount} sản phẩm`}
               icon={<StoreOutlined />}
@@ -296,6 +300,7 @@ const Dashboard = () => {
           </Grid>
           <Grid item xs={12} sm={6} md={3} lg={3} xl={3}>
             <Statbox
+              to={"/orders"}
               title={"Đơn hàng"}
               subTitle={`${ordersCount} đơn hàng`}
               icon={<Checklist />}
@@ -310,11 +315,11 @@ const Dashboard = () => {
           <Box width={"95%"} height={"100%"}>
             <Grid
               container
-              sx={{ height: "100%", margin: "0 0 0 20px" }}
+              sx={{ height: "auto", margin: "0 0 0 20px" }}
               justifyContent={"flex-start"}
               gap={"20px"}
               flexDirection={"column"}>
-              <Grid container spacing={2} height={"70%"}>
+              <Grid container spacing={2} height={"50%"}>
                 <Grid item xs={12} sm={12} md={4} lg={4} xl={4} height={"100%"}>
                   <Paper elevation={3} sx={{ padding: "20px", height: "100%" }}>
                     <Header title={"Khách hàng thân thiết"} />
@@ -333,7 +338,7 @@ const Dashboard = () => {
                     </Box>
                   </Paper>
                 </Grid>
-                <Grid item xs={12} sm={12} md={8} lg={8} xl={8} height={"100%"}>
+                <Grid item xs={12} sm={12} md={8} lg={8} xl={8} height={"auto"}>
                   <Paper elevation={3} sx={{ padding: "20px", height: "100%" }}>
                     <Header title={"Doanh thu"} />
 
@@ -433,7 +438,11 @@ const Dashboard = () => {
                   </Paper>
                 </Grid>
               </Grid>
-              <Grid container spacing={3} height={"30%"} sx={{}}>
+              <Grid
+                container
+                spacing={3}
+                height={"50%"}
+                sx={{ marginBottom: "20px" }}>
                 <Grid item xs={12} sm={12} md={6} lg={6} xl={6}>
                   <Paper
                     elevation={3}
@@ -487,7 +496,7 @@ const Dashboard = () => {
                         gap={"20px"}>
                         <Box
                           width={"300px"}
-                          height={"100%"}
+                          height={"400px"}
                           sx={{
                             objectFit: "cover",
                             overflow: "hidden",

@@ -2,13 +2,20 @@ import { Box, Typography } from "@mui/material";
 import { useTheme } from "@emotion/react";
 import { token } from "../../theme";
 import React from "react";
+import { useNavigate } from "react-router-dom";
 
-const Statbox = ({ title, subTitle, icon, children, width, height }) => {
+const Statbox = ({ title, subTitle, icon, children, width, height, to }) => {
   const theme = useTheme();
   const colors = token(theme.palette.mode);
+  const navigate = useNavigate();
 
   return (
     <Box
+      onClick={() => {
+        if (to) {
+          navigate(to);
+        }
+      }}
       width={"80%"}
       // m={"20px 30px"}
       sx={{
@@ -16,6 +23,10 @@ const Statbox = ({ title, subTitle, icon, children, width, height }) => {
         boxShadow: "0px 0px 10px 0px rgba(0,0,0,0.1)",
         padding: "10px 20px",
         height: "100%",
+        "&:hover": {
+          cursor: "pointer",
+          backgroundColor: "#fff7ec",
+        },
       }}>
       {children ? (
         <Box width={width} height={height}>

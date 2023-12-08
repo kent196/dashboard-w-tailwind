@@ -19,6 +19,7 @@ body,
 .content {
   overflow-y: auto;
   overflow-x: hidden;
+  padding-bottom: 200px;
 }
 
 html {
