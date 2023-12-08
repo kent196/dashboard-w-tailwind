@@ -330,6 +330,7 @@ const Dashboard = () => {
                       }}>
                       {frequentUsers.map((user) => (
                         <UserCard
+                          isDashboard={true}
                           bidderName={user.name}
                           avatar={user.profilePicture}
                           numberOfDoneOrders={user.numberOfDoneOrders}

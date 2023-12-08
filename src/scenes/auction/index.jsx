@@ -140,11 +140,11 @@ const Auction = ({ userId }) => {
     navigate(`/auction/${auctionId}`);
   };
   const columns = [
-    { field: "id", headerName: "ID" },
+    { field: "id", headerName: "ID", flex: 0.1 },
     {
       field: "title",
       headerName: "Tên",
-      flex: 1,
+      flex: 2,
       cellClassName: "auctionName-column--cell",
     },
     {
@@ -170,7 +170,7 @@ const Auction = ({ userId }) => {
     {
       field: "status",
       headerName: "Trạng thái",
-      flex: 2,
+      flex: 1.5,
       cellClassName: "status-column--cell",
       valueGetter: (params) => getStatusText(params.value),
       renderCell: (params) => (
@@ -221,7 +221,7 @@ const Auction = ({ userId }) => {
     {
       field: "startedAt",
       headerName: "Ngày bắt đầu",
-      flex: 1,
+      flex: 1.25,
       cellClassName: "auctionName-column--cell",
       valueFormatter: (params) => {
         // Use the formatDateTime function to format the date-time value
@@ -231,7 +231,7 @@ const Auction = ({ userId }) => {
     {
       field: "endedAt",
       headerName: "Ngày kết thúc",
-      flex: 1,
+      flex: 1.25,
       cellClassName: "auctionName-column--cell",
       valueFormatter: (params) => {
         // Use the formatDateTime function to format the date-time value
@@ -242,7 +242,7 @@ const Auction = ({ userId }) => {
     {
       field: "assignStaff",
       headerName: "Thao tác",
-      flex: 1,
+      // flex: 1,
       renderCell: (params) => (
         <>
           <IconButton

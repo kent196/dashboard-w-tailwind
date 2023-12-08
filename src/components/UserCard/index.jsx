@@ -11,6 +11,7 @@ const UserCard = ({
   icon,
   numberOfDoneOrders,
   color,
+  isDashboard,
 }) => {
   return (
     <Box
@@ -27,7 +28,7 @@ const UserCard = ({
         display={"flex"}
         justifyContent={"flex-start"}
         gap={"10px"}
-        width={"60%"}>
+        width={isDashboard ? "100%" : "60%"}>
         <Box
           width={"100px"}
           height={"100px"}
@@ -43,7 +44,7 @@ const UserCard = ({
             src={avatar}
           />
         </Box>
-        <Box width={"60%"}>
+        <Box>
           <Box
             display={"flex"}
             justifyContent={"space-between"}
@@ -62,13 +63,15 @@ const UserCard = ({
         </Box>
       </Box>
       {/* right */}
-      <Box display={"flex"} justifyContent={"flex-end"} width={"40%"}>
-        <Box>
-          <Typography variant='h5' fontWeight={"bold"}>
-            {bidAmmount && formatPrice(bidAmmount)}
-          </Typography>
+      {bidAmmount && (
+        <Box display={"flex"} justifyContent={"flex-end"} width={"40%"}>
+          <Box>
+            <Typography variant='h5' fontWeight={"bold"}>
+              {bidAmmount && formatPrice(bidAmmount)}
+            </Typography>
+          </Box>
         </Box>
-      </Box>
+      )}
     </Box>
   );
 };

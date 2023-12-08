@@ -245,11 +245,11 @@ const AuctionManager = () => {
       .catch((err) => {});
   };
   const columns = [
-    { field: "id", headerName: "ID" },
+    { field: "id", headerName: "ID", flex: 0.1 },
     {
       field: "title",
       headerName: "Tên",
-      flex: 1,
+      flex: 2,
       cellClassName: "auctionName-column--cell",
     },
     {
@@ -275,7 +275,7 @@ const AuctionManager = () => {
     {
       field: "status",
       headerName: "Trạng thái",
-      flex: 2,
+      flex: 1.5,
       cellClassName: "staffName-column--cell",
       valueGetter: (params) => getStatusText(params.value),
       renderCell: (params) => (
@@ -326,7 +326,7 @@ const AuctionManager = () => {
     {
       field: "startedAt",
       headerName: "Ngày bắt đầu",
-      flex: 1,
+      flex: 1.25,
       cellClassName: "auctionName-column--cell",
       valueFormatter: (params) => {
         // Use the formatDateTime function to format the date-time value
@@ -336,7 +336,7 @@ const AuctionManager = () => {
     {
       field: "endedAt",
       headerName: "Ngày kết thúc",
-      flex: 1,
+      flex: 1.25,
       cellClassName: "auctionName-column--cell",
       valueFormatter: (params) => {
         // Use the formatDateTime function to format the date-time value
@@ -347,7 +347,7 @@ const AuctionManager = () => {
     {
       field: "assignStaff",
       headerName: "Thao tác",
-      flex: 1,
+      // flex: 1,
       renderCell: (params) => (
         <>
           <IconButton
@@ -690,16 +690,14 @@ const AuctionManager = () => {
                           </Typography>
                           {(auctionDetails.status === 1 ||
                             auctionDetails.status === 2) && (
-                              <Button
-                                sx={{ minWidth: "100px", height: "50px" }}
-                                variant='contained'
-                                color='primary'
-                                onClick={() =>
-                                  setIsOpenChooser(!isOpenChooser)
-                                }>
-                                Chọn nhân viên
-                              </Button>
-                            )}
+                            <Button
+                              sx={{ minWidth: "100px", height: "50px" }}
+                              variant='contained'
+                              color='primary'
+                              onClick={() => setIsOpenChooser(!isOpenChooser)}>
+                              Chọn nhân viên
+                            </Button>
+                          )}
                         </Box>
                       </Box>
                     </Box>
