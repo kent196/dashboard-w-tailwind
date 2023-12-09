@@ -387,7 +387,7 @@ const Orders = () => {
                   padding: "5px",
                 }}
                 onClick={() => handleClose("Hoàn tất", 6)}>
-                Hoàn tất
+                Hoàn thành
               </MenuItem>
               {/* Add more filter options as needed */}
             </Menu>
