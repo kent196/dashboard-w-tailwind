@@ -168,6 +168,8 @@ const Orders = () => {
               ? "Đã vận chuyển"
               : params.row.status === 5
               ? "Chờ xác nhận"
+              : params.row.status === 6
+              ? "Hoàn thành"
               : params.row.status === 10
               ? "Bị từ chối"
               : params.row.status === 11
@@ -188,7 +190,7 @@ const Orders = () => {
               : params.row.status === 5
               ? "success"
               : params.row.status === 6
-              ? "warning"
+              ? "success"
               : params.row.status === 7
               ? "secondary"
               : "error"

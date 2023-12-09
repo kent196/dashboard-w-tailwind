@@ -151,6 +151,8 @@ const OrderDetail = () => {
                     ? "Đã vận chuyển"
                     : orderDetail.status === 5
                     ? "Chờ xác nhận"
+                    : orderDetail.status === 6
+                    ? "Hoàn thành"
                     : orderDetail.status === 10
                     ? "Bị từ chối"
                     : orderDetail.status === 11
@@ -171,7 +173,7 @@ const OrderDetail = () => {
                     : orderDetail.status === 5
                     ? "success"
                     : orderDetail.status === 6
-                    ? "warning"
+                    ? "success"
                     : orderDetail.status === 7
                     ? "secondary"
                     : "error"
