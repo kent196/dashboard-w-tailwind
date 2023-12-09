@@ -182,13 +182,13 @@ const Orders = () => {
             params.row.status === 1
               ? "info"
               : params.row.status === 2
-              ? "success"
+              ? "warning"
               : params.row.status === 3
               ? "default"
               : params.row.status === 4
               ? "info"
               : params.row.status === 5
-              ? "success"
+              ? "warning"
               : params.row.status === 6
               ? "success"
               : params.row.status === 7

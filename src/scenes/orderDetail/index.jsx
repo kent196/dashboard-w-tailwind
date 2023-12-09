@@ -165,13 +165,13 @@ const OrderDetail = () => {
                   orderDetail.status === 1
                     ? "info"
                     : orderDetail.status === 2
-                    ? "success"
+                    ? "warning"
                     : orderDetail.status === 3
                     ? "default"
                     : orderDetail.status === 4
                     ? "info"
                     : orderDetail.status === 5
-                    ? "success"
+                    ? "warning"
                     : orderDetail.status === 6
                     ? "success"
                     : orderDetail.status === 7
