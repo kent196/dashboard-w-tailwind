@@ -372,8 +372,8 @@ const Orders = () => {
                 style={{
                   padding: "5px",
                 }}
-                onClick={() => handleClose("Đang giao hàng", 3)}>
-                Đang giao hàng
+                onClick={() => handleClose("Đang vận chuyển", 3)}>
+                Đang vận chuyển
               </MenuItem>
               <MenuItem
                 style={{
