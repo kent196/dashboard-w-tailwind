@@ -26,14 +26,18 @@ const UserCard = ({
       {/* left */}
       <Box
         display={"flex"}
+        flex={1}
         justifyContent={"flex-start"}
-        gap={"10px"}
-        width={isDashboard ? "100%" : "60%"}>
+        width={isDashboard ? "100%" : "70%"}>
         <Box
           width={"100px"}
           height={"100px"}
           display={"flex"}
-          justifyContent={"center"}>
+          justifyContent={"center"}
+          sx={{
+            objectFit: "contain",
+            overflow: "hidden",
+          }}>
           <img
             style={{
               border: "1px solid #000",
@@ -44,7 +48,7 @@ const UserCard = ({
             src={avatar}
           />
         </Box>
-        <Box>
+        <Box marginLeft={"10px"}>
           <Box
             display={"flex"}
             justifyContent={"space-between"}
