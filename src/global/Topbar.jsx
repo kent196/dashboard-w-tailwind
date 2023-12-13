@@ -7,6 +7,7 @@ import {
   Popper,
   MenuItem,
   ClickAwayListener,
+  Typography,
 } from "@mui/material";
 import {
   DarkModeOutlined,
@@ -98,6 +99,13 @@ const Topbar = () => {
         <IconButton type='button' sx={{ p: 1 }}>
           <Settings />
         </IconButton> */}
+        <Box
+          display={"flex"}
+          justifyContent={"center"}
+          alignItems={"center"}
+          margin={"10px"}>
+          <Typography variant='h6'>Xin chào {userData.name}</Typography>
+        </Box>
         <Box
           width={"30px"}
           height={"30px"}
