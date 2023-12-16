@@ -361,7 +361,7 @@ const AuctionManager = () => {
   ];
 
   {
-    if (user.role === 4) {
+    if (user.role === 4 || user.role === 3) {
       return auctions != null ? (
         <Container maxWidth='xl' sx={{ paddingTop: "20px" }}>
           <Helmet>
