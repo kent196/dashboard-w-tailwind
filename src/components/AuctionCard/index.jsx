@@ -26,7 +26,11 @@ const AuctionCard = ({ image, title, startingPrice, status, id }) => {
         },
       }}>
       {/* auction info */}
-      <Box display={"flex"} justifyContent={"flex-start"} alignItems={"center"}>
+      <Box
+        width={"60%"}
+        display={"flex"}
+        justifyContent={"flex-start"}
+        alignItems={"center"}>
         <Box
           width={"50px"}
           height={"50px"}
@@ -69,7 +73,7 @@ const AuctionCard = ({ image, title, startingPrice, status, id }) => {
       <Chip
         sx={{
           textTransform: "uppercase",
-          width: "200px",
+          width: "30%",
           fontSize: "0.8rem",
         }}
         label={
