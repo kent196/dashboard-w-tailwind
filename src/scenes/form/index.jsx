@@ -247,13 +247,7 @@ const Form = () => {
                   //     timeZone: "Asia/Ho_Chi_Minh",
                   //   })
                   // }
-                  value={new Date(
-                    values.dob.toLocaleString("vi-VN", {
-                      timeZone: "Asia/Ho_Chi_Minh",
-                    })
-                  )
-                    .toISOString()
-                    .substring(0, 16)}
+                  value={new Date(values.dob).toISOString().slice(0, 16)}
                   name='dob'
                   error={!!touched.dob && !!errors.dob}
                   helperText={touched.dob && errors.dob}
