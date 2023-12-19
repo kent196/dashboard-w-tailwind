@@ -447,7 +447,7 @@ const AuctionManager = () => {
                   components={{ Toolbar: GridToolbar }}
                   rowCount={rowCountState}
                   // loading={isLoading}
-                  pageSizeOptions={[1, 2, 3, 10]}
+                  pageSizeOptions={[5, 10, 20, 30]}
                   paginationModel={paginationModel}
                   paginationMode='server'
                   onPaginationModelChange={setPaginationModel}

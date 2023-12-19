@@ -53,7 +53,7 @@ const Orders = () => {
   const [pageSizeInput, setPageSizeInput] = useState(3);
   const [paginationModel, setPaginationModel] = React.useState({
     page: 0,
-    pageSize: 5,
+    pageSize: 10,
   });
   const [anchorEl, setAnchorEl] = useState(null);
   const [selectedFilter, setSelectedFilter] = useState("Tất cả"); // Default selected filter
@@ -401,7 +401,7 @@ const Orders = () => {
             columns={columns}
             // components={{ Toolbar: GridToolbar }}
             rowCount={rowCountState}
-            pageSizeOptions={[1, 3, 5]}
+            pageSizeOptions={[5, 10, 20, 30]}
             paginationModel={paginationModel}
             paginationMode='server'
             onPaginationModelChange={setPaginationModel}

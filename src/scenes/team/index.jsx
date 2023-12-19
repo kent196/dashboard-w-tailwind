@@ -42,7 +42,7 @@ const Team = () => {
   const [loading, setLoading] = useState(false); // State to store loading status
   const [paginationModel, setPaginationModel] = React.useState({
     page: 0,
-    pageSize: 5,
+    pageSize: 10,
   });
   const [userCount, setUserCount] = React.useState(0);
   const [customerCount, setCustomerCount] = React.useState(0);
@@ -95,6 +95,7 @@ const Team = () => {
       fetchCustomer(paginationModel.pageSize, paginationModel.page + 1)
         .then((res) => {
           setCustomerCount(res.data.count);
+          console.log(customerCount);
           setCustomers(res.data.customerList);
         })
         .catch((err) => {});
@@ -312,7 +313,7 @@ const Team = () => {
               columns={columns}
               components={{ Toolbar: GridToolbar }}
               rowCount={rowCountState}
-              pageSizeOptions={[1, 3, 5]}
+              pageSizeOptions={[5, 10, 20, 30]}
               paginationModel={paginationModel}
               paginationMode='server'
               onPaginationModelChange={setPaginationModel}
@@ -393,7 +394,7 @@ const Team = () => {
               columns={columns}
               components={{ Toolbar: GridToolbar }}
               rowCount={rowCountState}
-              pageSizeOptions={[1, 3, 5]}
+              pageSizeOptions={[5, 10, 20, 30]}
               paginationModel={paginationModel}
               paginationMode='server'
               onPaginationModelChange={setPaginationModel}
