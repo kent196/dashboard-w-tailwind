@@ -143,6 +143,19 @@ const fetchRevenue = async (year) => {
   }
 };
 
+const fetchSellerDetails = async (id) => {
+  try {
+    const response = await authAxios.get(`/seller/${id}`);
+    if (!response.data) {
+      console.log("No data");
+    }
+
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
 export {
   fetchUsers,
   fetchStaffs,
@@ -155,4 +168,5 @@ export {
   fetchAllWithdrawRequest,
   handleWithdrawRequest,
   fetchRevenue,
+  fetchSellerDetails,
 };

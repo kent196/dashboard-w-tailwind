@@ -1,4 +1,15 @@
-import { Container, Box, Typography, Button } from "@mui/material";
+import {
+  Container,
+  Box,
+  Typography,
+  Button,
+  Icon,
+  IconButton,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+} from "@mui/material";
 import React from "react";
 import { useState } from "react";
 import ActionButtons from "../../components/ActionButtons";
@@ -17,6 +28,8 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Header from "../../components/Header";
 import { Helmet } from "react-helmet";
+import { Visibility } from "@mui/icons-material";
+import { fetchSellerDetails, fetchUserDetails } from "../../libs/userService";
 
 const SellerRequest = () => {
   const navigate = useNavigate();
@@ -29,6 +42,9 @@ const SellerRequest = () => {
     pageSize: 5,
   });
   const [rowCountState, setRowCountState] = React.useState(reqCount || 0);
+  const [openViewUser, setOpenViewUser] = useState(false);
+  const [userDetails, setUserDetails] = useState({});
+  const [userEmail, setUserEmail] = useState(null);
 
   React.useEffect(() => {
     setRowCountState((prevRowCountState) =>
@@ -100,6 +116,26 @@ const SellerRequest = () => {
       });
   };
 
+  const handleViewSellerDetails = (id) => {
+    fetchSellerDetails(id)
+      .then((res) => {
+        setUserDetails(res.data);
+        console.log("1");
+        console.log(userDetails);
+        setOpenViewUser(true);
+      })
+      .catch((err) => {});
+  };
+
+  const handleFetchUserDetails = (id) => {
+    fetchUserDetails(id)
+      .then((res) => {
+        setUserEmail(res.data.email);
+        console.log(userEmail);
+      })
+      .catch((err) => {});
+  };
+
   const columns = [
     { field: "id", headerName: "ID" },
     {
@@ -133,6 +169,13 @@ const SellerRequest = () => {
       flex: 1,
       renderCell: (params) => (
         <Box>
+          <IconButton
+            onClick={() => {
+              handleViewSellerDetails(params.row.id);
+              handleFetchUserDetails(params.row.id);
+            }}>
+            <Visibility />
+          </IconButton>
           <Button
             sx={{
               margin: "0 5px",
@@ -235,6 +278,119 @@ const SellerRequest = () => {
           />
         )}
       </Box>
+
+      <Dialog
+        fullWidth
+        open={openViewUser}
+        onClose={() => {
+          setOpenViewUser(false);
+        }}
+        aria-labelledby='scroll-dialog-title'
+        aria-describedby='scroll-dialog-description'>
+        <DialogTitle id='scroll-dialog-title' variant='h4'>
+          Thông tin của {userDetails.name}
+        </DialogTitle>
+        <DialogContent>
+          <Box id='scroll-dialog-description' tabIndex={-1}>
+            {/* Display user details here */}
+            <Box
+              display={"flex"}
+              justifyContent={"space-between"}
+              // alignItems={"center"}
+              gap={"20px"}>
+              {/* left */}
+              <Box padding={"10px"}>
+                <Box
+                  width={"200px"}
+                  height={"200px"}
+                  sx={{
+                    borderRadius: "50%",
+                    overflow: "hidden",
+                    objectFit: "contain",
+                  }}>
+                  <img
+                    width={"100%"}
+                    height={"100%"}
+                    src={userDetails.profilePicture}
+                  />
+                </Box>
+              </Box>
+              {/* right */}
+              <Box
+                display={"flex"}
+                justifyContent={"space-between"}
+                flexDirection={"column"}>
+                <Box>
+                  <Typography variant='h5' fontWeight={"bold"}>
+                    Tên
+                  </Typography>
+                  <Typography variant='h5'>{userDetails.name}</Typography>
+                </Box>
+                <Box>
+                  <Typography variant='h5' fontWeight={"bold"}>
+                    Email
+                  </Typography>
+                  <Typography variant='h5'>{userEmail}</Typography>
+                </Box>
+                <Box>
+                  <Typography variant='h5' fontWeight={"bold"}>
+                    SDT
+                  </Typography>
+                  <Typography variant='h5'>{userDetails.phone}</Typography>
+                </Box>
+                <Box>
+                  <Typography variant='h5' fontWeight={"bold"}>
+                    Địa chỉ
+                  </Typography>
+                  <Typography variant='h5'>
+                    {userDetails.street}, {userDetails.ward},{" "}
+                    {userDetails.district}, {userDetails.province}
+                  </Typography>
+                </Box>
+                <Box>
+                  <Typography variant='h5' fontWeight={"bold"}>
+                    Cấp bậc
+                  </Typography>
+                  <Typography variant='h5'>
+                    {userDetails.role === 1
+                      ? "Người mua"
+                      : userDetails.role === 2
+                      ? "Người bán"
+                      : "Người dùng"}
+                  </Typography>
+                </Box>
+              </Box>
+            </Box>
+            {/* Add more user details as needed */}
+          </Box>
+        </DialogContent>
+        <DialogActions>
+          <Button
+            sx={{
+              margin: "0 5px",
+            }}
+            variant='contained'
+            color='error'
+            onClick={() => {
+              handleReject(userDetails.id);
+              setOpenViewUser(false);
+            }}>
+            Từ chối
+          </Button>
+          <Button
+            sx={{
+              margin: "0 5px",
+            }}
+            variant='contained'
+            color='success'
+            onClick={() => {
+              handleApprove(userDetails.id);
+              setOpenViewUser(false);
+            }}>
+            Xác nhận
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Container>
   );
 };

@@ -72,6 +72,7 @@ const ActionButtons = ({ row, handleRerender }) => {
       fetchUserDetails(userId)
         .then((res) => {
           setUserDetails(res.data);
+          console.log(res.data);
         })
         .catch((err) => {});
 
@@ -214,18 +215,65 @@ const ActionButtons = ({ row, handleRerender }) => {
         <DialogContent dividers={scroll === "paper"}>
           <Box id='scroll-dialog-description' tabIndex={-1}>
             {/* Display user details here */}
-            <Typography variant='h5'>ID: {row.id}</Typography>
-            <Typography variant='h5'>Tên: {userDetails.name}</Typography>
-            <Typography variant='h5'>Email: {userDetails.email}</Typography>
-            <Typography variant='h5'>SDT: {userDetails.phone}</Typography>
-            <Typography variant='h5'>
-              Cấp bậc:{" "}
-              {userDetails.role === 1
-                ? "Người mua"
-                : userDetails.role === 2
-                ? "Người bán"
-                : "Người dùng"}
-            </Typography>
+            <Box
+              display={"flex"}
+              justifyContent={"space-between"}
+              // alignItems={"center"}
+              gap={"20px"}>
+              {/* left */}
+              <Box padding={"10px"}>
+                <Box
+                  width={"200px"}
+                  height={"200px"}
+                  sx={{
+                    borderRadius: "50%",
+                    overflow: "hidden",
+                    objectFit: "contain",
+                  }}>
+                  <img
+                    width={"100%"}
+                    height={"100%"}
+                    src={userDetails.profilePicture}
+                  />
+                </Box>
+              </Box>
+              {/* right */}
+              <Box
+                display={"flex"}
+                justifyContent={"space-between"}
+                flexDirection={"column"}>
+                <Box>
+                  <Typography variant='h5' fontWeight={"bold"}>
+                    Tên
+                  </Typography>
+                  <Typography variant='h5'>{userDetails.name}</Typography>
+                </Box>
+                <Box>
+                  <Typography variant='h5' fontWeight={"bold"}>
+                    Email
+                  </Typography>
+                  <Typography variant='h5'>{userDetails.email}</Typography>
+                </Box>
+                <Box>
+                  <Typography variant='h5' fontWeight={"bold"}>
+                    SDT
+                  </Typography>
+                  <Typography variant='h5'>{userDetails.phone}</Typography>
+                </Box>
+                <Box>
+                  <Typography variant='h5' fontWeight={"bold"}>
+                    Cấp bậc
+                  </Typography>
+                  <Typography variant='h5'>
+                    {userDetails.role === 1
+                      ? "Người mua"
+                      : userDetails.role === 2
+                      ? "Người bán"
+                      : "Người dùng"}
+                  </Typography>
+                </Box>
+              </Box>
+            </Box>
             {/* Add more user details as needed */}
           </Box>
         </DialogContent>
