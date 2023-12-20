@@ -176,24 +176,6 @@ const SellerRequest = () => {
             }}>
             <Visibility />
           </IconButton>
-          <Button
-            sx={{
-              margin: "0 5px",
-            }}
-            variant='contained'
-            color='error'
-            onClick={() => handleReject(params.row.id)}>
-            Từ chối
-          </Button>
-          <Button
-            sx={{
-              margin: "0 5px",
-            }}
-            variant='contained'
-            color='success'
-            onClick={() => handleApprove(params.row.id)}>
-            Xác nhận
-          </Button>
         </Box>
       ),
     },
