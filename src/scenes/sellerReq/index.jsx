@@ -60,7 +60,7 @@ const SellerRequest = () => {
       .catch((err) => {
         navigate("/error");
       });
-  }, [paginationModel]);
+  }, [paginationModel, request]);
 
   const handleApprove = (id) => {
     acceptSellerRequest(id)
