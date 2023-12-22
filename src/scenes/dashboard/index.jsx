@@ -567,7 +567,7 @@ const Dashboard = () => {
                             justifyContent={"space-between"}
                             alignItems={"center"}>
                             <Typography variant='h5' fontWeight={"bold"}>
-                              Lợi nhuận:
+                              Doanh thu:
                             </Typography>
                             <Typography variant='h5'>
                               {formatPrice(
